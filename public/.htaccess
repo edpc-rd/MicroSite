@@ -189,7 +189,7 @@ Options -MultiViews
     AddType application/ld+json                         jsonld
     AddType application/vnd.geo+json                    geojson
     AddType application/xml                             atom rdf rss xml
-
+    AddType message/rfc822                              mhtml mht
 
   # JavaScript
 

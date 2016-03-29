@@ -19,7 +19,9 @@
         @yield('after-styles-end')
 
         <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>
+        <!-- <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'> -->
+        <link href="{{asset('css/fonts/lato.css')}}" rel='stylesheet' type='text/css'>
+
     </head>
     <body id="app-layout">
 
@@ -31,7 +33,7 @@
         </div><!-- container -->
 
         <!-- JavaScripts -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="{{asset('js/vendor/jquery/jquery-2.1.4.min.js')}}"></script>
         <script>window.jQuery || document.write('<script src="{{asset('js/vendor/jquery/jquery-2.1.4.min.js')}}"><\/script>')</script>
         {!! Html::script('js/vendor/bootstrap/bootstrap.min.js') !!}
 
