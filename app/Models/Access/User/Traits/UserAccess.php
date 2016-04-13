@@ -9,31 +9,6 @@ namespace App\Models\Access\User\Traits;
 trait UserAccess
 {
     /**
-     * Checks if the user has a Role by its name or id.
-     *
-     * @param  string $nameOrId Role name or id.
-     * @return bool
-     */
-    public function hasRole($nameOrId)
-    {
-        foreach ($this->roles as $role) {
-            //First check to see if it's an ID
-            if (is_numeric($nameOrId)) {
-                if ($role->id == $nameOrId) {
-                    return true;
-                }
-            }
-
-            //Otherwise check by name
-            if ($role->name == $nameOrId) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Checks to see if user has array of roles
      *
      * All must return true
@@ -71,6 +46,40 @@ trait UserAccess
     }
 
     /**
+     * Checks if the user has a Role by its name or id.
+     *
+     * @param  string $nameOrId Role name or id.
+     * @return bool
+     */
+    public function hasRole($nameOrId)
+    {
+        foreach ($this->roles as $role) {
+            //First check to see if it's an ID
+            if (is_numeric($nameOrId)) {
+                if ($role->role_id == $nameOrId) {
+                    return true;
+                }
+            }
+
+            //Otherwise check by name
+            if ($role->role_name == $nameOrId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param  $nameOrId
+     * @return bool
+     */
+    public function hasPermission($nameOrId)
+    {
+        return $this->allow($nameOrId);
+    }
+
+    /**
      * Check if user has a permission by its name or id.
      *
      * @param  string $nameOrId Permission name or id.
@@ -80,7 +89,7 @@ trait UserAccess
     {
         foreach ($this->roles as $role) {
             //See if role has all permissions
-            if ($role->all) {
+            if ($role->all_permission) {
                 return true;
             }
 
@@ -89,7 +98,7 @@ trait UserAccess
 
                 //First check to see if it's an ID
                 if (is_numeric($nameOrId)) {
-                    if ($perm->id == $nameOrId) {
+                    if ($perm->permission_id == $nameOrId) {
                         return true;
                     }
                 }
@@ -106,7 +115,7 @@ trait UserAccess
 
             //First check to see if it's an ID
             if (is_numeric($nameOrId)) {
-                if ($perm->id == $nameOrId) {
+                if ($perm->permission_id == $nameOrId) {
                     return true;
                 }
             }
@@ -118,6 +127,16 @@ trait UserAccess
         }
 
         return false;
+    }
+
+    /**
+     * @param  $permissions
+     * @param  bool $needsAll
+     * @return bool
+     */
+    public function hasPermissions($permissions, $needsAll = false)
+    {
+        return $this->allowMultiple($permissions, $needsAll);
     }
 
     /**
@@ -155,22 +174,16 @@ trait UserAccess
     }
 
     /**
-     * @param  $nameOrId
-     * @return bool
+     * Attach multiple roles to a user
+     *
+     * @param  mixed $roles
+     * @return void
      */
-    public function hasPermission($nameOrId)
+    public function attachRoles($roles)
     {
-        return $this->allow($nameOrId);
-    }
-
-    /**
-     * @param  $permissions
-     * @param  bool           $needsAll
-     * @return bool
-     */
-    public function hasPermissions($permissions, $needsAll = false)
-    {
-        return $this->allowMultiple($permissions, $needsAll);
+        foreach ($roles as $role) {
+            $this->attachRole($role);
+        }
     }
 
     /**
@@ -186,10 +199,23 @@ trait UserAccess
         }
 
         if (is_array($role)) {
-            $role = $role['id'];
+            $role = $role['role_id'];
         }
 
         $this->roles()->attach($role);
+    }
+
+    /**
+     * Detach multiple roles from a user
+     *
+     * @param  mixed $roles
+     * @return void
+     */
+    public function detachRoles($roles)
+    {
+        foreach ($roles as $role) {
+            $this->detachRole($role);
+        }
     }
 
     /**
@@ -205,54 +231,10 @@ trait UserAccess
         }
 
         if (is_array($role)) {
-            $role = $role['id'];
+            $role = $role['role_id'];
         }
 
         $this->roles()->detach($role);
-    }
-
-    /**
-     * Attach multiple roles to a user
-     *
-     * @param  mixed  $roles
-     * @return void
-     */
-    public function attachRoles($roles)
-    {
-        foreach ($roles as $role) {
-            $this->attachRole($role);
-        }
-    }
-
-    /**
-     * Detach multiple roles from a user
-     *
-     * @param  mixed  $roles
-     * @return void
-     */
-    public function detachRoles($roles)
-    {
-        foreach ($roles as $role) {
-            $this->detachRole($role);
-        }
-    }
-
-    /**
-     * Attach one permission not associated with a role directly to a user
-     *
-     * @param $permission
-     */
-    public function attachPermission($permission)
-    {
-        if (is_object($permission)) {
-            $permission = $permission->getKey();
-        }
-
-        if (is_array($permission)) {
-            $permission = $permission['id'];
-        }
-
-        $this->permissions()->attach($permission);
     }
 
     /**
@@ -270,21 +252,21 @@ trait UserAccess
     }
 
     /**
-     * Detach one permission not associated with a role directly to a user
+     * Attach one permission not associated with a role directly to a user
      *
      * @param $permission
      */
-    public function detachPermission($permission)
+    public function attachPermission($permission)
     {
         if (is_object($permission)) {
             $permission = $permission->getKey();
         }
 
         if (is_array($permission)) {
-            $permission = $permission['id'];
+            $permission = $permission['permission_id'];
         }
 
-        $this->permissions()->detach($permission);
+        $this->permissions()->attach($permission);
     }
 
     /**
@@ -297,5 +279,23 @@ trait UserAccess
         foreach ($permissions as $perm) {
             $this->detachPermission($perm);
         }
+    }
+
+    /**
+     * Detach one permission not associated with a role directly to a user
+     *
+     * @param $permission
+     */
+    public function detachPermission($permission)
+    {
+        if (is_object($permission)) {
+            $permission = $permission->getKey();
+        }
+
+        if (is_array($permission)) {
+            $permission = $permission['permission_id'];
+        }
+
+        $this->permissions()->detach($permission);
     }
 }

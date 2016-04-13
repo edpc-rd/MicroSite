@@ -22,7 +22,7 @@ interface UserContract
      * @param  $status
      * @return mixed
      */
-    public function getUsersPaginated($per_page, $status = 1, $order_by = 'id', $sort = 'asc');
+    public function getUsersPaginated($per_page, $status = 1, $order_by = 'user_id', $sort = 'asc');
 
     /**
      * @param  $per_page
@@ -35,7 +35,7 @@ interface UserContract
      * @param  string  $sort
      * @return mixed
      */
-    public function getAllUsers($order_by = 'id', $sort = 'asc');
+    public function getAllUsers($order_by = 'user_id', $sort = 'asc');
 
     /**
      * @param $input

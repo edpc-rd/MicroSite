@@ -21,7 +21,7 @@ interface RoleRepositoryContract
      * @param  string      $sort
      * @return mixed
      */
-    public function getRolesPaginated($per_page, $order_by = 'id', $sort = 'asc');
+    public function getRolesPaginated($per_page, $order_by = 'role_id', $sort = 'asc');
 
     /**
      * @param  string  $order_by
@@ -29,7 +29,7 @@ interface RoleRepositoryContract
      * @param  bool    $withPermissions
      * @return mixed
      */
-    public function getAllRoles($order_by = 'id', $sort = 'asc', $withPermissions = false);
+    public function getAllRoles($order_by = 'role_id', $sort = 'asc', $withPermissions = false);
 
     /**
      * @param  $input

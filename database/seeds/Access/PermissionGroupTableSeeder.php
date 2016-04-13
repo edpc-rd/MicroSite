@@ -30,7 +30,7 @@ class PermissionGroupTableSeeder extends Seeder
         $group_model        = config('access.group');
         $access             = new $group_model;
         $access->name       = 'Access';
-        $access->sort       = 1;
+        $access->sort_order = 1;
         $access->created_at = Carbon::now();
         $access->updated_at = Carbon::now();
         $access->save();
@@ -38,8 +38,8 @@ class PermissionGroupTableSeeder extends Seeder
         $group_model      = config('access.group');
         $user             = new $group_model;
         $user->name       = 'User';
-        $user->sort       = 1;
-        $user->parent_id  = $access->id;
+        $user->sort_order = 1;
+        $user->parent_id = $access->group_id;
         $user->created_at = Carbon::now();
         $user->updated_at = Carbon::now();
         $user->save();
@@ -47,8 +47,8 @@ class PermissionGroupTableSeeder extends Seeder
         $group_model      = config('access.group');
         $role             = new $group_model;
         $role->name       = 'Role';
-        $role->sort       = 2;
-        $role->parent_id  = $access->id;
+        $role->sort_order = 2;
+        $role->parent_id = $access->group_id;
         $role->created_at = Carbon::now();
         $role->updated_at = Carbon::now();
         $role->save();
@@ -56,8 +56,8 @@ class PermissionGroupTableSeeder extends Seeder
         $group_model            = config('access.group');
         $permission             = new $group_model;
         $permission->name       = 'Permission';
-        $permission->sort       = 3;
-        $permission->parent_id  = $access->id;
+        $permission->sort_order = 3;
+        $permission->parent_id = $access->group_id;
         $permission->created_at = Carbon::now();
         $permission->updated_at = Carbon::now();
         $permission->save();

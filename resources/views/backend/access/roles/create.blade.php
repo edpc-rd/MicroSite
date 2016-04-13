@@ -27,16 +27,16 @@
 
             <div class="box-body">
                 <div class="form-group">
-                    {!! Form::label('name', trans('validation.attributes.backend.access.roles.name'), ['class' => 'col-lg-2 control-label']) !!}
+                    {!! Form::label('role_name', trans('validation.attributes.backend.access.roles.name'), ['class' => 'col-lg-2 control-label']) !!}
                     <div class="col-lg-10">
-                        {!! Form::text('name', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.backend.access.roles.name')]) !!}
+                        {!! Form::text('role_name', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.backend.access.roles.name')]) !!}
                     </div>
                 </div><!--form control-->
 
                 <div class="form-group">
                     <label class="col-lg-2 control-label">{{ trans('validation.attributes.backend.access.roles.associated_permissions') }}</label>
                     <div class="col-lg-10">
-                        {!! Form::select('associated-permissions', array('all' => trans('labels.general.all'), 'custom' => trans('labels.general.custom')), 'all', ['class' => 'form-control']); !!}
+                        {!! Form::select('associated-permissions', array('all' => trans('labels.general.all'), 'custom' => trans('labels.general.custom')), 'all', ['class' => 'form-control']) !!}
 
                         <div id="available-permissions" class="hidden">
                             <div class="row">
@@ -59,7 +59,8 @@
                                                         @if ($group->permissions->count())
                                                             <ul>
                                                                 @foreach ($group->permissions as $permission)
-                                                                    <li id="{!! $permission->id !!}" data-dependencies="{!! json_encode($permission->dependencies->lists('dependency_id')->all()) !!}">
+                                                                    <li id="{!! $permission->permission_id !!}"
+                                                                        data-dependencies="{!! json_encode($permission->dependencies->lists('dependency_id')->all()) !!}">
 
                                                                         @if ($permission->dependencies->count())
                                                                             <?php
@@ -86,7 +87,8 @@
                                                                         @if ($child->permissions->count())
                                                                             <ul> style="padding-left:40px;font-size:.8em">
                                                                                 @foreach ($child->permissions as $permission)
-                                                                                    <li id="{!! $permission->id !!}" data-dependencies="{!! json_encode($permission->dependencies->lists('dependency_id')->all()) !!}">
+                                                                                    <li id="{!! $permission->permission_id !!}"
+                                                                                        data-dependencies="{!! json_encode($permission->dependencies->lists('dependency_id')->all()) !!}">
                                                                                         @if ($permission->dependencies->count())
                                                                                             <?php
                                                                                             //Get the dependency list for the tooltip
@@ -122,7 +124,11 @@
 
                                     @if ($permissions->count())
                                         @foreach ($permissions as $perm)
-                                            <input type="checkbox" name="ungrouped[]" data-dependencies="{!! json_encode($perm->dependencies->lists('dependency_id')->all()) !!}" value="{!! $perm->id !!}" id="perm_{!! $perm->id !!}" /> <label for="perm_{!! $perm->id !!}">
+                                            <input type="checkbox" name="ungrouped[]"
+                                                   data-dependencies="{!! json_encode($perm->dependencies->lists('dependency_id')->all()) !!}"
+                                                   value="{!! $perm->permission_id !!}"
+                                                   id="perm_{!! $perm->permission_id !!}"/> <label
+                                                    for="perm_{!! $perm->permission_id !!}">
 
                                                 @if ($perm->dependencies->count())
                                                     <?php
@@ -149,9 +155,9 @@
                 </div><!--form control-->
 
                 <div class="form-group">
-                    {!! Form::label('name', trans('validation.attributes.backend.access.roles.sort'), ['class' => 'col-lg-2 control-label']) !!}
+                    {!! Form::label('sort_order', trans('validation.attributes.backend.access.roles.sort'), ['class' => 'col-lg-2 control-label']) !!}
                     <div class="col-lg-10">
-                        {!! Form::text('sort', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.backend.access.roles.sort')]) !!}
+                        {!! Form::text('sort_order', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.backend.access.roles.sort')]) !!}
                     </div>
                 </div><!--form control-->
             </div><!-- /.box-body -->

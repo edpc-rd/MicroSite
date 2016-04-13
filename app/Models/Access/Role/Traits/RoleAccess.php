@@ -24,6 +24,19 @@ trait RoleAccess
     }
 
     /**
+     * Attach multiple permissions to current role.
+     *
+     * @param  mixed $permissions
+     * @return void
+     */
+    public function attachPermissions($permissions)
+    {
+        foreach ($permissions as $permission) {
+            $this->attachPermission($permission);
+        }
+    }
+
+    /**
      * Attach permission to current role.
      *
      * @param  object|array $permission
@@ -36,10 +49,23 @@ trait RoleAccess
         }
 
         if (is_array($permission)) {
-            $permission = $permission['id'];
+            $permission = $permission['permission_id'];
         }
 
         $this->permissions()->attach($permission);
+    }
+
+    /**
+     * Detach multiple permissions from current role
+     *
+     * @param  mixed  $permissions
+     * @return void
+     */
+    public function detachPermissions($permissions)
+    {
+        foreach ($permissions as $permission) {
+            $this->detachPermission($permission);
+        }
     }
 
     /**
@@ -55,35 +81,9 @@ trait RoleAccess
         }
 
         if (is_array($permission)) {
-            $permission = $permission['id'];
+            $permission = $permission['permission_id'];
         }
 
         $this->permissions()->detach($permission);
-    }
-
-    /**
-     * Attach multiple permissions to current role.
-     *
-     * @param  mixed  $permissions
-     * @return void
-     */
-    public function attachPermissions($permissions)
-    {
-        foreach ($permissions as $permission) {
-            $this->attachPermission($permission);
-        }
-    }
-
-    /**
-     * Detach multiple permissions from current role
-     *
-     * @param  mixed  $permissions
-     * @return void
-     */
-    public function detachPermissions($permissions)
-    {
-        foreach ($permissions as $permission) {
-            $this->detachPermission($permission);
-        }
     }
 }

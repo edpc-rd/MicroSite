@@ -29,7 +29,9 @@ class UpdateUserRequest extends Request
     {
         return [
             'email' => 'required|email',
-            'name'  => 'required',
+            'user_nick' => 'required|max:50',
+            'user_name' => 'required|max:50',
+            'weixin_id' => 'required|max:60',
         ];
     }
 }

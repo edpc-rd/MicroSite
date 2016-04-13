@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-    {!! Form::model($permission, ['route' => ['admin.access.roles.permissions.update', $permission->id], 'class' => 'form-horizontal', 'role' => 'form', 'method' => 'PATCH']) !!}
+    {!! Form::model($permission, ['route' => ['admin.access.roles.permissions.update', $permission->permission_id], 'class' => 'form-horizontal', 'role' => 'form', 'method' => 'PATCH']) !!}
 
         <div class="box box-success">
             <div class="box-header with-border">
@@ -62,16 +62,16 @@
                                         <option value="">{{ trans('labels.general.none') }}</option>
 
                                         @foreach ($groups as $group)
-                                            <option value="{!! $group->id !!}" {!! $permission->group_id == $group->id ? 'selected' : '' !!}>{!! $group->name !!}</option>
+                                            <option value="{!! $group->group_id !!}" {!! $permission->group_id == $group->group_id ? 'selected' : '' !!}>{!! $group->name !!}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div><!--form control-->
 
                             <div class="form-group">
-                                {!! Form::label('sort', trans('validation.attributes.backend.access.permissions.group_sort'), ['class' => 'col-lg-2 control-label']) !!}
+                                {!! Form::label('sort_order', trans('validation.attributes.backend.access.permissions.group_sort'), ['class' => 'col-lg-2 control-label']) !!}
                                 <div class="col-lg-10">
-                                    {!! Form::text('sort', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.backend.access.permissions.group_sort')]) !!}
+                                    {!! Form::text('sort_order', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.backend.access.permissions.group_sort')]) !!}
                                 </div>
                             </div><!--form control-->
 
@@ -80,7 +80,10 @@
                                 <div class="col-lg-3">
                                     @if (count($roles) > 0)
                                         @foreach($roles as $role)
-                                            <input type="checkbox" {{$role->id == 1 ? 'disabled' : ''}} {{in_array($role->id, $permission_roles) || ($role->id == 1) ? 'checked' : ""}} value="{{$role->id}}" name="permission_roles[]" id="role-{{$role->id}}" /> <label for="role-{{$role->id}}">{!! $role->name !!}</label><br/>
+                                            <input type="checkbox"
+                                                   {{$role->role_id == 1 ? 'disabled' : ''}} {{in_array($role->role_id, $permission_roles) || ($role->role_id == 1) ? 'checked' : ""}} value="{{$role->role_id}}"
+                                                   name="permission_roles[]" id="role-{{$role->role_id}}"/> <label
+                                                    for="role-{{$role->role_id}}">{!! $role->role_name !!}</label><br/>
                                             <div class="clearfix"></div>
                                         @endforeach
                                     @else
@@ -130,8 +133,12 @@
                                                         $dependency_list = implode(", ", $dependency_list);
                                                         ?>
 
-                                                        @if ($p['id'] != $permission->id)
-                                                            <li><input type="checkbox" value="{{$p['id']}}" name="dependencies[]" data-dependencies="{!! $dependencies !!}" id="permission-{{$p['id']}}" {!! in_array($p['id'], $permission_dependencies) ? 'checked' : '' !!} /> <label for="permission-{{$p['id']}}" />
+                                                        @if ($p['permission_id'] != $permission->permission_id)
+                                                            <li><input type="checkbox" value="{{$p['permission_id']}}"
+                                                                       name="dependencies[]"
+                                                                       data-dependencies="{!! $dependencies !!}"
+                                                                       id="permission-{{$p['permission_id']}}" {!! in_array($p['permission_id'], $permission_dependencies) ? 'checked' : '' !!} />
+                                                                <label for="permission-{{$p['permission_id']}}"/>
 
                                                                 @if ($p['dependencies'])
                                                                     <a style="color:black;text-decoration:none;" data-toggle="tooltip" data-html="true" title="<strong>{{ trans('labels.backend.access.permissions.dependencies') }}:</strong> {!! $dependency_list !!}">{!! $p['display_name'] !!} <small><strong>(D)</strong></small></a>
@@ -139,7 +146,8 @@
                                                                     {!! $p['display_name'] !!}
                                                                     @endif
 
-                                                                    </label></li>
+                                                                </label>
+                                                            </li>
                                                         @endif
                                                     @endforeach
                                                 </ul>

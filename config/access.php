@@ -5,7 +5,7 @@ return [
     /*
      * Users table used to store users
      */
-    'users_table' => 'users',
+    'users_table' => 'ms_users',
 
     /*
      * Role model used by Access to create correct relations. Update the role if it is in a different namespace.
@@ -15,7 +15,7 @@ return [
     /*
      * Roles table used by Access to save roles to the database.
      */
-    'roles_table' => 'roles',
+    'roles_table' => 'ms_roles',
 
     /*
      * Permission model used by Access to create correct relations.
@@ -26,7 +26,7 @@ return [
     /*
      * Permissions table used by Access to save permissions to the database.
      */
-    'permissions_table' => 'permissions',
+    'permissions_table' => 'ms_permissions',
 
     /*
      * PermissionGroup model used by Access to create permissions groups.
@@ -37,24 +37,24 @@ return [
     /*
      * Permissions table used by Access to save permissions to the database.
      */
-    'permission_group_table' => 'permission_groups',
+    'permission_group_table' => 'ms_permission_groups',
 
     /*
      * permission_role table used by Access to save relationship between permissions and roles to the database.
      */
-    'permission_role_table' => 'permission_role',
+    'permission_role_table' => 'ms_role_permissions',
 
     /*
      * permission_user table used by Access to save relationship between permissions and users to the database.
      * This table is only for permissions that belong directly to a specific user and not a role
      */
-    'permission_user_table' => 'permission_user',
+    'permission_user_table' => 'ms_user_permissions',
 
     /*
      * Table that specifies if one permission is dependent on another.
      * For example in order for a user to have the edit-user permission they also need the view-backend permission.
      */
-    'permission_dependencies_table' => 'permission_dependencies',
+    'permission_dependencies_table' => 'ms_permission_dependencies',
 
     /*
      * PermissionDependency model used by Access to create permissions dependencies.
@@ -65,7 +65,7 @@ return [
     /*
      * assigned_roles table used by Access to save assigned roles to the database.
      */
-    'assigned_roles_table' => 'assigned_roles',
+    'assigned_roles_table' => 'ms_assigned_roles',
 
     /*
      * Configurations for the user

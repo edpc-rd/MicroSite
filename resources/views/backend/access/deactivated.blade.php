@@ -25,13 +25,15 @@
                     <thead>
                     <tr>
                         <th>{{ trans('labels.backend.access.users.table.id') }}</th>
-                        <th>{{ trans('labels.backend.access.users.table.name') }}</th>
+                        <th>{{ trans('labels.backend.access.users.table.nick') }}</th>
+                        <th>{{ trans('labels.backend.access.users.table.weixin_id') }}</th>
                         <th>{{ trans('labels.backend.access.users.table.email') }}</th>
                         <th>{{ trans('labels.backend.access.users.table.confirmed') }}</th>
                         <th>{{ trans('labels.backend.access.users.table.roles') }}</th>
                         <th>{{ trans('labels.backend.access.users.table.other_permissions') }}</th>
                         <th class="visible-lg">{{ trans('labels.backend.access.users.table.created') }}</th>
                         <th class="visible-lg">{{ trans('labels.backend.access.users.table.last_updated') }}</th>
+                        <th class="visible-lg">{{ trans('labels.backend.access.users.table.last_login') }}</th>
                         <th>{{ trans('labels.general.actions') }}</th>
                     </tr>
                     </thead>
@@ -39,14 +41,15 @@
                     @if ($users->count())
                         @foreach ($users as $user)
                             <tr>
-                                <td>{!! $user->id !!}</td>
-                                <td>{!! $user->name !!}</td>
+                                <td>{!! $user->user_id !!}</td>
+                                <td>{!! $user->user_nick !!}</td>
+                                <td>{!! $user->weixin_id !!}</td>
                                 <td>{!! link_to("mailto:".$user->email, $user->email) !!}</td>
                                 <td>{!! $user->confirmed_label !!}</td>
                                 <td>
                                     @if ($user->roles()->count() > 0)
                                         @foreach ($user->roles as $role)
-                                            {!! $role->name !!}<br/>
+                                            {!! $role->role_name !!}<br/>
                                         @endforeach
                                     @else
                                         None
@@ -63,11 +66,12 @@
                                 </td>
                                 <td class="visible-lg">{!! $user->created_at->diffForHumans() !!}</td>
                                 <td class="visible-lg">{!! $user->updated_at->diffForHumans() !!}</td>
+                                <td class="visible-lg">{!! $user->login_at == null?'None':$user->login_at->diffForHumans() !!}</td>
                                 <td>{!! $user->action_buttons !!}</td>
                             </tr>
                         @endforeach
                     @else
-                        <td colspan="9">{{ trans('labels.backend.access.users.table.no_deactivated') }}</td>
+                        <td colspan="11">{{ trans('labels.backend.access.users.table.no_deactivated') }}</td>
                     @endif
                     </tbody>
                 </table>

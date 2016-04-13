@@ -13,6 +13,6 @@ trait PermissionDependencyRelationship
      */
     public function permission()
     {
-        return $this->hasOne(config('access.permission'), 'id', 'dependency_id');
+        return $this->hasOne(config('access.permission'), 'permission_id', 'dependency_id');
     }
 }

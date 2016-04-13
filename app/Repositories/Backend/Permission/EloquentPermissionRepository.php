@@ -4,8 +4,8 @@ namespace App\Repositories\Backend\Permission;
 
 use App\Exceptions\GeneralException;
 use App\Models\Access\Permission\Permission;
-use App\Repositories\Backend\Role\RoleRepositoryContract;
 use App\Repositories\Backend\Permission\Dependency\PermissionDependencyRepositoryContract;
+use App\Repositories\Backend\Role\RoleRepositoryContract;
 
 /**
  * Class EloquentPermissionRepository
@@ -34,25 +34,6 @@ class EloquentPermissionRepository implements PermissionRepositoryContract
     {
         $this->roles        = $roles;
         $this->dependencies = $dependencies;
-    }
-
-    /**
-     * @param  $id
-     * @param  bool                                                                             $withRoles
-     * @throws GeneralException
-     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Support\Collection|null|static
-     */
-    public function findOrThrowException($id, $withRoles = false)
-    {
-        if (! is_null(Permission::find($id))) {
-            if ($withRoles) {
-                return Permission::with('roles')->find($id);
-            }
-
-            return Permission::find($id);
-        }
-
-        throw new GeneralException(trans('exceptions.backend.access.permissions.not_found'));
     }
 
     /**
@@ -104,7 +85,7 @@ class EloquentPermissionRepository implements PermissionRepositoryContract
         $permission->display_name = $input['display_name'];
         $permission->system       = isset($input['system']) ? 1 : 0;
         $permission->group_id     = isset($input['group']) && strlen($input['group']) > 0 ? (int) $input['group'] : null;
-        $permission->sort         = isset($input['sort']) ? (int) $input['sort'] : 0;
+        $permission->sort_order = isset($input['sort_order']) ? (int)$input['sort_order'] : 0;
 
         if ($permission->save()) {
             //For each role, load role, collect perms, add perm to perms, flush perms, read perms
@@ -114,13 +95,13 @@ class EloquentPermissionRepository implements PermissionRepositoryContract
                     $role = $this->roles->findOrThrowException($role_id, true);
 
                     //Get the roles permissions into an array
-                    $role_permissions = $role->permissions->lists('id')->all();
+                    $role_permissions = $role->permissions->lists('permission_id')->all();
 
                     if (count($role_permissions) >= 1) {
                         //Role has permissions, gather them first
 
                         //Add this new permission id to the role
-                        array_push($role_permissions, $permission->id);
+                        array_push($role_permissions, $permission->permission_id);
 
                         //For some reason the lists() casts as a string, convert all to int
                         $role_permissions_temp = array();
@@ -133,7 +114,7 @@ class EloquentPermissionRepository implements PermissionRepositoryContract
                         $role->permissions()->sync($role_permissions);
                     } else {
                         //Role has no permissions, add the 1
-                        $role->permissions()->sync([$permission->id]);
+                        $role->permissions()->sync([$permission->permission_id]);
                     }
                 }
             }
@@ -141,7 +122,7 @@ class EloquentPermissionRepository implements PermissionRepositoryContract
             //Add the dependencies of this permission if any
             if (isset($input['dependencies']) && count($input['dependencies'])) {
                 foreach ($input['dependencies'] as $dependency_id) {
-                    $this->dependencies->create($permission->id, $dependency_id);
+                    $this->dependencies->create($permission->permission_id, $dependency_id);
                 }
             }
 
@@ -165,7 +146,7 @@ class EloquentPermissionRepository implements PermissionRepositoryContract
         $permission->display_name = $input['display_name'];
         $permission->system       = isset($input['system']) ? 1 : 0;
         $permission->group_id     = isset($input['group']) && strlen($input['group']) > 0 ? (int) $input['group'] : null;
-        $permission->sort         = isset($input['sort']) ? (int) $input['sort'] : 0;
+        $permission->sort_order = isset($input['sort_order']) ? (int)$input['sort_order'] : 0;
 
         if ($permission->save()) {
             //Detach permission from every role, then add the permission to the selected roles
@@ -181,13 +162,13 @@ class EloquentPermissionRepository implements PermissionRepositoryContract
                     $role = $this->roles->findOrThrowException($role_id, true);
 
                     //Get the roles permissions into an array
-                    $role_permissions = $role->permissions->lists('id')->all();
+                    $role_permissions = $role->permissions->lists('permission_id')->all();
 
                     if (count($role_permissions) >= 1) {
                         //Role has permissions, gather them first
 
                         //Add this new permission id to the role
-                        array_push($role_permissions, $permission->id);
+                        array_push($role_permissions, $permission->permission_id);
 
                         //For some reason the lists() casts as a string, convert all to int
                         $role_permissions_temp = array();
@@ -200,7 +181,7 @@ class EloquentPermissionRepository implements PermissionRepositoryContract
                         $role->permissions()->sync($role_permissions);
                     } else {
                         //Role has no permissions, add the 1
-                        $role->permissions()->sync([$permission->id]);
+                        $role->permissions()->sync([$permission->permission_id]);
                     }
                 }
             }
@@ -208,23 +189,42 @@ class EloquentPermissionRepository implements PermissionRepositoryContract
             //Add the dependencies of this permission if any
             if (isset($input['dependencies']) && count($input['dependencies'])) {
                 //Remove all current dependencies
-                $this->dependencies->clear($permission->id);
+                $this->dependencies->clear($permission->permission_id);
 
                 //Add the currently checked dependencies
                 foreach ($input['dependencies'] as $dependency_id) {
-                    $this->dependencies->create($permission->id, $dependency_id);
+                    $this->dependencies->create($permission->permission_id, $dependency_id);
                 }
 
             } else
             //None checked, remove any if they were there prior
             {
-                $this->dependencies->clear($permission->id);
+                $this->dependencies->clear($permission->permission_id);
             }
 
             return true;
         }
 
         throw new GeneralException(trans('exceptions.backend.access.permissions.update_error'));
+    }
+
+    /**
+     * @param  $id
+     * @param  bool $withRoles
+     * @throws GeneralException
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Support\Collection|null|static
+     */
+    public function findOrThrowException($id, $withRoles = false)
+    {
+        if (!is_null(Permission::find($id))) {
+            if ($withRoles) {
+                return Permission::with('roles')->find($id);
+            }
+
+            return Permission::find($id);
+        }
+
+        throw new GeneralException(trans('exceptions.backend.access.permissions.not_found'));
     }
 
     /**

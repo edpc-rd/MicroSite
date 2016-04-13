@@ -13,7 +13,7 @@ trait PermissionGroupRelationship
      */
     public function children()
     {
-        return $this->hasMany(config('access.group'), 'parent_id', 'id')->orderBy('sort', 'asc');
+        return $this->hasMany(config('access.group'), 'parent_id', 'group_id')->orderBy('sort_order', 'asc');
     }
 
     /**
@@ -21,6 +21,6 @@ trait PermissionGroupRelationship
      */
     public function permissions()
     {
-        return $this->hasMany(config('access.permission'), 'group_id')->orderBy('sort', 'asc');
+        return $this->hasMany(config('access.permission'), 'group_id')->orderBy('sort_order', 'asc');
     }
 }

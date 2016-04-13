@@ -2,8 +2,8 @@
 
 namespace App\Repositories\Backend\Role;
 
-use App\Models\Access\Role\Role;
 use App\Exceptions\GeneralException;
+use App\Models\Access\Role\Role;
 
 /**
  * Class EloquentRoleRepository
@@ -12,32 +12,12 @@ use App\Exceptions\GeneralException;
 class EloquentRoleRepository implements RoleRepositoryContract
 {
     /**
-     * @param  $id
-     * @param  bool $withPermissions
-     * @throws GeneralException
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|\Illuminate\Support\Collection|null|static
-     */
-    public function findOrThrowException($id, $withPermissions = false)
-    {
-        if (! is_null(Role::find($id))) {
-            if ($withPermissions) {
-                return Role::with('permissions')
-                    ->find($id);
-            }
-
-            return Role::find($id);
-        }
-
-        throw new GeneralException(trans('exceptions.backend.access.roles.not_found'));
-    }
-
-    /**
      * @param  $per_page
      * @param  string      $order_by
      * @param  string      $sort
      * @return mixed
      */
-    public function getRolesPaginated($per_page, $order_by = 'sort', $sort = 'asc')
+    public function getRolesPaginated($per_page, $order_by = 'sort_order', $sort = 'asc')
     {
         return Role::with('permissions')
             ->orderBy($order_by, $sort)
@@ -50,7 +30,7 @@ class EloquentRoleRepository implements RoleRepositoryContract
      * @param  bool    $withPermissions
      * @return mixed
      */
-    public function getAllRoles($order_by = 'sort', $sort = 'asc', $withPermissions = false)
+    public function getAllRoles($order_by = 'sort_order', $sort = 'asc', $withPermissions = false)
     {
         if ($withPermissions) {
             return Role::with('permissions')
@@ -69,7 +49,7 @@ class EloquentRoleRepository implements RoleRepositoryContract
      */
     public function create($input)
     {
-        if (Role::where('name', $input['name'])->first()) {
+        if (Role::where('role_name', $input['role_name'])->first()) {
             throw new GeneralException(trans('exceptions.backend.access.roles.already_exists'));
         }
 
@@ -86,11 +66,11 @@ class EloquentRoleRepository implements RoleRepositoryContract
         }
 
         $role       = new Role;
-        $role->name = $input['name'];
-        $role->sort = isset($input['sort']) && strlen($input['sort']) > 0 && is_numeric($input['sort']) ? (int) $input['sort'] : 0;
+        $role->role_name = $input['role_name'];
+        $role->sort_order = isset($input['sort_order']) && strlen($input['sort_order']) > 0 && is_numeric($input['sort_order']) ? (int)$input['sort_order'] : 0;
 
         //See if this role has all permissions and set the flag on the role
-        $role->all = $all;
+        $role->all_permission = $all;
 
         if ($role->save()) {
             if (!$all) {
@@ -125,7 +105,7 @@ class EloquentRoleRepository implements RoleRepositoryContract
         $role = $this->findOrThrowException($id);
 
         //See if the role has all access, administrator always has all access
-        if ($role->id == 1) {
+        if ($role->role_id == 1) {
             $all = true;
         } else {
             $all = $input['associated-permissions'] == 'all' ? true : false;
@@ -139,11 +119,11 @@ class EloquentRoleRepository implements RoleRepositoryContract
             }
         }
 
-        $role->name = $input['name'];
-        $role->sort = isset($input['sort']) && strlen($input['sort']) > 0 && is_numeric($input['sort']) ? (int) $input['sort'] : 0;
+        $role->role_name = $input['role_name'];
+        $role->sort_order = isset($input['sort_order']) && strlen($input['sort_order']) > 0 && is_numeric($input['sort_order']) ? (int)$input['sort_order'] : 0;
 
         //See if this role has all permissions and set the flag on the role
-        $role->all = $all;
+        $role->all_permission = $all;
 
         if ($role->save()) {
             //If role has all access detach all permissions because they're not needed
@@ -172,6 +152,26 @@ class EloquentRoleRepository implements RoleRepositoryContract
         }
 
         throw new GeneralException(trans('exceptions.backend.access.roles.update_error'));
+    }
+
+    /**
+     * @param  $id
+     * @param  bool $withPermissions
+     * @throws GeneralException
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|\Illuminate\Support\Collection|null|static
+     */
+    public function findOrThrowException($id, $withPermissions = false)
+    {
+        if (!is_null(Role::find($id))) {
+            if ($withPermissions) {
+                return Role::with('permissions')
+                    ->find($id);
+            }
+
+            return Role::find($id);
+        }
+
+        throw new GeneralException(trans('exceptions.backend.access.roles.not_found'));
     }
 
     /**
@@ -209,9 +209,9 @@ class EloquentRoleRepository implements RoleRepositoryContract
     public function getDefaultUserRole()
     {
         if (is_numeric(config('access.users.default_role'))) {
-            return Role::where('id', (int) config('access.users.default_role'))->first();
+            return Role::where('role_id', (int)config('access.users.default_role'))->first();
         }
 
-        return Role::where('name', config('access.users.default_role'))->first();
+        return Role::where('role_name', config('access.users.default_role'))->first();
     }
 }

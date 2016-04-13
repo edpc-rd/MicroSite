@@ -2,9 +2,9 @@
 
 namespace App\Models\Access\Permission;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Access\Permission\Traits\Attribute\PermissionGroupAttribute;
 use App\Models\Access\Permission\Traits\Relationship\PermissionGroupRelationship;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class PermissionGroup
@@ -13,6 +13,13 @@ use App\Models\Access\Permission\Traits\Relationship\PermissionGroupRelationship
 class PermissionGroup extends Model
 {
     use PermissionGroupRelationship, PermissionGroupAttribute;
+
+    /**
+     * The primary key for the model.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'group_id';
 
     /**
      * The database table used by the model.
@@ -26,7 +33,7 @@ class PermissionGroup extends Model
      *
      * @var array
      */
-    protected $guarded = ['id'];
+    protected $guarded = ['group_id'];
 
     /**
      *

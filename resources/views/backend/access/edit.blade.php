@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-    {!! Form::model($user, ['route' => ['admin.access.users.update', $user->id], 'class' => 'form-horizontal', 'role' => 'form', 'method' => 'PATCH']) !!}
+    {!! Form::model($user, ['route' => ['admin.access.users.update', $user->user_id], 'class' => 'form-horizontal', 'role' => 'form', 'method' => 'PATCH']) !!}
 
         <div class="box box-success">
             <div class="box-header with-border">
@@ -23,9 +23,23 @@
 
             <div class="box-body">
                 <div class="form-group">
-                    {!! Form::label('name', trans('validation.attributes.backend.access.users.name'), ['class' => 'col-lg-2 control-label']) !!}
+                    {!! Form::label('user_name', trans('validation.attributes.backend.access.users.name'), ['class' => 'col-lg-2 control-label']) !!}
                     <div class="col-lg-10">
-                        {!! Form::text('name', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.backend.access.users.name')]) !!}
+                        {!! Form::text('user_name', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.backend.access.users.name')]) !!}
+                    </div>
+                </div><!--form control-->
+
+                <div class="form-group">
+                    {!! Form::label('user_nick', trans('validation.attributes.backend.access.users.nick'), ['class' => 'col-lg-2 control-label']) !!}
+                    <div class="col-lg-10">
+                        {!! Form::text('user_nick', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.backend.access.users.nick')]) !!}
+                    </div>
+                </div><!--form control-->
+
+                <div class="form-group">
+                    {!! Form::label('weixin_id', trans('validation.attributes.backend.access.users.weixin_id'), ['class' => 'col-lg-2 control-label']) !!}
+                    <div class="col-lg-10">
+                        {!! Form::text('weixin_id', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.backend.access.users.weixin_id')]) !!}
                     </div>
                 </div><!--form control-->
 
@@ -36,7 +50,7 @@
                     </div>
                 </div><!--form control-->
 
-                @if ($user->id != 1)
+                @if ($user->user_id != 1)
                     <div class="form-group">
                         <label class="col-lg-2 control-label">{{ trans('validation.attributes.backend.access.users.active') }}</label>
                         <div class="col-lg-1">
@@ -56,8 +70,10 @@
                         <div class="col-lg-3">
                             @if (count($roles) > 0)
                                 @foreach($roles as $role)
-                                    <input type="checkbox" value="{{$role->id}}" name="assignees_roles[]" {{in_array($role->id, $user_roles) ? 'checked' : ''}} id="role-{{$role->id}}" /> <label for="role-{{$role->id}}">{!! $role->name !!}</label>
-                                        <a href="#" data-role="role_{{$role->id}}" class="show-permissions small">
+                                    <input type="checkbox" value="{{$role->role_id}}" name="assignees_roles[]"
+                                           {{in_array($role->role_id, $user_roles) ? 'checked' : ''}} id="role-{{$role->role_id}}"/>
+                                    <label for="role-{{$role->role_id}}">{!! $role->role_name !!}</label>
+                                    <a href="#" data-role="role_{{$role->role_id}}" class="show-permissions small">
                                             (
                                                 <span class="show-text">{{ trans('labels.general.show') }}</span>
                                                 <span class="hide-text hidden">{{ trans('labels.general.hide') }}</span>
@@ -65,8 +81,8 @@
                                             )
                                         </a>
                                     <br/>
-                                    <div class="permission-list hidden" data-role="role_{{$role->id}}">
-                                        @if ($role->all)
+                                    <div class="permission-list hidden" data-role="role_{{$role->role_id}}">
+                                        @if ($role->all_permission)
                                             {{ trans('labels.backend.access.users.all_permissions') }}<br/><br/>
                                         @else
                                             @if (count($role->permissions) > 0)
@@ -116,7 +132,11 @@
                                                 $dependency_list = implode(", ", $dependency_list);
                                                 ?>
 
-                                                <li><input type="checkbox" value="{{$p['id']}}" name="permission_user[]" data-dependencies="{!! $dependencies !!}" {{in_array($p['id'], $user_permissions) ? 'checked' : ""}} id="permission-{{$p['id']}}" /> <label for="permission-{{$p['id']}}">
+                                                <li><input type="checkbox" value="{{$p['permission_id']}}"
+                                                           name="permission_user[]"
+                                                           data-dependencies="{!! $dependencies !!}"
+                                                           {{in_array($p['permission_id'], $user_permissions) ? 'checked' : ""}} id="permission-{{$p['permission_id']}}"/>
+                                                    <label for="permission-{{$p['permission_id']}}">
 
                                                         @if ($p['dependencies'])
                                                             <a style="color:black;text-decoration:none;" data-toggle="tooltip" data-html="true" title="<strong>{{ trans('labels.backend.access.users.dependencies') }}:</strong> {!! $dependency_list !!}">{!! $p['display_name'] !!} <small><strong>(D)</strong></small></a>
@@ -135,6 +155,14 @@
                         </div><!--col 3-->
                     </div><!--form control-->
                 @endif
+
+                <div class="form-group">
+                    {!! Form::label('remark', trans('validation.attributes.backend.access.users.remark'), ['class' => 'col-lg-2 control-label']) !!}
+                    <div class="col-lg-10">
+                        {!! Form::text('remark', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.backend.access.users.remark')]) !!}
+                    </div>
+                </div><!--form control-->
+
             </div><!-- /.box-body -->
         </div><!--box-->
 

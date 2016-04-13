@@ -31,9 +31,9 @@
                     <tbody>
                         @foreach ($roles as $role)
                             <tr>
-                                <td>{!! $role->name !!}</td>
+                                <td>{!! $role->role_name !!}</td>
                                 <td>
-                                    @if ($role->all)
+                                    @if ($role->all_permission)
                                         <span class="label label-success">{{ trans('labels.general.all') }}</span>
                                     @else
                                         @if (count($role->permissions) > 0)
@@ -48,7 +48,7 @@
                                     @endif
                                 </td>
                                 <td>{!! $role->users()->count() !!}</td>
-                                <td>{!! $role->sort !!}</td>
+                                <td>{!! $role->sort_order!!}</td>
                                 <td>{!! $role->action_buttons !!}</td>
                             </tr>
                         @endforeach

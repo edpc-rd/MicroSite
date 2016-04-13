@@ -120,7 +120,7 @@
                         <!-- The user image in the navbar-->
                         <img src="{!! access()->user()->picture !!}" class="user-image" alt="User Image"/>
                         <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                        <span class="hidden-xs">{{ access()->user()->name }}</span>
+                        <span class="hidden-xs">{{ access()->user()->user_nick }}</span>
                     </a>
 
                     <ul class="dropdown-menu">
@@ -128,7 +128,7 @@
                         <li class="user-header">
                             <img src="{!! access()->user()->picture !!}" class="img-circle" alt="User Image" />
                             <p>
-                                {!! access()->user()->name !!} - {{ trans('roles.web_developer') }}
+                                {!! access()->user()->user_nick !!} - {{ trans('roles.web_developer') }}
                                 <small>{{ trans('strings.backend.general.member_since') }} XX/XX/XXXX</small>
                             </p>
                         </li>

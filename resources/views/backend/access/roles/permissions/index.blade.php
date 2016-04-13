@@ -52,13 +52,13 @@
                                 <div class="dd permission-hierarchy">
                                     <ol class="dd-list">
                                         @foreach ($groups as $group)
-                                                <li class="dd-item" data-id="{!! $group->id !!}">
+                                            <li class="dd-item" data-id="{!! $group->group_id !!}">
                                                     <div class="dd-handle">{!! $group->name !!} <span class="pull-right">{!! $group->permissions->count() !!} {{ trans('labels.backend.access.permissions.label') }}</span></div>
 
                                                     @if ($group->children->count())
                                                         <ol class="dd-list">
                                                             @foreach($group->children as $child)
-                                                                <li class="dd-item" data-id="{!! $child->id !!}">
+                                                                <li class="dd-item" data-id="{!! $child->group_id !!}">
                                                                     <div class="dd-handle">{!! $child->name !!} <span class="pull-right">{!! $child->permissions->count() !!} {{ trans('labels.backend.access.permissions.label') }}</span></div>
                                                                 </li>
                                                             @endforeach
@@ -164,17 +164,17 @@
                                         <td>
                                             @if (count($permission->users))
                                                 @foreach($permission->users as $user)
-                                                    {!! $user->name !!}<br/>
+                                                    {!! $user->user_name !!}<br/>
                                                 @endforeach
                                             @else
                                                 <span class="label label-danger">{{ trans('labels.general.none') }}</span>
                                             @endif
                                         </td>
                                         <td>
-                                            {!! $roles->findOrThrowException(1)->name !!}<br/>
+                                            {!! $roles->findOrThrowException(1)->role_name !!}<br/>
                                             @if (count($permission->roles))
                                                 @foreach($permission->roles as $role)
-                                                    {!! $role->name !!}<br/>
+                                                    {!! $role->role_name !!}<br/>
                                                 @endforeach
                                             @endif
                                         </td>
@@ -185,7 +185,7 @@
                                                 <span class="label label-danger">{{ trans('labels.general.none') }}</span>
                                             @endif
                                         </td>
-                                        <td>{!! $permission->sort !!}</td>
+                                        <td>{!! $permission->sort_order !!}</td>
                                         <td>{!! $permission->system_label !!}</td>
                                         <td>{!! $permission->action_buttons !!}</td>
                                     </tr>

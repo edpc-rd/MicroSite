@@ -28,7 +28,7 @@ class StoreRoleRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'required',
+            'role_name' => 'required|unique:ms_roles',
         ];
     }
 }

@@ -12,15 +12,6 @@ use App\Models\Access\Permission\PermissionGroup;
 class EloquentPermissionGroupRepository implements PermissionGroupRepositoryContract
 {
     /**
-     * @param  $id
-     * @return mixed
-     */
-    public function find($id)
-    {
-        return PermissionGroup::findOrFail($id);
-    }
-
-    /**
      * @param  int     $limit
      * @return mixed
      */
@@ -28,7 +19,7 @@ class EloquentPermissionGroupRepository implements PermissionGroupRepositoryCont
     {
         return PermissionGroup::with('children', 'permissions')
             ->whereNull('parent_id')
-            ->orderBy('sort', 'asc')
+            ->orderBy('sort_order', 'asc')
             ->paginate($limit);
     }
 
@@ -44,7 +35,7 @@ class EloquentPermissionGroupRepository implements PermissionGroupRepositoryCont
 
         return PermissionGroup::with('children', 'permissions')
             ->whereNull('parent_id')
-            ->orderBy('sort', 'asc')
+            ->orderBy('sort_order', 'asc')
             ->get();
     }
 
@@ -81,6 +72,15 @@ class EloquentPermissionGroupRepository implements PermissionGroupRepositoryCont
 
     /**
      * @param  $id
+     * @return mixed
+     */
+    public function find($id)
+    {
+        return PermissionGroup::findOrFail($id);
+    }
+
+    /**
+     * @param  $id
      * @throws GeneralException
      * @return mixed
      */
@@ -111,14 +111,14 @@ class EloquentPermissionGroupRepository implements PermissionGroupRepositoryCont
         foreach ($hierarchy as $group) {
             $this->find((int) $group['id'])->update([
                 'parent_id' => null,
-                'sort'      => $parent_sort,
+                'sort_order' => $parent_sort,
             ]);
 
             if (isset($group['children']) && count($group['children'])) {
                 foreach ($group['children'] as $child) {
                     $this->find((int) $child['id'])->update([
                         'parent_id' => (int) $group['id'],
-                        'sort'      => $child_sort,
+                        'sort_order' => $child_sort,
                     ]);
 
                     $child_sort++;

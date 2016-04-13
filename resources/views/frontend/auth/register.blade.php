@@ -13,9 +13,23 @@
                     {!! Form::open(['url' => 'register', 'class' => 'form-horizontal']) !!}
 
                         <div class="form-group">
-                            {!! Form::label('name', trans('validation.attributes.frontend.name'), ['class' => 'col-md-4 control-label']) !!}
+                            {!! Form::label('user_name', trans('validation.attributes.frontend.name'), ['class' => 'col-md-4 control-label']) !!}
                             <div class="col-md-6">
-                                {!! Form::input('name', 'name', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.frontend.name')]) !!}
+                                {!! Form::input('user_name', 'user_name', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.frontend.name')]) !!}
+                            </div><!--col-md-6-->
+                        </div><!--form-group-->
+
+                    <div class="form-group">
+                        {!! Form::label('user_nick', trans('validation.attributes.frontend.nick'), ['class' => 'col-md-4 control-label']) !!}
+                        <div class="col-md-6">
+                            {!! Form::input('user_nick', 'user_nick', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.frontend.nick')]) !!}
+                        </div><!--col-md-6-->
+                    </div><!--form-group-->
+
+                    <div class="form-group">
+                        {!! Form::label('weixin_id', trans('validation.attributes.frontend.weixin_id'), ['class' => 'col-md-4 control-label']) !!}
+                        <div class="col-md-6">
+                            {!! Form::input('weixin_id', 'weixin_id', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.frontend.weixin_id')]) !!}
                             </div><!--col-md-6-->
                         </div><!--form-group-->
 

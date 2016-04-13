@@ -2,9 +2,9 @@
 
 namespace App\Models\Access\Permission;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Access\Permission\Traits\Attribute\PermissionAttribute;
 use App\Models\Access\Permission\Traits\Relationship\PermissionRelationship;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Permission
@@ -13,6 +13,13 @@ use App\Models\Access\Permission\Traits\Relationship\PermissionRelationship;
 class Permission extends Model
 {
     use PermissionRelationship, PermissionAttribute;
+
+    /**
+     * The primary key for the model.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'permission_id';
 
     /**
      * The database table used by the model.
@@ -26,7 +33,7 @@ class Permission extends Model
      *
      * @var array
      */
-    protected $guarded = ['id'];
+    protected $guarded = ['permission_id'];
 
     /**
      *

@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Backend\Access\User;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\Backend\User\UserContract;
-use App\Repositories\Backend\Role\RoleRepositoryContract;
+use App\Http\Requests\Backend\Access\User\ChangeUserPasswordRequest;
 use App\Http\Requests\Backend\Access\User\CreateUserRequest;
-use App\Http\Requests\Backend\Access\User\StoreUserRequest;
+use App\Http\Requests\Backend\Access\User\DeleteUserRequest;
 use App\Http\Requests\Backend\Access\User\EditUserRequest;
 use App\Http\Requests\Backend\Access\User\MarkUserRequest;
-use App\Http\Requests\Backend\Access\User\UpdateUserRequest;
-use App\Http\Requests\Backend\Access\User\DeleteUserRequest;
-use App\Http\Requests\Backend\Access\User\RestoreUserRequest;
-use App\Http\Requests\Backend\Access\User\ChangeUserPasswordRequest;
-use App\Http\Requests\Backend\Access\User\UpdateUserPasswordRequest;
-use App\Repositories\Backend\Permission\PermissionRepositoryContract;
 use App\Http\Requests\Backend\Access\User\PermanentlyDeleteUserRequest;
-use App\Repositories\Frontend\User\UserContract as FrontendUserContract;
 use App\Http\Requests\Backend\Access\User\ResendConfirmationEmailRequest;
+use App\Http\Requests\Backend\Access\User\RestoreUserRequest;
+use App\Http\Requests\Backend\Access\User\StoreUserRequest;
+use App\Http\Requests\Backend\Access\User\UpdateUserPasswordRequest;
+use App\Http\Requests\Backend\Access\User\UpdateUserRequest;
+use App\Repositories\Backend\Permission\PermissionRepositoryContract;
+use App\Repositories\Backend\Role\RoleRepositoryContract;
+use App\Repositories\Backend\User\UserContract;
+use App\Repositories\Frontend\User\UserContract as FrontendUserContract;
 
 /**
  * Class UserController
@@ -71,7 +71,7 @@ class UserController extends Controller
     public function create(CreateUserRequest $request)
     {
         return view('backend.access.create')
-            ->withRoles($this->roles->getAllRoles('sort', 'asc', true))
+            ->withRoles($this->roles->getAllRoles('sort_order', 'asc', true))
             ->withPermissions($this->permissions->getAllPermissions());
     }
 
@@ -99,9 +99,9 @@ class UserController extends Controller
         $user = $this->users->findOrThrowException($id, true);
         return view('backend.access.edit')
             ->withUser($user)
-            ->withUserRoles($user->roles->lists('id')->all())
-            ->withRoles($this->roles->getAllRoles('sort', 'asc', true))
-            ->withUserPermissions($user->permissions->lists('id')->all())
+            ->withUserRoles($user->roles->lists('role_id')->all())
+            ->withRoles($this->roles->getAllRoles('sort_order', 'asc', true))
+            ->withUserPermissions($user->permissions->lists('permission_id')->all())
             ->withPermissions($this->permissions->getAllPermissions());
     }
 

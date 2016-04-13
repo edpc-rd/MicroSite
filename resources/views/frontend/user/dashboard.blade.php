@@ -28,7 +28,15 @@
                                     </tr>
                                     <tr>
                                         <th>{{ trans('labels.frontend.user.profile.name') }}</th>
-                                        <td>{!! $user->name !!}</td>
+                                        <td>{!! $user->user_name !!}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>{{ trans('labels.frontend.user.profile.nick') }}</th>
+                                        <td>{!! $user->user_nick !!}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>{{ trans('labels.frontend.user.profile.weixin_id') }}</th>
+                                        <td>{!! $user->weixin_id !!}</td>
                                     </tr>
                                     <tr>
                                         <th>{{ trans('labels.frontend.user.profile.email') }}</th>

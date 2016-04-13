@@ -2,10 +2,10 @@
 
 namespace App\Repositories\Backend\User;
 
-use App\Models\Access\User\User;
-use App\Exceptions\GeneralException;
-use App\Repositories\Backend\Role\RoleRepositoryContract;
 use App\Exceptions\Backend\Access\User\UserNeedsRolesException;
+use App\Exceptions\GeneralException;
+use App\Models\Access\User\User;
+use App\Repositories\Backend\Role\RoleRepositoryContract;
 use App\Repositories\Frontend\User\UserContract as FrontendUserContract;
 
 /**
@@ -38,34 +38,13 @@ class EloquentUserRepository implements UserContract
     }
 
     /**
-     * @param  $id
-     * @param  bool               $withRoles
-     * @throws GeneralException
-     * @return mixed
-     */
-    public function findOrThrowException($id, $withRoles = false)
-    {
-        if ($withRoles) {
-            $user = User::with('roles')->withTrashed()->find($id);
-        } else {
-            $user = User::withTrashed()->find($id);
-        }
-
-        if (!is_null($user)) {
-            return $user;
-        }
-
-        throw new GeneralException(trans('exceptions.backend.access.users.not_found'));
-    }
-
-    /**
      * @param  $per_page
      * @param  string      $order_by
      * @param  string      $sort
      * @param  int         $status
      * @return mixed
      */
-    public function getUsersPaginated($per_page, $status = 1, $order_by = 'id', $sort = 'asc')
+    public function getUsersPaginated($per_page, $status = 1, $order_by = 'user_id', $sort = 'asc')
     {
         return User::where('status', $status)
             ->orderBy($order_by, $sort)
@@ -87,7 +66,7 @@ class EloquentUserRepository implements UserContract
      * @param  string  $sort
      * @return mixed
      */
-    public function getAllUsers($order_by = 'id', $sort = 'asc')
+    public function getAllUsers($order_by = 'user_id', $sort = 'asc')
     {
         return User::orderBy($order_by, $sort)
             ->get();
@@ -117,13 +96,59 @@ class EloquentUserRepository implements UserContract
 
             //Send confirmation email if requested
             if (isset($input['confirmation_email']) && $user->confirmed == 0) {
-                $this->user->sendConfirmationEmail($user->id);
+                $this->user->sendConfirmationEmail($user->user_id);
             }
 
             return true;
         }
 
         throw new GeneralException(trans('exceptions.backend.access.users.create_error'));
+    }
+
+    /**
+     * @param  $input
+     * @return mixed
+     */
+    private function createUserStub($input)
+    {
+        $user = new User;
+        $user->user_name = $input['user_name'];
+        $user->user_nick = $input['user_nick'];
+        $user->weixin_id = $input['weixin_id'];
+        $user->email = $input['email'];
+        $user->password = bcrypt($input['password']);
+        $user->status = isset($input['status']) ? 1 : 0;
+        $user->confirmation_code = md5(uniqid(mt_rand(), true));
+        $user->confirmed = isset($input['confirmed']) ? 1 : 0;
+        $user->remark = $input['remark'];
+        $user->login_ip = $_SERVER["REMOTE_ADDR"];
+        return $user;
+    }
+
+    /**
+     * Check to make sure at lease one role is being applied or deactivate user
+     *
+     * @param  $user
+     * @param  $roles
+     * @throws UserNeedsRolesException
+     */
+    private function validateRoleAmount($user, $roles)
+    {
+        //Validate that there's at least one role chosen, placing this here so
+        //at lease the user can be updated first, if this fails the roles will be
+        //kept the same as before the user was updated
+        if (count($roles) == 0) {
+            //Deactivate user
+            $user->status = 0;
+            $user->save();
+
+            $exception = new UserNeedsRolesException();
+            $exception->setValidationErrors(trans('exceptions.backend.access.users.role_needed_create'));
+
+            //Grab the user id in the controller
+            $exception->setUserID($user->user_id);
+            throw $exception;
+        }
     }
 
     /**
@@ -153,6 +178,83 @@ class EloquentUserRepository implements UserContract
         }
 
         throw new GeneralException(trans('exceptions.backend.access.users.update_error'));
+    }
+
+    /**
+     * @param  $id
+     * @param  bool $withRoles
+     * @throws GeneralException
+     * @return mixed
+     */
+    public function findOrThrowException($id, $withRoles = false)
+    {
+        if ($withRoles) {
+            $user = User::withTrashed()->with('roles')->find($id);
+        } else {
+            $user = User::withTrashed()->find($id);
+        }
+
+        if (!is_null($user)) {
+            return $user;
+        }
+
+        throw new GeneralException(trans('exceptions.backend.access.users.not_found'));
+    }
+
+    /**
+     * @param  $input
+     * @param  $user
+     * @throws GeneralException
+     */
+    private function checkUserByEmail($input, $user)
+    {
+        //Figure out if email is not the same
+        if ($user->email != $input['email']) {
+            //Check to see if email exists
+            if (User::where('email', '=', $input['email'])->first()) {
+                throw new GeneralException(trans('exceptions.backend.access.users.email_error'));
+            }
+
+        }
+    }
+
+    /**
+     * @param  $roles
+     * @throws GeneralException
+     */
+    private function checkUserRolesCount($roles)
+    {
+        //User Updated, Update Roles
+        //Validate that there's at least one role chosen
+        if (count($roles['assignees_roles']) == 0) {
+            throw new GeneralException(trans('exceptions.backend.access.users.role_needed'));
+        }
+
+    }
+
+    /**
+     * @param $roles
+     * @param $user
+     */
+    private function flushRoles($roles, $user)
+    {
+        //Flush roles out, then add array of new ones
+        $user->detachRoles($user->roles);
+        $user->attachRoles($roles['assignees_roles']);
+    }
+
+    /**
+     * @param $permissions
+     * @param $user
+     */
+    private function flushPermissions($permissions, $user)
+    {
+        //Flush permissions out, then add array of new ones if any
+        $user->detachPermissions($user->permissions);
+        if (count($permissions['permission_user']) > 0) {
+            $user->attachPermissions($permissions['permission_user']);
+        }
+
     }
 
     /**
@@ -249,103 +351,5 @@ class EloquentUserRepository implements UserContract
         }
 
         throw new GeneralException(trans('exceptions.backend.access.users.mark_error'));
-    }
-
-    /**
-     * Check to make sure at lease one role is being applied or deactivate user
-     *
-     * @param  $user
-     * @param  $roles
-     * @throws UserNeedsRolesException
-     */
-    private function validateRoleAmount($user, $roles)
-    {
-        //Validate that there's at least one role chosen, placing this here so
-        //at lease the user can be updated first, if this fails the roles will be
-        //kept the same as before the user was updated
-        if (count($roles) == 0) {
-            //Deactivate user
-            $user->status = 0;
-            $user->save();
-
-            $exception = new UserNeedsRolesException();
-            $exception->setValidationErrors(trans('exceptions.backend.access.users.role_needed_create'));
-
-            //Grab the user id in the controller
-            $exception->setUserID($user->id);
-            throw $exception;
-        }
-    }
-
-    /**
-     * @param  $input
-     * @param  $user
-     * @throws GeneralException
-     */
-    private function checkUserByEmail($input, $user)
-    {
-        //Figure out if email is not the same
-        if ($user->email != $input['email']) {
-            //Check to see if email exists
-            if (User::where('email', '=', $input['email'])->first()) {
-                throw new GeneralException(trans('exceptions.backend.access.users.email_error'));
-            }
-
-        }
-    }
-
-    /**
-     * @param $roles
-     * @param $user
-     */
-    private function flushRoles($roles, $user)
-    {
-        //Flush roles out, then add array of new ones
-        $user->detachRoles($user->roles);
-        $user->attachRoles($roles['assignees_roles']);
-    }
-
-    /**
-     * @param $permissions
-     * @param $user
-     */
-    private function flushPermissions($permissions, $user)
-    {
-        //Flush permissions out, then add array of new ones if any
-        $user->detachPermissions($user->permissions);
-        if (count($permissions['permission_user']) > 0) {
-            $user->attachPermissions($permissions['permission_user']);
-        }
-
-    }
-
-    /**
-     * @param  $roles
-     * @throws GeneralException
-     */
-    private function checkUserRolesCount($roles)
-    {
-        //User Updated, Update Roles
-        //Validate that there's at least one role chosen
-        if (count($roles['assignees_roles']) == 0) {
-            throw new GeneralException(trans('exceptions.backend.access.users.role_needed'));
-        }
-
-    }
-
-    /**
-     * @param  $input
-     * @return mixed
-     */
-    private function createUserStub($input)
-    {
-        $user                    = new User;
-        $user->name              = $input['name'];
-        $user->email             = $input['email'];
-        $user->password          = bcrypt($input['password']);
-        $user->status            = isset($input['status']) ? 1 : 0;
-        $user->confirmation_code = md5(uniqid(mt_rand(), true));
-        $user->confirmed         = isset($input['confirmed']) ? 1 : 0;
-        return $user;
     }
 }

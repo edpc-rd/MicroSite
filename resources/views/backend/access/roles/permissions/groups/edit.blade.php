@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-    {!! Form::model($group, ['route' => ['admin.access.roles.permission-group.update', $group->id], 'class' => 'form-horizontal', 'role' => 'form', 'method' => 'patch']) !!}
+    {!! Form::model($group, ['route' => ['admin.access.roles.permission-group.update', $group->group_id], 'class' => 'form-horizontal', 'role' => 'form', 'method' => 'patch']) !!}
 
         <div class="box box-success">
             <div class="box-header with-border">

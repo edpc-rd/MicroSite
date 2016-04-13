@@ -13,9 +13,9 @@
                     {!! Form::model($user, ['route' => 'frontend.user.profile.update', 'class' => 'form-horizontal', 'method' => 'PATCH']) !!}
 
                         <div class="form-group">
-                            {!! Form::label('name', trans('validation.attributes.frontend.name'), ['class' => 'col-md-4 control-label']) !!}
+                            {!! Form::label('user_nick', trans('validation.attributes.frontend.nick'), ['class' => 'col-md-4 control-label']) !!}
                             <div class="col-md-6">
-                                {!! Form::input('text', 'name', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.frontend.name')]) !!}
+                                {!! Form::input('text', 'user_nick', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.frontend.nick')]) !!}
                             </div>
                         </div>
 

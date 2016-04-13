@@ -62,16 +62,16 @@
                                         <option value="">{{ trans('labels.general.none') }}</option>
 
                                         @foreach ($groups as $group)
-                                            <option value="{!! $group->id !!}">{!! $group->name !!}</option>
+                                            <option value="{!! $group->group_id !!}">{!! $group->name !!}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div><!--form control-->
 
                             <div class="form-group">
-                                {!! Form::label('sort', trans('validation.attributes.backend.access.permissions.group_sort'), ['class' => 'col-lg-2 control-label']) !!}
+                                {!! Form::label('sort_order', trans('validation.attributes.backend.access.permissions.group_sort'), ['class' => 'col-lg-2 control-label']) !!}
                                 <div class="col-lg-10">
-                                    {!! Form::text('sort', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.backend.access.permissions.group_sort')]) !!}
+                                    {!! Form::text('sort_order', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.backend.access.permissions.group_sort')]) !!}
                                 </div>
                             </div><!--form control-->
 
@@ -80,7 +80,10 @@
                                 <div class="col-lg-3">
                                     @if (count($roles) > 0)
                                         @foreach($roles as $role)
-                                            <input type="checkbox" {{$role->id == 1 ? 'disabled checked' : ''}} value="{{$role->id}}" name="permission_roles[]" id="role-{{$role->id}}" /> <label for="role-{{$role->id}}">{!! $role->name !!}</label><br/>
+                                            <input type="checkbox"
+                                                   {{$role->role_id == 1 ? 'disabled checked' : ''}} value="{{$role->role_id}}"
+                                                   name="permission_roles[]" id="role-{{$role->role_id}}"/> <label
+                                                    for="role-{{$role->role_id}}">{!! $role->role_name !!}</label><br/>
                                         @endforeach
                                     @else
                                         {{ trans('labels.backend.access.permissions.no_roles') }}
@@ -129,7 +132,11 @@
                                                         $dependency_list = implode(", ", $dependency_list);
                                                         ?>
 
-                                                        <li><input type="checkbox" value="{{$p['id']}}" name="dependencies[]" data-dependencies="{!! $dependencies !!}" id="permission-{{$p['id']}}" /> <label for="permission-{{$p['id']}}" />
+                                                        <li><input type="checkbox" value="{{$p['permission_id']}}"
+                                                                   name="dependencies[]"
+                                                                   data-dependencies="{!! $dependencies !!}"
+                                                                   id="permission-{{$p['permission_id']}}"/> <label
+                                                                    for="permission-{{$p['permission_id']}}"/>
 
                                                             @if ($p['dependencies'])
                                                                 <a style="color:black;text-decoration:none;" data-toggle="tooltip" data-html="true" title="<strong>{{ trans('labels.backend.access.permissions.dependencies') }}:</strong> {!! $dependency_list !!}">{!! $p['display_name'] !!} <small><strong>(D)</strong></small></a>
@@ -137,7 +144,8 @@
                                                                 {!! $p['display_name'] !!}
                                                                 @endif
 
-                                                                </label></li>
+                                                            </label>
+                                                        </li>
                                                     @endforeach
                                                 </ul>
                                             </div>

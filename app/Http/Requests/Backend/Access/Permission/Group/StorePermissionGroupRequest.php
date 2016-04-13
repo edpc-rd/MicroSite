@@ -28,7 +28,7 @@ class StorePermissionGroupRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'required|unique:permission_groups',
+            'name' => 'required|unique:ms_permission_groups',
         ];
     }
 }

@@ -37,6 +37,6 @@ trait PermissionRelationship
      */
     public function dependencies()
     {
-        return $this->hasMany(config('access.dependency'), 'permission_id', 'id');
+        return $this->hasMany(config('access.dependency'), 'permission_id', 'permission_id');
     }
 }
