@@ -30,6 +30,8 @@ class LoginRequest extends Request
         return [
             'email'    => 'required|email',
             'password' => 'required',
+            //'g-recaptcha-response' => 'required|captcha',
+            'captcha' => 'required|captcha'
         ];
     }
 }

@@ -1,7 +1,7 @@
 {
-    "name": "rappasoft/laravel-5-boilerplate",
+    "name": "edpc-rd/MicroSite",
     "description": "The Laravel Framework Boilerplate Project.",
-    "keywords": ["framework", "laravel", "boilerplate"],
+    "keywords": ["framework", "laravel", "microSite"],
     "license": "MIT",
     "type": "project",
     "require": {
@@ -13,7 +13,8 @@
         "creativeorange/gravatar": "~1.0",
         "davejamesmiller/laravel-breadcrumbs": "^3.0",
         "hieu-le/active": "~2.0",
-        "arcanedev/log-viewer": "~3.0"
+        "arcanedev/log-viewer": "~3.0",
+        "anhskohbo/no-captcha": "2.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -21,7 +22,9 @@
         "phpunit/phpunit": "~4.0",
         "symfony/css-selector": "2.8.*|3.0.*",
         "symfony/dom-crawler": "2.8.*|3.0.*",
-        "barryvdh/laravel-debugbar": "^2.1"
+        "barryvdh/laravel-debugbar": "^2.1",
+        "squizlabs/php_codesniffer": "2.6.0",
+        "mews/captcha": "2.1.2"
     },
     "autoload": {
         "classmap": [

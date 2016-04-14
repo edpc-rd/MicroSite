@@ -33,6 +33,7 @@ class RegisterRequest extends Request
             'email' => 'required|email|max:60|unique:ms_users',
             'weixin_id' => 'required|max:60',
             'password' => 'required|confirmed|min:6',
+            'g-recaptcha-response' => 'required|captcha',
         ];
     }
 }

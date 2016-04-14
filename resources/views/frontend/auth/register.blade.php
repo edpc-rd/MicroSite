@@ -54,7 +54,24 @@
                             </div><!--col-md-6-->
                         </div><!--form-group-->
 
-                        <div class="form-group">
+                    {{--<div class="form-group">
+                         {!! Form::label('captcha', trans('validation.attributes.frontend.captcha'), ['class' => 'col-md-4 control-label']) !!}
+                         <div class="col-md-6">
+                             {!! app('captcha')->display() !!}
+                         </div>
+                     </div>--}}
+
+                    <div class="form-group">
+                        {!! Form::label('captcha', trans('validation.attributes.frontend.captcha'), ['class' => 'col-md-4 control-label']) !!}
+                        <div class="col-md-3">
+                            {!! Form::input('text', 'captcha', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.frontend.captcha')]) !!}
+                        </div>
+                        <div class="col-md-3">
+                            {!! Captcha::img() !!}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 {!! Form::submit(trans('labels.frontend.auth.register_button'), ['class' => 'btn btn-primary']) !!}
                             </div><!--col-md-6-->

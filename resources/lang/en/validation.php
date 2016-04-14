@@ -154,6 +154,7 @@ return [
             'weixin_id' => 'WeiXin ID',
             'remark' => 'Remark',
             'password' => 'Password',
+            'captcha' => 'Captcha',
             'password_confirmation' => 'Password Confirmation',
             'old_password' => 'Old Password',
             'new_password' => 'New Password',

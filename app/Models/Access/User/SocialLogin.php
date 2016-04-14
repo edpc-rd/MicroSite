@@ -15,7 +15,7 @@ class SocialLogin extends Model
      *
      * @var string
      */
-    protected $table = 'social_logins';
+    protected $table = 'ms_social_logins';
 
     /**
      * The attributes that are not mass assignable.

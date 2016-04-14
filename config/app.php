@@ -188,6 +188,8 @@ return [
         Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,
         HieuLe\Active\ActiveServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
+        //Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
+        Mews\Captcha\CaptchaServiceProvider::class,
 
         /*
          * Has to override the Collective\Html\HtmlServiceProvider form singleton
@@ -249,6 +251,8 @@ return [
         'Gravatar'    => Creativeorange\Gravatar\Facades\Gravatar::class,
         'Html'        => Collective\Html\HtmlFacade::class,
         'Socialite'   => Laravel\Socialite\Facades\Socialite::class,
+        //'NoCaptcha'   => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
+        'Captcha'     => Mews\Captcha\Facades\Captcha::class,
     ],
 
 ];
