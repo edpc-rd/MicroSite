@@ -108,7 +108,7 @@ class CreateMicroSiteTable extends Migration
         });
 
         //Table:ms_user_permissions
-        Schema::create('ms_user_permissions', function (Blueprint $table) {
+        Schema::create(config('access.permission_user_table'), function (Blueprint $table) {
             $table->increments('id')->unsigned();
             $table->integer('permission_id')->unsigned();
             $table->integer('user_id')->unsigned();
@@ -168,10 +168,10 @@ class CreateMicroSiteTable extends Migration
 
         /*Report Tables============================================================================Begin*/
         //Table:ms_reports
-        Schema::create('ms_reports', function (Blueprint $table) {
+        Schema::create(config('report.reports_table'), function (Blueprint $table) {
             $table->increments('report_id')->unsigned();
             $table->integer('group_id')->nullable()->unsigned();
-            $table->string('name', 100);
+            $table->string('name', 100)->unique();
             $table->string('format', 20);
             $table->string('schedule', 100)->nullable();
             $table->tinyInteger('status')->default(1)->unsigned();
@@ -185,7 +185,7 @@ class CreateMicroSiteTable extends Migration
         });
 
         //Table:ms_report_groups
-        Schema::create('ms_report_groups', function (Blueprint $table) {
+        Schema::create(config('report.report_group_table'), function (Blueprint $table) {
             $table->increments('group_id')->unsigned();
             $table->integer('parent_id')->nullable();
             $table->string('name', 50);
@@ -195,7 +195,7 @@ class CreateMicroSiteTable extends Migration
         });
 
         //Table:ms_report_snapshots
-        Schema::create('ms_report_snapshots', function (Blueprint $table) {
+        Schema::create(config('report.snapshots_table'), function (Blueprint $table) {
             $table->increments('snapshot_id')->unsigned();
             $table->integer('report_id')->unsigned();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
@@ -209,12 +209,12 @@ class CreateMicroSiteTable extends Migration
 
             $table->foreign('report_id')
                 ->references('report_id')
-                ->on('ms_reports')
+                ->on(config('report.reports_table'))
                 ->onDelete('cascade');
         });
 
         //Table:ms_report_parameters
-        Schema::create('ms_report_parameters', function (Blueprint $table) {
+        Schema::create(config('report.report_parameter_table'), function (Blueprint $table) {
             $table->increments('parameter_id')->unsigned();
             $table->integer('report_id')->unsigned();
             $table->string('name', 50);
@@ -232,12 +232,13 @@ class CreateMicroSiteTable extends Migration
 
             $table->foreign('report_id')
                 ->references('report_id')
-                ->on('ms_reports')
+                ->on(config('report.reports_table'))
                 ->onDelete('cascade');
         });
 
         //Table:ms_user_subscriptions
-        Schema::create('ms_user_subscriptions', function (Blueprint $table) {
+        Schema::create(config('report.user_subscriptions_table'), function (Blueprint $table) {
+            $table->increments('id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->integer('report_id')->unsigned();
             $table->tinyInteger('subscribe_status')->default(0)->unsigned();
@@ -247,7 +248,6 @@ class CreateMicroSiteTable extends Migration
             /**
              * Add Foreign/Unique/Index
              */
-            $table->primary(['user_id', 'report_id']);
 
             $table->foreign('user_id')
                 ->references('user_id')
@@ -256,7 +256,7 @@ class CreateMicroSiteTable extends Migration
 
             $table->foreign('report_id')
                 ->references('report_id')
-                ->on('ms_reports')
+                ->on(config('report.reports_table'))
                 ->onDelete('cascade');
 
         });
@@ -364,20 +364,26 @@ class CreateMicroSiteTable extends Migration
         });
 
         //Table:ms_report_snapshots
-        Schema::table('ms_report_snapshots', function (Blueprint $table) {
-            $table->dropForeign('ms_report_snapshots_report_id_foreign');
+        Schema::table(config('report.snapshots_table'), function (Blueprint $table) {
+            $table->dropForeign(config('report.snapshots_table') . '_report_id_foreign');
         });
 
         //Table:ms_report_parameters
-        Schema::table('ms_report_parameters', function (Blueprint $table) {
-            $table->dropForeign('ms_report_parameters_report_id_foreign');
+        Schema::table(config('report.report_parameter_table'), function (Blueprint $table) {
+            $table->dropForeign(config('report.report_parameter_table') . '_report_id_foreign');
         });
 
         //Table:ms_user_subscriptions
-        Schema::table('ms_user_subscriptions', function (Blueprint $table) {
-            $table->dropForeign('ms_user_subscriptions_user_id_foreign');
-            $table->dropForeign('ms_user_subscriptions_report_id_foreign');
+        Schema::table(config('report.user_subscriptions_table'), function (Blueprint $table) {
+            $table->dropForeign(config('report.user_subscriptions_table') . '_user_id_foreign');
+            $table->dropForeign(config('report.user_subscriptions_table') . '_report_id_foreign');
         });
+
+        //Table:ms_reports
+        Schema::table(config('report.reports_table'), function (Blueprint $table) {
+            $table->dropUnique(config('report.reports_table') . '_name_unique');
+        });
+
         /*Index Index=============================================================================End*/
 
         /*Drop Tables============================================================================Begin*/
@@ -389,12 +395,12 @@ class CreateMicroSiteTable extends Migration
         Schema::drop(config('access.permission_group_table'));
         Schema::drop(config('access.permission_user_table'));
         Schema::drop(config('access.permission_role_table'));
+        Schema::drop(config('report.reports_table'));
+        Schema::drop(config('report.report_group_table'));
+        Schema::drop(config('report.snapshots_table'));
+        Schema::drop(config('report.report_parameter_table'));
+        Schema::drop(config('report.user_subscriptions_table'));
         Schema::drop('ms_social_logins');
-        Schema::drop('ms_reports');
-        Schema::drop('ms_report_groups');
-        Schema::drop('ms_report_snapshots');
-        Schema::drop('ms_report_parameters');
-        Schema::drop('ms_user_subscriptions');
         Schema::drop('ms_weixin_fans');
         Schema::drop('ms_weixin_messages');
         Schema::drop('ms_configurations');

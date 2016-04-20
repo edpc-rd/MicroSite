@@ -2,9 +2,9 @@
 
 namespace App\Listeners\Frontend\Auth;
 
-use Illuminate\Queue\InteractsWithQueue;
 use App\Events\Frontend\Auth\UserLoggedIn;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 
 /**
  * Class UserLoggedInListener
@@ -32,6 +32,6 @@ class UserLoggedInListener implements ShouldQueue
      */
     public function handle(UserLoggedIn $event)
     {
-        \Log::info('User Logged In: ' . $event->user->name);
+        \Log::info('User Logged In: ' . $event->user->user_name);
     }
 }

@@ -165,6 +165,11 @@ class EloquentUserRepository implements UserContract
         $this->checkUserByEmail($input, $user);
 
         if ($user->update($input)) {
+            //Administrator does not need to update role and permission;
+            if ($user->user_id == 1) {
+                $user->save();
+                return true;
+            }
             //For whatever reason this just wont work in the above call, so a second is needed for now
             $user->status    = isset($input['status']) ? 1 : 0;
             $user->confirmed = isset($input['confirmed']) ? 1 : 0;

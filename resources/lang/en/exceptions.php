@@ -56,6 +56,18 @@ return [
                 'update_password_error' => 'There was a problem changing this users password. Please try again.',
             ],
         ],
+        'report' => [
+            'report' => [
+                'already_exists' => 'That report already exists. Please choose a different name.',
+                'cant_delete_active' => 'You can not delete the Active report.',
+                'create_error' => 'There was a problem creating this report. Please try again.',
+                'delete_error' => 'There was a problem deleting this report. Please try again.',
+                'has_users' => 'You can not delete a report with associated users.',
+                'needs_parameter' => 'You must select at least one parameter for this report.',
+                'not_found' => 'That report does not exist.',
+                'update_error' => 'There was a problem updating this report. Please try again.',
+            ],
+        ],
     ],
 
     'frontend' => [

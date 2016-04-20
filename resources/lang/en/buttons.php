@@ -24,6 +24,14 @@ return [
                 'restore_user' => 'Restore User',
             ],
         ],
+
+        'report' => [
+            'report' => [
+                'activate' => 'Activate',
+                'deactivate' => 'Deactivate',
+                'delete_permanently' => 'Delete Permanently',
+            ],
+        ],
     ],
 
     'general' => [

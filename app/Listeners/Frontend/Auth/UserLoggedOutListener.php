@@ -2,9 +2,9 @@
 
 namespace App\Listeners\Frontend\Auth;
 
-use Illuminate\Queue\InteractsWithQueue;
 use App\Events\Frontend\Auth\UserLoggedOut;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 
 /**
  * Class UserLoggedOutListener
@@ -32,6 +32,6 @@ class UserLoggedOutListener implements ShouldQueue
      */
     public function handle(UserLoggedOut $event)
     {
-        \Log::info('User Logged Out: ' . $event->user->name);
+        \Log::info('User Logged Out: ' . $event->user->user_name);
     }
 }

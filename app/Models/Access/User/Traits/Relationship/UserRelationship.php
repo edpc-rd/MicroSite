@@ -29,7 +29,8 @@ trait UserRelationship
      */
     public function permissions()
     {
-        return $this->belongsToMany(config('access.permission'), config('access.permission_user_table'), 'user_id', 'permission_id');
+        return $this->belongsToMany(config('access.permission'),
+            config('access.permission_user_table'), 'user_id', 'permission_id');
     }
 
     /**
@@ -38,5 +39,28 @@ trait UserRelationship
     public function providers()
     {
         return $this->hasMany(SocialLogin::class);
+    }
+
+    /**
+     * Many-to-Many relations with Report.
+     * ONLY GETS REPORTS
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function reports()
+    {
+        return $this->belongsToMany(config('report.report'),
+            config('report.user_subscriptions_table'), 'user_id', 'report_id');
+    }
+
+    /**
+     * Many-to-Many relations with  Subscription.
+     * ONLY GETS Subscriptions
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function subscriptions()
+    {
+        return $this->hasMany(config('report.user_subscription'), 'user_id', 'user_id');
     }
 }

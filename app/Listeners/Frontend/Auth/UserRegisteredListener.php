@@ -2,9 +2,9 @@
 
 namespace App\Listeners\Frontend\Auth;
 
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Events\Frontend\Auth\UserRegistered;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 
 /**
  * Class UserRegisteredListener
@@ -32,6 +32,6 @@ class UserRegisteredListener implements ShouldQueue
      */
     public function handle(UserRegistered $event)
     {
-        \Log::info('User Registered: ' . $event->user->name);
+        \Log::info('User Registered: ' . $event->user->user_name);
     }
 }

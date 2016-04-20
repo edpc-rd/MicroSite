@@ -15,7 +15,7 @@ trait PermissionAttribute
     {
         if ($this->isSystem())
             return '<span class="label label-danger">' . trans('labels.general.yes') . '</span>';
-        return '<span class="label label-success">' . trans('labels.general.yes') . '</span>';
+        return '<span class="label label-success">' . trans('labels.general.no') . '</span>';
     }
 
     /**
