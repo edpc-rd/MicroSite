@@ -48,7 +48,8 @@ trait UserAttribute
      */
     public function getPictureAttribute()
     {
-        return gravatar()->get($this->email, ['size' => 50]);
+        //return gravatar()->get($this->email, ['size' => 50]);
+        return asset('img/20160420182930.png');
     }
 
     /**
