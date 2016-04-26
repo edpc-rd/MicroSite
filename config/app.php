@@ -190,6 +190,8 @@ return [
         Laravel\Socialite\SocialiteServiceProvider::class,
         //Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
         Mews\Captcha\CaptchaServiceProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        GrahamCampbell\Exceptions\ExceptionsServiceProvider::class,
 
         /*
          * Has to override the Collective\Html\HtmlServiceProvider form singleton
