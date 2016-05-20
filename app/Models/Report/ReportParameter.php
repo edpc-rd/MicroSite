@@ -34,8 +34,9 @@ class ReportParameter extends Model
     /**
      *
      */
-    public function __construct()
+    public function __construct(array $attributes = [])
     {
+        parent::__construct($attributes);
         $this->table = config('report.report_parameter_table');
     }
 }

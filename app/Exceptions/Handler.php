@@ -9,6 +9,8 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 //use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use GrahamCampbell\Exceptions\ExceptionHandler;
 
 /**
@@ -71,6 +73,12 @@ class Handler extends ExceptionHandler
          */
         if ($e instanceof Backend\Access\User\UserNeedsRolesException) {
             return redirect()->route('admin.access.users.edit', $e->userID())->withInput()->withFlashDanger($e->validationErrors());
+        }
+
+        if ($e instanceof TokenExpiredException) {
+            return response()->json(['token_expired'], $e->getStatusCode());
+        } else if ($e instanceof TokenInvalidException) {
+            return response()->json(['token_invalid'], $e->getStatusCode());
         }
 
         return parent::render($request, $e);

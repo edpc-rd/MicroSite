@@ -34,8 +34,10 @@ class Report extends Model
     /**
      *
      */
-    public function __construct()
+    public function __construct(array $attributes = [])
     {
+        parent::__construct($attributes);
         $this->table = config('report.reports_table');
     }
+
 }

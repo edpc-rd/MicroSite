@@ -32,10 +32,21 @@ class ReportSnapshot extends Model
     protected $guarded = ['snapshot_id'];
 
     /**
+     * @var array
+     */
+    protected $dates = ['expiration_at'];
+
+    /**
+     * @var boolean
+     */
+    public $timestamps = false;
+
+    /**
      *
      */
-    public function __construct()
+    public function __construct(array $attributes = [])
     {
+        parent::__construct($attributes);
         $this->table = config('report.snapshots_table');
     }
 }

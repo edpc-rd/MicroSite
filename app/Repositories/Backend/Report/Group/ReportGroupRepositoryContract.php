@@ -15,13 +15,13 @@ interface ReportGroupRepositoryContract
     public function find($id);
 
     /**
-     * @param  int $limit
+     * @param  int     $limit
      * @return mixed
      */
     public function getGroupsPaginated($limit = 50);
 
     /**
-     * @param  bool $withChildren
+     * @param  $withChildren
      * @return mixed
      */
     public function getAllGroups($withChildren = false);

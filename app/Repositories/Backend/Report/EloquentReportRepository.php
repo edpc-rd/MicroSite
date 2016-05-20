@@ -58,7 +58,7 @@ class EloquentReportRepository implements ReportRepositoryContract
         $report->format = $input['format'];
         $report->allow_subscribe = isset($input['allow_subscribe']) ? 'true' : 'false';
         $report->allow_query = isset($input['allow_query']) ? 'true' : 'false';
-        $report->group_id = isset($input['group']) && strlen($input['group']) > 0 ? (int)$input['group'] : null;
+        $report->group_id = isset($input['group_id']) && strlen($input['group_id']) > 0 ? (int)$input['group_id'] : null;
         $report->schedule = $input['schedule'];
         $report->status = isset($input['status']) ? 1 : 0;
         $report->receive_mode = $input['receive_mode'];
@@ -85,7 +85,7 @@ class EloquentReportRepository implements ReportRepositoryContract
         $report->format = $input['format'];
         $report->allow_subscribe = isset($input['allow_subscribe']) ? 'true' : 'false';
         $report->allow_query = isset($input['allow_query']) ? 'true' : 'false';
-        $report->group_id = isset($input['group']) && strlen($input['group']) > 0 ? (int)$input['group'] : null;
+        $report->group_id = isset($input['group_id']) && strlen($input['group_id']) > 0 ? (int)$input['group_id'] : null;
         $report->schedule = $input['schedule'];
         $report->status = isset($input['status']) ? 1 : 0;
         $report->receive_mode = $input['receive_mode'];
@@ -127,7 +127,7 @@ class EloquentReportRepository implements ReportRepositoryContract
     public function destroy($id)
     {
 
-        $report = $this->findOrThrowException($id, true);
+        $report = $this->findOrThrowException($id);
 
         //Don't delete the role is there are users associated
         if ($report->users()->count() > 0) {
@@ -139,6 +139,25 @@ class EloquentReportRepository implements ReportRepositoryContract
         }
 
         throw new GeneralException(trans('exceptions.backend.report.report.delete_error'));
+    }
+
+    /**
+     * @param  $id
+     * @param  $status
+     * @throws GeneralException
+     * @return bool
+     */
+    public function mark($id, $status)
+    {
+
+        $report         = $this->findOrThrowException($id);
+        $report->status = $status;
+
+        if ($report->save()) {
+            return true;
+        }
+
+        throw new GeneralException(trans('exceptions.backend.report.report.mark'));
     }
 
 }

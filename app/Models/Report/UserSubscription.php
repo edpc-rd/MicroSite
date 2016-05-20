@@ -25,10 +25,16 @@ class UserSubscription extends Model
     protected $guarded = ['id'];
 
     /**
+     * @var array
+     */
+    protected $dates = ['subscribe_time'];
+
+    /**
      *
      */
-    public function __construct()
+    public function __construct(array $attributes = [])
     {
+        parent::__construct($attributes);
         $this->table = config('report.user_subscriptions_table');
     }
 }

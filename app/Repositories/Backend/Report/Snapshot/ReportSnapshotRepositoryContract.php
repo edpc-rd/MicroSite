@@ -10,10 +10,10 @@ interface ReportSnapshotRepositoryContract
 {
     /**
      * @param  $id
-     * @param  bool $withPermissions
+     * @param  bool $withReport
      * @return mixed
      */
-    public function findOrThrowException($id, $withPermissions = false);
+    public function findOrThrowException($id, $withReport = false);
 
     /**
      * @param  $per_page
@@ -21,15 +21,15 @@ interface ReportSnapshotRepositoryContract
      * @param  string $sort
      * @return mixed
      */
-    public function getRolesPaginated($per_page, $order_by = 'role_id', $sort = 'asc');
+    public function getSnapshotsPaginated($per_page, $order_by = 'snapshot_id', $sort = 'asc');
 
     /**
      * @param  string $order_by
      * @param  string $sort
-     * @param  bool $withPermissions
+     * @param  bool $withReport
      * @return mixed
      */
-    public function getAllRoles($order_by = 'role_id', $sort = 'asc', $withPermissions = false);
+    public function getAllSnapshots($order_by = 'snapshot_id', $sort = 'asc', $withReport = false);
 
     /**
      * @param  $input
@@ -49,9 +49,4 @@ interface ReportSnapshotRepositoryContract
      * @return mixed
      */
     public function destroy($id);
-
-    /**
-     * @return mixed
-     */
-    public function getDefaultUserRole();
 }

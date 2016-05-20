@@ -50,4 +50,5 @@ interface ReportRepositoryContract
      */
     public function destroy($id);
 
+
 }

@@ -16,4 +16,12 @@ trait ReportGroupRelationship
     {
         return $this->hasMany(config('report.report'), 'group_id')->orderBy('name', 'asc');
     }
+
+    /**
+     * @return mixed
+     */
+    public function children()
+    {
+        return $this->hasMany(config('report.report_group'), 'parent_id', 'group_id')->orderBy('sort_order', 'asc');
+    }
 }

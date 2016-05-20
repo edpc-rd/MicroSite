@@ -60,7 +60,7 @@ trait ReportAttribute
      */
     public function getEditButtonAttribute()
     {
-        if (access()->allow('edit-users')) {
+        if (access()->allow('edit-reports')) {
             return '<a href="' . route('admin.report.report.edit', $this->report_id) .
             '" class="btn btn-xs btn-primary"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="' .
             trans('buttons.general.crud.edit') . '"></i></a> ';

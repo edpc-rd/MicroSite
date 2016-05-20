@@ -3,6 +3,7 @@
 namespace App\Repositories\Backend\Report\Group;
 
 use App\Exceptions\GeneralException;
+use App\Models\Report\ReportGroup;
 
 /**
  * Class EloquentPermissionGroupRepository
@@ -16,7 +17,7 @@ class EloquentReportGroupRepository implements ReportGroupRepositoryContract
      */
     public function getGroupsPaginated($limit = 50)
     {
-        return PermissionGroup::with('children', 'permissions')
+        return ReportGroup::with('children', 'reports')
             ->whereNull('parent_id')
             ->orderBy('sort_order', 'asc')
             ->paginate($limit);
@@ -29,10 +30,10 @@ class EloquentReportGroupRepository implements ReportGroupRepositoryContract
     public function getAllGroups($withChildren = false)
     {
         if ($withChildren) {
-            return PermissionGroup::orderBy('name', 'asc')->get();
+            return ReportGroup::orderBy('name', 'asc')->get();
         }
 
-        return PermissionGroup::with('children', 'permissions')
+        return ReportGroup::with('children', 'reports')
             ->whereNull('parent_id')
             ->orderBy('sort_order', 'asc')
             ->get();
@@ -44,7 +45,7 @@ class EloquentReportGroupRepository implements ReportGroupRepositoryContract
      */
     public function store($input)
     {
-        $group = new PermissionGroup;
+        $group = new ReportGroup;
         $group->name = $input['name'];
         return $group->save();
     }
@@ -61,8 +62,8 @@ class EloquentReportGroupRepository implements ReportGroupRepositoryContract
 
         //Name is changing for whatever reason
         if ($group->name != $input['name']) {
-            if (PermissionGroup::where('name', $input['name'])->count()) {
-                throw new GeneralException(trans('exceptions.backend.access.permissions.groups.name_taken'));
+            if (ReportGroup::where('name', $input['name'])->count()) {
+                throw new GeneralException(trans('exceptions.backend.report.groups.name_taken'));
             }
         }
 
@@ -75,7 +76,7 @@ class EloquentReportGroupRepository implements ReportGroupRepositoryContract
      */
     public function find($id)
     {
-        return PermissionGroup::findOrFail($id);
+        return ReportGroup::findOrFail($id);
     }
 
     /**
@@ -88,11 +89,11 @@ class EloquentReportGroupRepository implements ReportGroupRepositoryContract
         $group = $this->find($id);
 
         if ($group->children->count()) {
-            throw new GeneralException(trans('exceptions.backend.access.permissions.groups.has_children'));
+            throw new GeneralException(trans('exceptions.backend.report.groups.has_children'));
         }
 
-        if ($group->permissions->count()) {
-            throw new GeneralException(trans('exceptions.backend.access.permissions.groups.associated_permissions'));
+        if ($group->reports->count()) {
+            throw new GeneralException(trans('exceptions.backend.report.groups.associated_reports'));
         }
 
         return $group->delete();
@@ -108,15 +109,15 @@ class EloquentReportGroupRepository implements ReportGroupRepositoryContract
         $child_sort = 1;
 
         foreach ($hierarchy as $group) {
-            $this->find((int)$group['id'])->update([
+            $this->find((int)$group['group_id'])->update([
                 'parent_id' => null,
                 'sort_order' => $parent_sort,
             ]);
 
             if (isset($group['children']) && count($group['children'])) {
                 foreach ($group['children'] as $child) {
-                    $this->find((int)$child['id'])->update([
-                        'parent_id' => (int)$group['id'],
+                    $this->find((int)$child['group_id'])->update([
+                        'parent_id' => (int)$group['group_id'],
                         'sort_order' => $child_sort,
                     ]);
 

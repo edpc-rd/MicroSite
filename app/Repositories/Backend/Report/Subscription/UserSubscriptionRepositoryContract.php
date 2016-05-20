@@ -9,15 +9,44 @@ namespace App\Repositories\Backend\Report\Subscription;
 interface UserSubscriptionRepositoryContract
 {
     /**
-     * @param  $permission_id
-     * @param  $dependency_id
+     * @param  $id
+     * @param  bool $withUsers
      * @return mixed
      */
-    public function create($permission_id, $dependency_id);
+    public function findOrThrowException($id, $withUsers = false);
 
     /**
-     * @param  $permission_id
+     * @param  $per_page
+     * @param  string $order_by
+     * @param  string $sort
      * @return mixed
      */
-    public function clear($permission_id);
+    public function getSubscriptionsPaginated($per_page, $order_by = 'report_id', $sort = 'asc');
+
+    /**
+     * @param  string $order_by
+     * @param  string $sort
+     * @param  bool $withUser
+     * @return mixed
+     */
+    public function getAllSubscriptions($order_by = 'report_id', $sort = 'asc', $withUser = true);
+
+    /**
+     * @param  $input
+     * @return mixed
+     */
+    public function create($input);
+
+    /**
+     * @param  $id
+     * @param  $input
+     * @return mixed
+     */
+    public function update($id, $input);
+
+    /**
+     * @param  $id
+     * @return mixed
+     */
+    public function destroy($id);
 }

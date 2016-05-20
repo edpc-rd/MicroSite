@@ -17,7 +17,9 @@
         "anhskohbo/no-captcha": "2.*",
         "barryvdh/laravel-ide-helper": "v2.1.4",
         "filp/whoops": "2.1.2",
-        "graham-campbell/exceptions": "v8.4.0"
+        "graham-campbell/exceptions": "v8.4.0",
+        "dingo/api": "1.0.x@dev",
+        "tymon/jwt-auth": "0.5.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

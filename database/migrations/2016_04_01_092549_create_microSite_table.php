@@ -202,6 +202,7 @@ class CreateMicroSiteTable extends Migration
             $table->timestamp('expiration_at')->nullable();
             $table->string('file_name', 50)->nullable();
             $table->string('file_path', 200)->nullable();
+            $table->string('client_ip', 50)->nullable();
 
             /**
              * Add Foreign/Unique/Index

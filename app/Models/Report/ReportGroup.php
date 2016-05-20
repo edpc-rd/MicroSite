@@ -34,8 +34,10 @@ class ReportGroup extends Model
     /**
      *
      */
-    public function __construct()
+    public function __construct(array $attributes = [])
     {
+        parent::__construct($attributes);
         $this->table = config('report.report_group_table');
     }
+
 }

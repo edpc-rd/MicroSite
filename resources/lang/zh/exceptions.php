@@ -62,17 +62,44 @@ return [
                 'cant_delete_active' => '您不能刪除啟用了的報表.',
                 'create_error' => '創建報表時出現問題，請重試.',
                 'delete_error' => '刪除報表時出現問題，請重試.',
+                'mark' => '修改報表狀態出現問題，請重試.',
                 'has_users' => '您不能刪除該報表，因為已有用戶訂閱它.',
                 'needs_parameter' => '您必須為報表選擇至少一個參數.',
                 'not_found' => '報表不存在.',
                 'update_error' => '更新報表時出現問題，請重試.',
+            ],
+            'subscription' => [
+                'already_exists' => '报表授权已存在，請重新输入.',
+                'cant_delete_active' => '您不能刪除订阅了的報表授权.',
+                'create_error' => '創建報表授权時出現問題，請重試.',
+                'delete_error' => '刪除報表授权時出現問題，請重試.',
+                'mark' => '修改報表授权狀態出現問題，請重試.',
+                'not_found' => '報表不存在.',
+                'update_error' => '更新報表授权時出現問題，請重試.',
+            ],
+            'groups' => [
+                'associated_reports' => '您不能刪除這個群組，因為它有關聯的报表.',
+                'has_children' => '您不能刪除這個群組，因為它下面還有子群組.',
+                'name_taken' => '已經存在該群組',
+            ],
+            'parameter' => [
+                'create_error' => '創建報表参数時出現問題，請重試.',
+                'delete_error' => '刪除報表参数時出現問題，請重試.',
+                'update_error' => '更新報表参数時出現問題，請重試.',
+                'not_found' => '報表参数不存在.',
+            ],
+            'snapshot' => [
+                'create_error' => '創建報表快照時出現問題，請重試.',
+                'delete_error' => '刪除報表快照時出現問題，請重試.',
+                'update_error' => '更新報表快照時出現問題，請重試.',
+                'not_found' => '報表快照不存在.',
             ],
         ],
     ],
 
     'frontend' => [
         'auth' => [
-            'confirmation' => [
+            'confirmation' => ['delete_error' => '刪除報表時出現問題，請重試.',
                 'already_confirmed' => '您的賬號已經確認.',
                 'confirm' => '請確認您的賬號!',
                 'created_confirm' => '用戶賬號成功創建. 已發送一封確認郵件到您的郵箱.',

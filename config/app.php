@@ -74,7 +74,7 @@ return [
     |
     */
 
-    'locale' => env('APP_LOCALE', 'cn'),
+    'locale' => env('APP_LOCALE', 'zh'),
 
     /*
     |--------------------------------------------------------------------------
@@ -176,6 +176,8 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\ReportServiceProvider::class,
+
 
         /*
          * Third Party Providers
@@ -192,6 +194,8 @@ return [
         Mews\Captcha\CaptchaServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         GrahamCampbell\Exceptions\ExceptionsServiceProvider::class,
+        Dingo\Api\Provider\LaravelServiceProvider::class,
+        Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
 
         /*
          * Has to override the Collective\Html\HtmlServiceProvider form singleton
@@ -255,6 +259,10 @@ return [
         'Socialite'   => Laravel\Socialite\Facades\Socialite::class,
         //'NoCaptcha'   => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
         'Captcha'     => Mews\Captcha\Facades\Captcha::class,
+        'Api'         => Dingo\Api\Facade\API::class,
+        'ApiRouter'   => Dingo\Api\Facade\Route::class,
+        'JWTAuth'     => Tymon\JWTAuth\Facades\JWTAuth::class,
+        'JWTFactory'  => Tymon\JWTAuth\Facades\JWTFactory::class,
     ],
 
 ];
