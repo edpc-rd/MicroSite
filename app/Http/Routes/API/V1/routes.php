@@ -16,5 +16,4 @@ $api->version('v1', function ($api) {
     $api->group(['namespace' => 'App\Api\V1\Controllers\Report','middleware' => 'jwt.auth'], function($api) {
         $api->post('/report/uploadFile', 'SnapshotController@uploadFile');
     });
-    
 });

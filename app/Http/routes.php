@@ -38,6 +38,7 @@ Route::group(['namespace' => 'Backend', 'prefix' => 'admin', 'middleware' => 'ad
 
 Route::group(['namespace' => 'Api'], function() {
     require (__DIR__ . '/Routes/API/V1/routes.php');
+    
 });
 
 
