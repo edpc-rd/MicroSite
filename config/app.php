@@ -196,6 +196,7 @@ return [
         GrahamCampbell\Exceptions\ExceptionsServiceProvider::class,
         Dingo\Api\Provider\LaravelServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+        Overtrue\LaravelWechat\ServiceProvider::class,
 
         /*
          * Has to override the Collective\Html\HtmlServiceProvider form singleton
@@ -263,6 +264,7 @@ return [
         'ApiRouter'   => Dingo\Api\Facade\Route::class,
         'JWTAuth'     => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory'  => Tymon\JWTAuth\Facades\JWTFactory::class,
+        'Wechat'      => Overtrue\LaravelWechat\Facade::class,
     ],
 
 ];
