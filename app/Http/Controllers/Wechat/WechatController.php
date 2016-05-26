@@ -39,7 +39,7 @@ class WechatController extends Controller
         // 假设企业号在公众平台上设置的参数如下
         $encodingAesKey = "yyaNeacqghYBasSEy4d4InUPwTCIbAkyf15fJ4CIfw3";
         $token = "aRAXM84VRIAq8Y3";
-        $corpId = "aRAXM84VRIAq8Y3";//需要更换
+        $corpId = "wx3b01abe2ac9a2785";//需要更换
 
 
         $sVerifyMsgSig =$_GET["msg_signature"];
