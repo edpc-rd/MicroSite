@@ -21,6 +21,12 @@ interface UserContract
     public function findByEmail($email);
 
     /**
+     * @param $name
+     * @return mixed
+     */
+    public function findByName($name);
+
+    /**
      * @param $token
      * @return mixed
      */

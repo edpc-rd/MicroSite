@@ -41,7 +41,7 @@ Route::group(['namespace' => 'Api'], function() {
     
 });
 
-Route::group(['namespace' => 'Wechat'], function() {
+Route::group(['namespace' => 'Wechat' , 'prefix' => 'wechat'], function() {
     require (__DIR__ . '/Routes/Wechat/routes.php');
 });
 

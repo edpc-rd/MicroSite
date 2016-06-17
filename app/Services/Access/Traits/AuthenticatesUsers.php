@@ -8,6 +8,8 @@ use App\Events\Frontend\Auth\UserLoggedIn;
 use App\Events\Frontend\Auth\UserLoggedOut;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use App\Http\Requests\Frontend\Auth\LoginRequest;
+use App\Http\Requests\Frontend\Auth\MemberLoginRequest;
+use Stoneworld\Wechat\MemberLogin;
 
 /**
  * Class AuthenticatesUsers
@@ -56,6 +58,52 @@ trait AuthenticatesUsers
 
         return redirect()->back()
             ->withInput($request->only($this->loginUsername(), 'remember'))
+            ->withErrors([
+                $this->loginUsername() => trans('auth.failed'),
+            ]);
+    }
+
+    /**
+     * @param MemberLoginRequest $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
+    public function memberLogin(MemberLoginRequest $request)
+    {
+        $memLogin = new MemberLogin(config('qy-wechat.app_id'), config('qy-wechat.secret'));
+        $member = $memLogin->member();
+        $user = $this->user->findByName($member['user_info']['userid']);
+
+
+
+        // If the class is using the ThrottlesLogins trait, we can automatically throttle
+        // the login attempts for this application. We'll key this by the username and
+        // the IP address of the client making these requests into this application.
+        $throttles = in_array(
+            ThrottlesLogins::class, class_uses_recursive(get_class($this))
+        );
+
+        if ($throttles && $this->hasTooManyLoginAttempts($request)) {
+            return $this->sendLockoutResponse($request);
+        }
+
+        /*if (auth()->attempt($request->only($this->loginUsername(), 'password'), $request->has('remember'))) {
+            return $this->handleUserWasAuthenticated($request, $throttles);
+        }*/
+
+        //auth()->loginUsingId(1);
+        if (auth()->loginUsingId($user->user_id)) {
+            return $this->handleUserWasAuthenticated($request, $throttles);
+        }
+
+        // If the login attempt was unsuccessful we will increment the number of attempts
+        // to login and redirect the user back to the login form. Of course, when this
+        // user surpasses their maximum number of attempts they will get locked out.
+        if ($throttles) {
+            $this->incrementLoginAttempts($request);
+        }
+
+        return redirect()->back()
+            ->withInput($request->only($this->loginUsername()))
             ->withErrors([
                 $this->loginUsername() => trans('auth.failed'),
             ]);

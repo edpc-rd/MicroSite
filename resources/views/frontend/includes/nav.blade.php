@@ -42,6 +42,7 @@
                 @if (Auth::guest())
                     <li>{!! link_to('login', trans('navs.frontend.login')) !!}</li>
                     <li>{!! link_to('register', trans('navs.frontend.register')) !!}</li>
+                    <li><a href={{ access()->getLoginPage() }}>微信登陆授权</a></li>
                 @else
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -63,7 +64,6 @@
                         </ul>
                     </li>
                 @endif
-
             </ul>
         </div><!--navbar-collapse-->
     </div><!--container-->

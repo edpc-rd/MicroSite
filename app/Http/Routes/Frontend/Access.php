@@ -25,6 +25,8 @@ Route::group(['namespace' => 'Auth'], function () {
             ->name('auth.login');
         Route::post('login', 'AuthController@login');
 
+        Route::get('member/login', 'AuthController@memberLogin')->name('member.login');;
+
         // Socialite Routes
         Route::get('login/{provider}', 'AuthController@loginThirdParty')
             ->name('auth.provider');

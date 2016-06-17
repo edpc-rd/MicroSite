@@ -67,7 +67,8 @@ class SnapshotController extends BaseController
         }
 
         switch ($clientType){
-            case 'application/vnd.ms-excel':$filePath = 'uploads\reports\excel';break;
+            case 'application/vnd.ms-excel':
+            case 'application/CDFV2-corrupt':$filePath = 'uploads\reports\excel';break;
             case 'text/html':$filePath = 'uploads\reports\html';break;
             case 'image/jpeg':
             case 'image/gif':

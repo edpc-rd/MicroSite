@@ -251,4 +251,19 @@ class EloquentUserRepository implements UserContract
 
         throw new GeneralException(trans('exceptions.frontend.auth.password.change_mismatch'));
     }
+    
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function findByName($name) {
+        $user = User::where('user_name', $name)->first();
+
+        if ($user instanceof User)
+            return $user;
+
+        return false;
+    }
+
+
 }
