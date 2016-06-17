@@ -19,7 +19,9 @@
         "filp/whoops": "2.1.2",
         "graham-campbell/exceptions": "v8.4.0",
         "dingo/api": "1.0.x@dev",
-        "tymon/jwt-auth": "0.5.*"
+        "tymon/jwt-auth": "0.5.*",
+        "overtrue/laravel-wechat": "~3.0",
+        "stoneworld/wechat": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -56,16 +58,24 @@
         ],
         "post-install-cmd": [
             "php artisan clear-compiled",
+            "php artisan ide-helper:generate",
             "php artisan optimize"
         ],
         "pre-update-cmd": [
             "php artisan clear-compiled"
         ],
         "post-update-cmd": [
+            "php artisan ide-helper:generate",
             "php artisan optimize"
         ]
     },
     "config": {
         "preferred-install": "dist"
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
     }
 }
