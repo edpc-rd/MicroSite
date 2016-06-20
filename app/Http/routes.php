@@ -42,7 +42,7 @@ Route::group(['namespace' => 'Api'], function() {
 });
 
 Route::group(['namespace' => 'Weixin' , 'prefix' => 'weixin'], function() {
-    require (__DIR__ . '/Routes/Wexin/routes.php');
+    require (__DIR__ . '/Routes/Weixin/routes.php');
 });
 
 
