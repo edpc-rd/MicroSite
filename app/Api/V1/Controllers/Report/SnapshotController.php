@@ -1,6 +1,6 @@
 <?php
 
-namespace  App\Api\V1\Controllers\Report;
+namespace App\Api\V1\Controllers\Report;
 
 use App\Api\V1\Controllers\BaseController;
 use App\Repositories\Backend\Report\Snapshot\ReportSnapshotRepositoryContract;
@@ -16,6 +16,10 @@ use Illuminate\Http\Request;
  */
 class SnapshotController extends BaseController
 {
+    const TYPE_IMG   = 'PNG';
+    const TYPE_HTML  = 'HTML';
+    const TYPE_EXCEL = 'XLS';
+    const TYPE_TEXT  = 'TXT';
     /**
      * @var UserContract
      */
@@ -32,8 +36,8 @@ class SnapshotController extends BaseController
     protected $reports;
 
     /**
-     * @param UserContract                 $users
-     * @param ReportSnapshotRepositoryContract       $snapshots
+     * @param UserContract $users
+     * @param ReportSnapshotRepositoryContract $snapshots
      * @param ReportRepositoryContract $reports
      */
     public function __construct(
@@ -42,46 +46,58 @@ class SnapshotController extends BaseController
         ReportRepositoryContract $reports
     )
     {
-        $this->users       = $users;
-        $this->snapshots       = $snapshots;
+        $this->users = $users;
+        $this->snapshots = $snapshots;
         $this->reports = $reports;
     }
 
-    public function uploadFile(Request $request) {
-
-        try{
+    public function uploadFile(Request $request)
+    {
+        try {
             $report = $this->reports->findOrThrowException($request->get('report_id'));
-        }catch (\Exception $e){
-            return response()->json(array('Error'=>"Report Not Found"));
+        } catch (\Exception $e) {
+            return response()->json(array('Error' => "Report Not Found"));
         }
 
         $file = $request->File('file');
-        $clientIP =$request->getClientIp();
+        $abstract = $request->get('abstract');
+        $clientIP = $request->getClientIp();
         $clientName = $file->getClientOriginalName();
         $clientType = $file->getMimeType();
         $expiration_at = strtotime($request->get('expiration_at'));
         $fileSize = $file->getSize() / 1024;
 
-        if($fileSize>5000){
-            return response()->json(array('Error'=>"File Too Large!"));
+        if ($fileSize > 5000) {
+            return response()->json(array('Error' => "File Too Large!"));
         }
 
-        switch ($clientType){
+        switch ($clientType) {
             case 'application/vnd.ms-excel':
-            case 'application/CDFV2-corrupt':$filePath = 'uploads\reports\excel';break;
-            case 'text/html':$filePath = 'uploads\reports\html';break;
+            case 'application/CDFV2-corrupt':
+                $filePath = 'uploads\reports\excel';
+                $fileType = self::TYPE_EXCEL;
+                break;
+            case 'text/html':
+                $filePath = 'uploads\reports\html';
+                $fileType = self::TYPE_HTML;
+                break;
             case 'image/jpeg':
             case 'image/gif':
-            case 'image/png':$filePath = 'uploads\reports\img';break;
+            case 'image/png':
+                $filePath = 'uploads\reports\img';
+                $fileType = self::TYPE_IMG;
+                break;
             default:
-                return response()->json(array('Error'=>'No Support This FileType!'));
+                return response()->json(array('Error' => 'No Support This FileType!'));
         }
 
-        $file->move($filePath,$clientName);
+        $file->move($filePath, $clientName);
 
         $data = array(
             "file_name" => $clientName,
             "file_path" => $filePath,
+            "file_type" => $fileType,
+            "abstract" => $abstract,
             "report_id" => $report->report_id,
             "expiration_at" => $expiration_at,
             "client_ip" => $clientIP,
@@ -95,7 +111,7 @@ class SnapshotController extends BaseController
     {
         try {
 
-            if (! $user = JWTAuth::parseToken()->authenticate()) {
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
                 return response()->json(['user_not_found'], 404);
             }
 

@@ -170,6 +170,7 @@ class CreateMicroSiteTable extends Migration
         //Table:ms_reports
         Schema::create(config('report.reports_table'), function (Blueprint $table) {
             $table->increments('report_id')->unsigned();
+            $table->string('report_no', 10)->unique();
             $table->integer('group_id')->nullable()->unsigned();
             $table->string('name', 100)->unique();
             $table->string('format', 20);
@@ -202,6 +203,9 @@ class CreateMicroSiteTable extends Migration
             $table->timestamp('expiration_at')->nullable();
             $table->string('file_name', 50)->nullable();
             $table->string('file_path', 200)->nullable();
+            $table->string('file_type',10);
+            $table->tinyInteger('status');
+            $table->string('abstract', 200)->nullable();
             $table->string('client_ip', 50)->nullable();
 
             /**

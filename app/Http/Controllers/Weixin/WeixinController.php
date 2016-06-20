@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Wechat;
+namespace App\Http\Controllers\Weixin;
 
 use App\Http\Controllers\Controller;
 use Stoneworld\Wechat\Server;
@@ -17,9 +17,7 @@ use Stoneworld\Wechat\MemberLogin;
  * @package App\Http\Controllers\Backend
  */
 
-//include_once 'qywechat.class.php';
-
-class WechatController extends Controller
+class WeixinController extends Controller
 {
 
     /**
@@ -43,7 +41,7 @@ class WechatController extends Controller
   		    '_logcallback'=>'logg', //调试输出方法，需要有一个string类型的参数
         );
         logg("GET参数为：\n".var_export($_GET,true));
-        $weObj = new Wechat($options);
+        $weObj = new Wexin($options);
         $ret=$weObj->valid();
         if (!$ret) {
             logg("验证失败！");
@@ -116,7 +114,7 @@ class WechatController extends Controller
         $newsItem->title = 'MicroSite News Test';
         $newsItem->description = 'News From MicroSite';
         $newsItem->pic_url = $picUrl;
-        $newsItem->url = 'http://microsite.ngrok.cc//uploads/reports/html/R003_detail.html';
+        $newsItem->url = 'http://microsite.ngrok.cc/uploads/reports/html/R003_detail.html';
         $message = Message::make('news')->item($newsItem);
         $broadcast = new Broadcast(config('qy-wechat.app_id'), config('qy-wechat.secret'));
         $broadcast->fromAgentId('3')->send($message)->toAll();
@@ -125,7 +123,7 @@ class WechatController extends Controller
     public function sendMpNews()
     {
         $auth = new Auth(config('qy-wechat.app_id'), config('qy-wechat.secret'));
-        $url = $auth->url('http://microsite.ngrok.cc/wechat/getUserInfo');
+        $url = $auth->url('http://microsite.ngrok.cc/weixin/getUserInfo');
         $media_id = $this->uploadImage(public_path() . '/img/80591780457743455.png');
         $newsItem = new MpNewsItem();
         $newsItem->title = 'MicroSite MpNews Test!';
@@ -138,7 +136,7 @@ class WechatController extends Controller
 
         $message = Message::make('mp_news')->item($newsItem);
         $broadcast = new Broadcast(config('qy-wechat.app_id'), config('qy-wechat.secret'));
-        $broadcast->fromAgentId('3')->send($message)->to('LiZhenHua');
+        $broadcast->fromAgentId('3')->send($message)->to('LinHuiMin');
     }
 
     public function getUserInfo()

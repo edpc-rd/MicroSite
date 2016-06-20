@@ -51,6 +51,8 @@ class EloquentReportSnapshotRepository implements ReportSnapshotRepositoryContra
         $snapshot = new ReportSnapshot;
         $snapshot->file_name = $input['file_name'];
         $snapshot->file_path = $input['file_path'];
+        $snapshot->file_type = $input['file_type'];
+        $snapshot->abstract = $input['abstract'];
         $snapshot->expiration_at = $input['expiration_at'];
         $snapshot->report_id = isset($input['report_id']) && strlen($input['report_id']) > 0 ? (int)$input['report_id'] : null;
         $snapshot->client_ip = $input['client_ip'];
