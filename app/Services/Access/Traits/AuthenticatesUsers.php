@@ -9,7 +9,6 @@ use App\Events\Frontend\Auth\UserLoggedOut;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use App\Http\Requests\Frontend\Auth\LoginRequest;
 use App\Http\Requests\Frontend\Auth\MemberLoginRequest;
-use Stoneworld\Wechat\MemberLogin;
 
 /**
  * Class AuthenticatesUsers
@@ -69,11 +68,9 @@ trait AuthenticatesUsers
      */
     public function memberLogin(MemberLoginRequest $request)
     {
-        $memLogin = new MemberLogin(config('qy-wechat.app_id'), config('qy-wechat.secret'));
-        $member = $memLogin->member();
+        $member = app('weixin')->getLoginMember();
+
         $user = $this->user->findByName($member['user_info']['userid']);
-
-
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and

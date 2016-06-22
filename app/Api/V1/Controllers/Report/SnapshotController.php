@@ -74,17 +74,17 @@ class SnapshotController extends BaseController
         switch ($clientType) {
             case 'application/vnd.ms-excel':
             case 'application/CDFV2-corrupt':
-                $filePath = 'uploads\reports\excel';
+                $filePath = app_path() . 'resources\uploads\reports\excel';
                 $fileType = self::TYPE_EXCEL;
                 break;
             case 'text/html':
-                $filePath = 'uploads\reports\html';
+                $filePath = app_path() . 'resources\uploads\reports\html';
                 $fileType = self::TYPE_HTML;
                 break;
             case 'image/jpeg':
             case 'image/gif':
             case 'image/png':
-                $filePath = 'uploads\reports\img';
+                $filePath = app_path() . 'resources\uploads\reports\img';
                 $fileType = self::TYPE_IMG;
                 break;
             default:

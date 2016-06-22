@@ -16,4 +16,23 @@ $api->version('v1', function ($api) {
     $api->group(['namespace' => 'App\Api\V1\Controllers\Report','middleware' => 'jwt.auth'], function($api) {
         $api->post('/report/uploadFile', 'SnapshotController@uploadFile');
     });
+
+    $api->group(['namespace' => 'App\Api\V1\Controllers\Weixin','middleware' => 'jwt.auth'], function($api) {
+        $api->get('/weixin/sendMsgToTag', 'WeixinController@sendMsgToTag');
+        $api->get('/weixin/sendImgToUser', 'WeixinController@sendImgToUser');
+        $api->get('/weixin/getFile', 'WeixinController@getFile');
+        $api->any('/weixin/sendMpNews', 'WeixinController@sendMpNews');
+        $api->any('/weixin/getForeverFileList', 'WeixinController@getForeverFileList');
+        $api->any('/weixin/uploadNewsImg', 'WeixinController@uploadNewsImg');
+        $api->any('/weixin/getForeverFile', 'WeixinController@getForeverFile');
+        $api->any('/weixin/sendNews', 'WeixinController@sendNews');
+        $api->any('/weixin/uploadFile', 'WeixinController@uploadFile');
+        $api->any('/weixin/uploadImage', 'WeixinController@uploadImage');
+    });
+
+    $api->group(['namespace' => 'App\Api\V1\Controllers\Weixin'], function($api) {
+        $api->any('/weixin/getMemberInfo', 'WeixinController@getMemberInfo');
+        $api->any('/weixin/serve', 'WeixinController@serve');
+    });
+
 });

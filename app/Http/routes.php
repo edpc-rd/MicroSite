@@ -34,6 +34,7 @@ Route::group(['namespace' => 'Backend', 'prefix' => 'admin', 'middleware' => 'ad
     require (__DIR__ . '/Routes/Backend/Dashboard.php');
     require (__DIR__ . '/Routes/Backend/Access.php');
     require (__DIR__ . '/Routes/Backend/LogViewer.php');
+    require (__DIR__ . '/Routes/Backend/Report.php');
 });
 
 Route::group(['namespace' => 'Api'], function() {
@@ -41,8 +42,8 @@ Route::group(['namespace' => 'Api'], function() {
     
 });
 
-Route::group(['namespace' => 'Weixin' , 'prefix' => 'weixin'], function() {
+/*Route::group(['namespace' => 'Weixin' , 'prefix' => 'weixin'], function() {
     require (__DIR__ . '/Routes/Weixin/routes.php');
-});
+});*/
 
 

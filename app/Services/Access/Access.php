@@ -2,8 +2,6 @@
 
 namespace App\Services\Access;
 
-use Stoneworld\Wechat\MemberLogin;
-use URL;
 /**
  * Class Access
  * @package App\Services\Access
@@ -131,15 +129,5 @@ class Access
     public function hasPermissions($permissions, $needsAll = false)
     {
         return $this->allowMultiple($permissions, $needsAll);
-    }
-
-    /**
-     * @param
-     * @return string
-     */
-    public function getLoginPage()
-    {
-        $memLogin = new MemberLogin(config('qy-wechat.app_id'), config('qy-wechat.secret'));
-        return $memLogin->getLoginUrl(URL::route('member.login'),'member');
     }
 }

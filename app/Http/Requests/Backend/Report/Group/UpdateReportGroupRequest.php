@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Http\Requests\Backend\Report\Group;
+
+use App\Http\Requests\Request;
+
+/**
+ * Class UpdateReportGroupRequest
+ * @package App\Http\Requests\Backend\Report\Group
+ */
+class UpdateReportGroupRequest extends Request
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return access()->allow('edit-group-groups');
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            'name' => 'required',
+            'sort_order' => 'required',
+        ];
+    }
+}
