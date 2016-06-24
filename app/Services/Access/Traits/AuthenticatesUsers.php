@@ -72,38 +72,64 @@ trait AuthenticatesUsers
 
         $user = $this->user->findByName($member['user_info']['userid']);
 
-        // If the class is using the ThrottlesLogins trait, we can automatically throttle
-        // the login attempts for this application. We'll key this by the username and
-        // the IP address of the client making these requests into this application.
-        $throttles = in_array(
-            ThrottlesLogins::class, class_uses_recursive(get_class($this))
-        );
+        if ($user) {
+            // If the class is using the ThrottlesLogins trait, we can automatically throttle
+            // the login attempts for this application. We'll key this by the username and
+            // the IP address of the client making these requests into this application.
+            $throttles = in_array(
+                ThrottlesLogins::class, class_uses_recursive(get_class($this))
+            );
 
-        if ($throttles && $this->hasTooManyLoginAttempts($request)) {
-            return $this->sendLockoutResponse($request);
+            if ($throttles && $this->hasTooManyLoginAttempts($request)) {
+                return $this->sendLockoutResponse($request);
+            }
+
+            if (auth()->loginUsingId($user->user_id)) {
+                return $this->handleUserWasAuthenticated($request, $throttles);
+            }
+
+            // If the login attempt was unsuccessful we will increment the number of attempts
+            // to login and redirect the user back to the login form. Of course, when this
+            // user surpasses their maximum number of attempts they will get locked out.
+            if ($throttles) {
+                $this->incrementLoginAttempts($request);
+            }
         }
-
-        /*if (auth()->attempt($request->only($this->loginUsername(), 'password'), $request->has('remember'))) {
-            return $this->handleUserWasAuthenticated($request, $throttles);
-        }*/
-
-        //auth()->loginUsingId(1);
-        if (auth()->loginUsingId($user->user_id)) {
-            return $this->handleUserWasAuthenticated($request, $throttles);
-        }
-
-        // If the login attempt was unsuccessful we will increment the number of attempts
-        // to login and redirect the user back to the login form. Of course, when this
-        // user surpasses their maximum number of attempts they will get locked out.
-        if ($throttles) {
-            $this->incrementLoginAttempts($request);
-        }
-
-        return redirect()->back()
-            ->withInput($request->only($this->loginUsername()))
+        return redirect()->guest('login')
             ->withErrors([
-                $this->loginUsername() => trans('auth.failed'),
+                $member['user_info']['userid'] => trans('auth.third_failed'),
             ]);
+    }
+
+
+    /**
+     * @return boolean
+     * @throws GeneralException
+     */
+    public function thirdLogin()
+    {
+        $member = app('weixin')->getMemberInfo();
+        $user = $this->user->findByName($member['UserId']);
+
+        if ($user) {
+            if (auth()->loginUsingId($user->user_id)) {
+                /**
+                 * Check to see if the users account is confirmed and active
+                 */
+                if (!access()->user()->isConfirmed()) {
+                    $token = access()->user()->confirmation_code;
+                    auth()->logout();
+                    throw new GeneralException(trans('exceptions.frontend.auth.confirmation.resend', ['token' => $token]));
+                } elseif (!access()->user()->isActive()) {
+                    auth()->logout();
+                    throw new GeneralException(trans('exceptions.frontend.auth.deactivated'));
+                }
+
+                event(new UserLoggedIn(access()->user()));
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

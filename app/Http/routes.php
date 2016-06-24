@@ -42,8 +42,21 @@ Route::group(['namespace' => 'Api'], function() {
     
 });
 
-/*Route::group(['namespace' => 'Weixin' , 'prefix' => 'weixin'], function() {
-    require (__DIR__ . '/Routes/Weixin/routes.php');
-});*/
+
+/**
+ * Third Routes
+ * Namespaces indicate folder structure
+ * Admin middleware groups web, auth, and routeNeedsPermission
+ */
+Route::group(['namespace' => 'Backend', 'prefix' => 'third', 'middleware' => 'third'], function () {
+    /**
+     * These routes need view-backend permission
+     * (good if you want to allow more than one group in the backend,
+     * then limit the backend features by different roles or permissions)
+     *
+     * Note: Administrator has all permissions so you do not have to specify the administrator role everywhere.
+     */
+    require (__DIR__ . '/Routes/Third/Report.php');
+});
 
 

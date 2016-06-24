@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Backend\Report;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\Backend\Report\CreateReportRequest;
 use App\Http\Requests\Backend\Report\DeleteReportRequest;
 use App\Http\Requests\Backend\Report\EditReportRequest;
@@ -22,6 +21,7 @@ use View;
  */
 class ReportController extends Controller
 {
+
     /**
      * @var UserContract
      */
@@ -156,10 +156,9 @@ class ReportController extends Controller
 
     /**
      * @param string $fileName
-     * @param  Request $request
      * @return mixed
      */
-    public function viewHtmlReport($fileName,Request $request)
+    public function viewHtmlReport($fileName)
     {
         View::addExtension('html','php');
         return view($fileName);

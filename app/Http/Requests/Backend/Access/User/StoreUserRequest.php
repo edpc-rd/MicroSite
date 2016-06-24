@@ -28,7 +28,7 @@ class StoreUserRequest extends Request
     public function rules()
     {
         return [
-            'user_name' => 'required|max:50',
+            'user_name' => 'required|max:50|unique:ms_users',
             'user_nick' => 'required|max:50',
             'weixin_id' => 'required|max:60',
             'email' => 'required|email|unique:ms_users',

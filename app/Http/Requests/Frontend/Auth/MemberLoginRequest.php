@@ -28,8 +28,8 @@ class MemberLoginRequest extends Request
     public function rules()
     {
         return [
-            'auth_code'  => 'required',
-            'expires_in' => 'required',
+            'auth_code'  => 'required|string',
+            'expires_in' => 'required|integer',
             'state'      => 'required'
         ];
     }

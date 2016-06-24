@@ -12,7 +12,7 @@ use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Http\Request;
 /**
- * Class UserController
+ * Class SnapshotController
  */
 class SnapshotController extends BaseController
 {
@@ -74,17 +74,17 @@ class SnapshotController extends BaseController
         switch ($clientType) {
             case 'application/vnd.ms-excel':
             case 'application/CDFV2-corrupt':
-                $filePath = app_path() . 'resources\uploads\reports\excel';
+                $filePath = base_path() . '\resources\uploads\reports\excel';
                 $fileType = self::TYPE_EXCEL;
                 break;
             case 'text/html':
-                $filePath = app_path() . 'resources\uploads\reports\html';
+                $filePath = base_path() . '\resources\uploads\reports\html';
                 $fileType = self::TYPE_HTML;
                 break;
             case 'image/jpeg':
             case 'image/gif':
             case 'image/png':
-                $filePath = app_path() . 'resources\uploads\reports\img';
+                $filePath = base_path() . '\resources\uploads\reports\img';
                 $fileType = self::TYPE_IMG;
                 break;
             default:
@@ -104,7 +104,12 @@ class SnapshotController extends BaseController
         );
         $this->snapshots->create($data);
 
-        return response()->json(compact('data'));
+        $result = array(
+            "file_name" => $clientName,
+            "report_id" => $report->report_id,
+        );
+
+        return response()->json(compact('result'));
     }
 
     public function getAuthenticatedUser()

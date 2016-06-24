@@ -42,6 +42,11 @@ class Kernel extends HttpKernel
             'access.routeNeedsPermission:view-backend',
         ],
 
+        'third' => [
+            'web',
+            'third.auth',
+        ],
+
         'api' => [
             'throttle:60,1',
         ],
@@ -61,6 +66,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'jwt.auth' => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
         'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
+        'third.auth' => \App\Http\Middleware\ThirdAuthenticate::class,
 
         /**
          * Access Middleware

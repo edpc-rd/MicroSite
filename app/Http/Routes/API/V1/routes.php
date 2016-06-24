@@ -28,6 +28,7 @@ $api->version('v1', function ($api) {
         $api->any('/weixin/sendNews', 'WeixinController@sendNews');
         $api->any('/weixin/uploadFile', 'WeixinController@uploadFile');
         $api->any('/weixin/uploadImage', 'WeixinController@uploadImage');
+        $api->any('/weixin/sendMpNews_test', 'WeixinController@sendMpNews_test');
     });
 
     $api->group(['namespace' => 'App\Api\V1\Controllers\Weixin'], function($api) {

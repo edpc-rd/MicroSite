@@ -16,7 +16,7 @@ class CreateMicroSiteTable extends Migration
         //Table:ms_users
         Schema::create(config('access.users_table'), function (Blueprint $table) {
             $table->increments('user_id')->unsigned();
-            $table->string('user_name', 50);
+            $table->string('user_name', 50)->unique();
             $table->string('user_nick', 50);
             $table->string('email', 60)->unique();
             $table->string('password', 60);

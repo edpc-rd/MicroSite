@@ -14,6 +14,7 @@ return [
     */
 
     'failed' => '證書信息不符.',
+    'third_failed' => '第三方登錄失敗.',
     'general_error' => '您沒有授權操作.',
     'socialite' => [
         'unacceptable' => ':登錄提供者不是可用的登錄類型.',
