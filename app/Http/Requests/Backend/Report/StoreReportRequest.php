@@ -31,7 +31,7 @@ class StoreReportRequest extends Request
             'report_no' => 'required|string|max:10|unique:ms_reports',
             'group_id' => 'integer',
             'name' => 'required|string|max:100',
-            'format' => 'required|string|max:20',
+            'format' => 'required|in:Text,Image,File,MpNews',
             'schedule' => 'string|max:100',
             'status' => 'required|integer',
             'allow_subscribe' => 'required|in:true,false',

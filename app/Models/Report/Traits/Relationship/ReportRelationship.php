@@ -24,7 +24,7 @@ trait ReportRelationship
     public function users()
     {
         return $this->belongsToMany(config('auth.providers.users.model'),
-            config('report.user_subscriptions_table'), 'report_id', 'user_id');
+            config('report.user_subscriptions_table'), 'report_id', 'user_id')->where(['subscribe_status' => 1, 'status' => 1]);
     }
 
     /**

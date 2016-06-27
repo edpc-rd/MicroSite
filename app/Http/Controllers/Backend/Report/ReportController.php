@@ -53,12 +53,12 @@ class ReportController extends Controller
     protected $reports;
 
     /**
-     * @param UserContract                        $users
-     * @param ReportGroupRepositoryContract       $groups
-     * @param ReportParameterRepositoryContract   $parameters
-     * @param UserSubscriptionRepositoryContract  $subscriptions
-     * @param ReportSnapshotRepositoryContract    $snapshots
-     * @param ReportRepositoryContract            $reports
+     * @param UserContract $users
+     * @param ReportGroupRepositoryContract $groups
+     * @param ReportParameterRepositoryContract $parameters
+     * @param UserSubscriptionRepositoryContract $subscriptions
+     * @param ReportSnapshotRepositoryContract $snapshots
+     * @param ReportRepositoryContract $reports
      */
     public function __construct(
         UserContract $users,

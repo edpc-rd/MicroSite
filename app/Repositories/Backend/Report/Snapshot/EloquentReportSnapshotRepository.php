@@ -4,6 +4,7 @@ namespace App\Repositories\Backend\Report\Snapshot;
 
 use App\Exceptions\GeneralException;
 use App\Models\Report\ReportSnapshot;
+use Carbon\Carbon;
 /**
  * Class EloquentReportSnapshotRepository
  * @package App\Repositories\Backend\Report\Snapshot
@@ -39,6 +40,29 @@ class EloquentReportSnapshotRepository implements ReportSnapshotRepositoryContra
 
         return ReportSnapshot::orderBy($order_by, $sort)
             ->get();
+    }
+
+    /**
+     * @param  integer $report_id
+     * @param  string $file_type
+     * @param  integer $status
+     * @param  string $order_by
+     * @param  string $sort
+     * @param  bool $withReport
+     * @return mixed
+     */
+    public function getSnapshotsByReportId($report_id, $file_type, $status = 0, $order_by = 'created_at', $sort = 'desc',  $withReport = false)
+    {
+        if ($withReport) {
+            return ReportSnapshot::with('report')->where(['report_id' => $report_id, 'file_type' => $file_type, 'status' => $status])
+                ->where('created_at', '>', Carbon::now()->toDateString())
+                ->orderBy($order_by, $sort)
+                ->first();
+        }
+
+        return ReportSnapshot::where(['report_id' => $report_id, 'file_type' => $file_type, 'status' => $status])
+            ->where('created_at', '>', Carbon::now()->toDateString())
+            ->orderBy($order_by, $sort)->first();
     }
 
     /**

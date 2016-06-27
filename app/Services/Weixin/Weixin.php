@@ -86,7 +86,7 @@ class Weixin
             'encodingaeskey' => config('qy-wechat.aes_key'), //填写加密用的EncodingAESKey
             'appid' => config('qy-wechat.app_id'), //填写高级调用功能的app id
             'appsecret' => config('qy-wechat.secret'), //填写高级调用功能的密钥
-            'agentid' => config('qy-wechat.agentid'),  //应用的id
+            'agentid' => config('qy-wechat.agent_id'),  //应用的id
         );
         $server = new Server($options);
         return $server;
@@ -95,35 +95,63 @@ class Weixin
     /**
      * @param  string $content
      * @param  integer $tagId
+     * @param  integer $agentId
      * @return json $result
      */
-    public function sendMsgToTag($content,$tagId)
+    public function sendMsgToTag($content, $tagId, $agentId = 3)
     {
         $message = Message::make('text')->content($content);
-        $result = $this->broadcast->fromAgentId('3')->send($message)->toTag($tagId);
+        $result = $this->broadcast->fromAgentId($agentId)->send($message)->toTag($tagId);
+        return $result;
+    }
+
+    /**
+     * @param  string $content
+     * @param  string|array $users
+     * @param  integer $agentId
+     * @return json $result
+     */
+    public function sendMsgToUser($content, $users = '@all', $agentId = 3)
+    {
+        $message = Message::make('text')->content($content);
+        $result = $this->broadcast->fromAgentId($agentId)->send($message)->to($users);
         return $result;
     }
 
     /**
      * @param  string $mediaId
      * @param  string $users
+     * @param  integer $agentId
      * @return json $result
      */
-    public function sendImgToUser($mediaId,$users='@all')
+    public function sendImgToUser($mediaId, $users = '@all', $agentId = 3)
     {
         $message = Message::make('image')->media_id($mediaId);
-        $result = $this->broadcast->fromAgentId('3')->send($message)->to($users);
+        $result = $this->broadcast->fromAgentId($agentId)->send($message)->to($users);
         return $result;
     }
 
     /**
      * @param  string $mediaId
-     * @param  string $fileName
+     * @param  string $users
+     * @param  integer $agentId
      * @return json $result
      */
-    public function getFile($mediaId,$fileName)
+    public function sendFileToUser($mediaId, $users = '@all', $agentId = 3)
     {
-        $result = $this->media->download($mediaId,$fileName);
+        $message = Message::make('file')->media_id($mediaId);
+        $result = $this->broadcast->fromAgentId($agentId)->send($message)->to($users);
+        return $result;
+    }
+
+    /**
+     * @param  string $mediaId
+     * @param  string $filePath
+     * @return json $result
+     */
+    public function getFile($mediaId, $filePath)
+    {
+        $result = $this->media->download($mediaId, $filePath);
         return $result;
     }
 
@@ -142,7 +170,7 @@ class Weixin
      * @param  integer $agentId
      * @return json $result
      */
-    public function getForeverFileList($type,$agentId)
+    public function getForeverFileList($type, $agentId = 3)
     {
         $result = $this->media->lists($type, 0, 20, $agentId);
         return $result;
@@ -164,7 +192,7 @@ class Weixin
      */
     public function getLoginPage()
     {
-        $result = $this->memLogin->getLoginUrl(URL::route('member.login'),'member');
+        $result = $this->memLogin->getLoginUrl(URL::route('member.login'), 'member');
         return $result;
     }
 
@@ -194,16 +222,16 @@ class Weixin
      */
     public function uploadNewsImg($filePath)
     {
-        $results =$this->media->uploadImg($filePath);
+        $results = $this->media->uploadImg($filePath);
         return $results;
     }
 
     /**
      * @param  string $filePath
-     * @param  string $agentId
+     * @param  integer $agentId
      * @return json $result
      */
-    public function uploadForeverMedia($filePath, $agentId)
+    public function uploadForeverMedia($filePath, $agentId = 3)
     {
         $results = $this->media->forever($agentId)->image($filePath);
         return $results;
@@ -211,23 +239,23 @@ class Weixin
 
     /**
      * @param  string $media_id
-     * @param  string $agentId
+     * @param  integer $agentId
      * @param  string $filePath
      * @return json $result
      */
-    public function getForeverFile($media_id, $agentId, $filePath)
+    public function getForeverFile($media_id, $filePath, $agentId = 3)
     {
-        $results =$this->media->forever($agentId)->download($media_id, $filePath);
+        $results = $this->media->forever($agentId)->download($media_id, $filePath);
         return $results;
     }
 
     /**
      * @param  NewsItem $newsItem
      * @param  integer $agentId
-     * @param  string $users
+     * @param  string|array $users
      * @return json $result
      */
-    public function sendNews(NewsItem $newsItem, $agentId, $users)
+    public function sendNews(NewsItem $newsItem, $users = '@all', $agentId = 3)
     {
         $message = Message::make('news')->item($newsItem);
         $result = $this->broadcast->fromAgentId($agentId)->send($message)->to($users);
@@ -241,7 +269,7 @@ class Weixin
      * @param  string $redirect_url
      * @return json $result
      */
-    public function sendMpNews(MpNewsItem $newsItem, $agentId, $redirect_url, $users)
+    public function sendMpNews(MpNewsItem $newsItem, $redirect_url, $users = '@all', $agentId = 3)
     {
         $newsItem->content_source_url = $this->auth->url($redirect_url);
         $message = Message::make('mp_news')->item($newsItem);

@@ -18,7 +18,7 @@ class EloquentUserSubscriptionRepository implements UserSubscriptionRepositoryCo
      */
     public function getSubscriptionsPaginated($per_page, $order_by = 'sort_order', $sort = 'asc')
     {
-        return UserSubscription::with('user','report')
+        return UserSubscription::with('user', 'report')
             ->orderBy($order_by, $sort)
             ->paginate($per_page);
     }
@@ -32,12 +32,52 @@ class EloquentUserSubscriptionRepository implements UserSubscriptionRepositoryCo
     public function getAllSubscriptions($order_by = 'sort_order', $sort = 'asc', $withUser = true)
     {
         if ($withUser) {
-            return UserSubscription::with('user','report')
+            return UserSubscription::with('user', 'report')
                 ->orderBy($order_by, $sort)
                 ->get();
         }
 
         return UserSubscription::orderBy($order_by, $sort)
+            ->get();
+    }
+
+    /**
+     * @param  integer $report_id
+     * @param  integer $status
+     * @param  string $order_by
+     * @param  string $sort
+     * @param  bool $withUser
+     * @return mixed
+     */
+    public function getSubscriptionsByReportId($report_id, $status = 1, $order_by = 'report_id', $sort = 'asc', $withUser = true)
+    {
+        if ($withUser) {
+            return UserSubscription::with('user', 'report')->where(['report_id' => $report_id, 'subscribe_status' => $status])
+                ->orderBy($order_by, $sort)
+                ->get();
+        }
+
+        return UserSubscription::where(['report_id' => $report_id, 'subscribe_status' => $status])->orderBy($order_by, $sort)
+            ->get();
+    }
+
+    /**
+     * @param  integer $user_id
+     * @param  integer $status
+     * @param  string $order_by
+     * @param  string $sort
+     * @param  bool $withUser
+     * @return mixed
+     */
+    public function getSubscriptionsByUserId($user_id, $status = 1, $order_by = 'user_id', $sort = 'asc', $withUser = true)
+    {
+        if ($withUser) {
+            return UserSubscription::with('user', 'report')->where(['user_id' => $user_id, 'subscribe_status' => $status])
+                ->orderBy($order_by, $sort)
+                ->get();
+        }
+
+        return UserSubscription::where(['user_id' => $user_id, 'subscribe_status' => $status])->orderBy($order_by, $sort)
             ->get();
     }
 
@@ -51,8 +91,8 @@ class EloquentUserSubscriptionRepository implements UserSubscriptionRepositoryCo
         $subscription = new UserSubscription;
         $subscription->user_id = isset($input['user_id']) && strlen($input['user_id']) > 0 ? (int)$input['user_id'] : null;
         $subscription->report_id = isset($input['report_id']) && strlen($input['report_id']) > 0 ? (int)$input['report_id'] : null;
-        $subscription->subscribe_status =  0;
-        $subscription->subscribe_time =DB::raw('CURRENT_TIMESTAMP');
+        $subscription->subscribe_status = 0;
+        $subscription->subscribe_time = DB::raw('CURRENT_TIMESTAMP');
         $subscription->receive_mode = $input['receive_mode'];
 
 
@@ -74,7 +114,7 @@ class EloquentUserSubscriptionRepository implements UserSubscriptionRepositoryCo
 
         $subscription->user_id = isset($input['user_id']) && strlen($input['user_id']) > 0 ? (int)$input['user_id'] : null;
         $subscription->report_id = isset($input['report_id']) && strlen($input['report_id']) > 0 ? (int)$input['report_id'] : null;
-        $subscription->subscribe_time =DB::raw('CURRENT_TIMESTAMP');
+        $subscription->subscribe_time = DB::raw('CURRENT_TIMESTAMP');
         $subscription->receive_mode = $input['receive_mode'];
 
         if ($subscription->save()) {
@@ -94,7 +134,7 @@ class EloquentUserSubscriptionRepository implements UserSubscriptionRepositoryCo
     {
         if (!is_null(UserSubscription::find($id))) {
             if ($withUser) {
-                return UserSubscription::with('user','report')
+                return UserSubscription::with('user', 'report')
                     ->find($id);
             }
 

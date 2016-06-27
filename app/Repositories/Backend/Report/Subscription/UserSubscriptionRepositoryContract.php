@@ -32,6 +32,26 @@ interface UserSubscriptionRepositoryContract
     public function getAllSubscriptions($order_by = 'report_id', $sort = 'asc', $withUser = true);
 
     /**
+     * @param  integer $report_id
+     * @param  integer $status
+     * @param  string $order_by
+     * @param  string $sort
+     * @param  bool $withUser
+     * @return mixed
+     */
+    public function getSubscriptionsByReportId($report_id, $status = 1, $order_by = 'report_id', $sort = 'asc', $withUser = true);
+
+    /**
+     * @param  integer $user_id
+     * @param  integer $status
+     * @param  string $order_by
+     * @param  string $sort
+     * @param  bool $withUser
+     * @return mixed
+     */
+    public function getSubscriptionsByUserId($user_id, $status = 1, $order_by = 'user_id', $sort = 'asc', $withUser = true);
+
+    /**
      * @param  $input
      * @return mixed
      */

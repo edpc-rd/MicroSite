@@ -16,10 +16,10 @@ use Illuminate\Http\Request;
  */
 class SnapshotController extends BaseController
 {
-    const TYPE_IMG   = 'PNG';
-    const TYPE_HTML  = 'HTML';
-    const TYPE_EXCEL = 'XLS';
-    const TYPE_TEXT  = 'TXT';
+    const TYPE_IMAGE = 'IMAGE';
+    const TYPE_HTML = 'HTML';
+    const TYPE_EXCEL = 'EXCEL';
+    const TYPE_TEXT = 'TEXT';
     /**
      * @var UserContract
      */
@@ -84,8 +84,8 @@ class SnapshotController extends BaseController
             case 'image/jpeg':
             case 'image/gif':
             case 'image/png':
-                $filePath = base_path() . '\resources\uploads\reports\img';
-                $fileType = self::TYPE_IMG;
+                $filePath = base_path() . '\resources\uploads\reports\image';
+                $fileType = self::TYPE_IMAGE;
                 break;
             default:
                 return response()->json(array('Error' => 'No Support This FileType!'));
