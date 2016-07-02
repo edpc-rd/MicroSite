@@ -8,7 +8,7 @@ use App\Http\Requests\Request;
  * Class SendMsgRequest
  * @package App\Api\V1\Requests\Weixin
  */
-class SendMsgToUserRequest extends Request
+class SendMsgRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,7 +29,8 @@ class SendMsgToUserRequest extends Request
     {
         return [
             'content' => 'required|string',
-            'users' => 'required',
+            'tagId' => 'sometimes|required|integer',
+            'users' => 'sometimes|required|string',
         ];
     }
 }

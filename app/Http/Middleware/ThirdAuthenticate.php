@@ -44,6 +44,6 @@ class ThirdAuthenticate
                 return $next($request);
             }
         }
-        return redirect()->guest('login');
+        return abort(403);
     }
 }

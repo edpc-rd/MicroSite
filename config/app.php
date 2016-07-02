@@ -22,7 +22,7 @@ return [
 	|
 	| The application name for use within the UI of the application
 	*/
-    'name' => 'MicroSite',
+    'name' => '網購營運信息分發平台',
 
     /*
     |--------------------------------------------------------------------------

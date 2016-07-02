@@ -21,6 +21,7 @@ return [
     'token'   => env('WECHAT_TOKEN', 'your-token'),          // Token
     'aes_key' => env('WECHAT_AES_KEY', ''),                  // EncodingAESKey
     'agent_id' => env('WECHAT_AGENT_ID', ''),                 //应用的id
+    'msg_safe' => 0,                 //信息是否保密
 
     /**
      * 日志配置

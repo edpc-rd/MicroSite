@@ -11,6 +11,8 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Http\Request;
+use Stoneworld\Wechat\Exception;
+use Log;
 /**
  * Class SnapshotController
  */
@@ -56,24 +58,23 @@ class SnapshotController extends BaseController
         try {
             $report = $this->reports->findOrThrowException($request->get('report_id'));
         } catch (\Exception $e) {
-            return response()->json(array('Error' => "Report Not Found"));
+            throw new Exception('獲取報表失敗，請檢查report_id是否正確', 30001);
         }
 
         $file = $request->File('file');
         $abstract = $request->get('abstract');
         $clientIP = $request->getClientIp();
         $clientName = $file->getClientOriginalName();
-        $clientType = $file->getMimeType();
+        $clientType = $file->getClientMimeType();
         $expiration_at = strtotime($request->get('expiration_at'));
         $fileSize = $file->getSize() / 1024;
 
         if ($fileSize > 5000) {
-            return response()->json(array('Error' => "File Too Large!"));
+            throw new Exception('上傳報表文件失敗，文件不能大於5M', 30002);
         }
 
         switch ($clientType) {
             case 'application/vnd.ms-excel':
-            case 'application/CDFV2-corrupt':
                 $filePath = base_path() . '\resources\uploads\reports\excel';
                 $fileType = self::TYPE_EXCEL;
                 break;
@@ -88,7 +89,7 @@ class SnapshotController extends BaseController
                 $fileType = self::TYPE_IMAGE;
                 break;
             default:
-                return response()->json(array('Error' => 'No Support This FileType!'));
+                throw new Exception('上傳報表文件不支持此類型：' . $clientType , 30003);
         }
 
         $file->move($filePath, $clientName);
@@ -105,11 +106,15 @@ class SnapshotController extends BaseController
         $this->snapshots->create($data);
 
         $result = array(
-            "file_name" => $clientName,
-            "report_id" => $report->report_id,
+            'message' => 'ok',
+            'code' => 0,
+            'status_code' => 0,
+            'uploadFile_Response' => array("file_name" => $clientName,
+                                           "report_id" => $report->report_id)
         );
 
-        return response()->json(compact('result'));
+        Log::info('上傳報表文件成功：文件名稱[' . $clientName . ']、類型[' . $fileType . ']、存放路徑[' . $filePath . ']');
+        return response()->json($result);
     }
 
     public function getAuthenticatedUser()

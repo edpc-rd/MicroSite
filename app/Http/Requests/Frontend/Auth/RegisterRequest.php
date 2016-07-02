@@ -30,7 +30,7 @@ class RegisterRequest extends Request
         return [
             'user_name' => 'required|max:50',
             'user_nick' => 'required|max:50',
-            'email' => 'required|email|max:60|unique:ms_users',
+            'email' => array('required','max:60','unique:ms_users','regex:/^[a-zA-Z0-9_-]+@glorisun|GloriSun.com$/'),
             'weixin_id' => 'required|max:60',
             'password' => 'required|confirmed|min:6',
             'captcha' => 'required|captcha',

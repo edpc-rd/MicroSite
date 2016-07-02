@@ -29,7 +29,7 @@ class UpdateProfileRequest extends Request
     {
         return [
             'user_nick' => 'required|max:50',
-            'email' => 'sometimes|required|email',
+            'email' => array('sometimes','required','email','regex:/^[a-zA-Z0-9_-]+@glorisun|GloriSun.com$/'),
         ];
     }
 }

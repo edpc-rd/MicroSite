@@ -2,13 +2,11 @@
 
 namespace App\Api\V1\Controllers\Weixin;
 
-use App\Http\Controllers\Controller;
-use Carbon\Carbon;
+use App\Api\V1\Controllers\BaseController;
 use Stoneworld\Wechat\Message;
 use Stoneworld\Wechat\Messages\NewsItem;
 use Stoneworld\Wechat\Messages\MpNewsItem;
-use App\Api\V1\Requests\Weixin\SendMsgToTagRequest;
-use App\Api\V1\Requests\Weixin\SendMsgToUserRequest;
+use App\Api\V1\Requests\Weixin\SendMsgRequest;
 use App\Api\V1\Requests\Weixin\SendImgRequest;
 use App\Api\V1\Requests\Weixin\GetFileRequest;
 use App\Api\V1\Requests\Weixin\GetForeverFileRequest;
@@ -24,12 +22,12 @@ use App\Repositories\Backend\Report\Parameter\ReportParameterRepositoryContract;
 use App\Repositories\Backend\Report\Group\ReportGroupRepositoryContract;
 use App\Repositories\Backend\Report\ReportRepositoryContract;
 use App\Repositories\Backend\User\UserContract;
-
+use Stoneworld\Wechat\Exception;
 /**
  * Class WeixinController
  * @package App\Api\V1\Controllers\Weixin
  */
-class WeixinController extends Controller
+class WeixinController extends BaseController
 {
     /**
      * @var UserContract
@@ -110,12 +108,12 @@ class WeixinController extends Controller
         echo $result;
     }
 
-    public function sendMsgToTag(SendMsgToTagRequest $request)
+    public function sendMsgToTag(SendMsgRequest $request)
     {
         return app('weixin')->sendMsgToTag($request->get('content'), $request->get('tagId'));
     }
 
-    public function sendMsgToUser(SendMsgToUserRequest $request)
+    public function sendMsgToUser(SendMsgRequest $request)
     {
         return app('weixin')->sendMsgToUser($request->get('content'), $request->get('users'));
     }
@@ -218,24 +216,24 @@ class WeixinController extends Controller
                 $userNames = '@all';
             }
         } catch (\Exception $e) {
-            return response()->json(array('Error' => "Report Or User Not Found"));
+            throw new Exception('發送報表失敗，報表或用戶ID錯誤',30004);
         }
 
         if ($report->receive_mode == 'email') {
-            return response()->json(array('Error' => 'No Support Email Mode'));
+            throw new Exception('發送報表失敗，暫不支持發送郵件',30005);
         }
         if ($report->status == 0) {
-            return response()->json(array('Error' => 'This Report Is Disable'));
+            throw new Exception('發送報表失敗，報表狀態為未啟用',30006);
         }
 
-        switch ($report->format) {
-            case 'Text': {
+        switch (strtoupper($report->format)) {
+            case 'TEXT': {
                 $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'TEXT');
                 $content = $snapshot->abstract;
                 return app('weixin')->sendMsgToUser($content, $userNames);
             };
                 break;
-            case 'Image': {
+            case 'IMAGE': {
                 $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'IMAGE');
                 $filePath = $snapshot->file_path . '\\' . $snapshot->file_name;
                 $media_id = app('weixin')->uploadImage($filePath);
@@ -243,7 +241,7 @@ class WeixinController extends Controller
                 return app('weixin')->sendImgToUser($media_id['media_id'], $userNames);
             }
                 break;
-            case 'File': {
+            case 'FILE': {
                 $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'EXCEL');
                 $filePath = $snapshot->file_path . '\\' . $snapshot->file_name;
                 $media_id = app('weixin')->uploadFile($filePath);
@@ -251,13 +249,13 @@ class WeixinController extends Controller
                 return app('weixin')->sendFileToUser($media_id, $userNames);
             }
                 break;
-            case 'MpNews': {
+            case 'MPNEWS': {
                 try{
                     $imgSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'IMAGE');
                     $htmlSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'HTML');
                     $xlsSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'EXCEL');
                 }catch(\Exception $e){
-                    return response()->json(array('Error' => "Get Snapshot Failed"));
+                    throw new Exception('發送報表失敗，獲取報表快照錯誤',30007);
                 }
 
                 $xlsName = basename($htmlSnapshot->file_name, "." . substr(strrchr($htmlSnapshot->file_name, '.'), 1));
@@ -266,7 +264,7 @@ class WeixinController extends Controller
                 $media_id = app('weixin')->uploadImage($imgPath);
 
                 $newsItem = new MpNewsItem();
-                $newsItem->title = $imgSnapshot->abstract . '(' . Carbon::now()->toDateTimeString() . ')';
+                $newsItem->title = $imgSnapshot->abstract;
                 $newsItem->thumb_media_id = $media_id['media_id'];
                 $newsItem->content = $xlsSnapshot->abstract;
                 $newsItem->digest = $htmlSnapshot->abstract;
@@ -276,7 +274,7 @@ class WeixinController extends Controller
             }
                 break;
             default:
-                return response()->json(array('Error' => 'No Support This Message Type!'));
+                throw new Exception('發送報表失敗，不支持的發送類型',30008);
         }
     }
 }

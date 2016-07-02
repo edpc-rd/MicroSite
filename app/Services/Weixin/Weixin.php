@@ -11,6 +11,7 @@ use Stoneworld\Wechat\Messages\MpNewsItem;
 use Stoneworld\Wechat\Auth;
 use Stoneworld\Wechat\MemberLogin;
 use URL;
+use Log;
 /**
  * Class Weixin
  * @package App\Services\Weixin
@@ -102,6 +103,7 @@ class Weixin
     {
         $message = Message::make('text')->content($content);
         $result = $this->broadcast->fromAgentId($agentId)->send($message)->toTag($tagId);
+        Log::info('推送企業號信息成功[文字].');
         return $result;
     }
 
@@ -115,6 +117,7 @@ class Weixin
     {
         $message = Message::make('text')->content($content);
         $result = $this->broadcast->fromAgentId($agentId)->send($message)->to($users);
+        Log::info('推送企業號信息成功[文字].');
         return $result;
     }
 
@@ -128,6 +131,7 @@ class Weixin
     {
         $message = Message::make('image')->media_id($mediaId);
         $result = $this->broadcast->fromAgentId($agentId)->send($message)->to($users);
+        Log::info('推送企業號信息成功[圖片]:' . $mediaId);
         return $result;
     }
 
@@ -141,6 +145,7 @@ class Weixin
     {
         $message = Message::make('file')->media_id($mediaId);
         $result = $this->broadcast->fromAgentId($agentId)->send($message)->to($users);
+        Log::info('推送企業號信息成功[文檔]:' . $mediaId);
         return $result;
     }
 
@@ -152,6 +157,7 @@ class Weixin
     public function getFile($mediaId, $filePath)
     {
         $result = $this->media->download($mediaId, $filePath);
+        Log::info('獲取企業號素材成功[文檔]:' . $mediaId);
         return $result;
     }
 
@@ -173,6 +179,7 @@ class Weixin
     public function getForeverFileList($type, $agentId = 3)
     {
         $result = $this->media->lists($type, 0, 20, $agentId);
+        Log::info('獲取企業號永久素材列表成功.');
         return $result;
     }
 
@@ -203,6 +210,7 @@ class Weixin
     public function uploadFile($filePath)
     {
         $result = $this->media->file($filePath);
+        Log::info('上傳企業號臨時素材成功[文檔]：' . $result );
         return $result;
     }
 
@@ -213,6 +221,7 @@ class Weixin
     public function uploadImage($filePath)
     {
         $result = $this->media->image($filePath);
+        Log::info('上傳企業號臨時素材成功[圖片]：' . $result['media_id'] );
         return $result;
     }
 
@@ -222,8 +231,9 @@ class Weixin
      */
     public function uploadNewsImg($filePath)
     {
-        $results = $this->media->uploadImg($filePath);
-        return $results;
+        $result = $this->media->uploadImg($filePath);
+        Log::info('上傳企業號圖文信息內圖片成功：' . $result );
+        return $result;
     }
 
     /**
@@ -233,8 +243,9 @@ class Weixin
      */
     public function uploadForeverMedia($filePath, $agentId = 3)
     {
-        $results = $this->media->forever($agentId)->image($filePath);
-        return $results;
+        $result = $this->media->forever($agentId)->image($filePath);
+        Log::info('上傳企業號永久素材成功：' . $result );
+        return $result;
     }
 
     /**
@@ -245,8 +256,9 @@ class Weixin
      */
     public function getForeverFile($media_id, $filePath, $agentId = 3)
     {
-        $results = $this->media->forever($agentId)->download($media_id, $filePath);
-        return $results;
+        $result = $this->media->forever($agentId)->download($media_id, $filePath);
+        Log::info('獲取企業號永久素材成功：' . $result );
+        return $result;
     }
 
     /**
@@ -259,6 +271,7 @@ class Weixin
     {
         $message = Message::make('news')->item($newsItem);
         $result = $this->broadcast->fromAgentId($agentId)->send($message)->to($users);
+        Log::info('發送企業號普通圖文信息成功：' . $newsItem->title );
         return $result;
     }
 
@@ -274,6 +287,7 @@ class Weixin
         $newsItem->content_source_url = $this->auth->url($redirect_url);
         $message = Message::make('mp_news')->item($newsItem);
         $result = $this->broadcast->fromAgentId($agentId)->send($message)->to($users);
+        Log::info('發送企業號詳細圖文信息成功：' . $newsItem->title );
         return $result;
     }
 
