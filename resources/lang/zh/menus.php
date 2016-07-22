@@ -50,6 +50,42 @@ return [
             ],
         ],
 
+        'report' => [
+            'title' => '報表管理',
+
+            'reports' => [
+                'all' => '報表列表',
+                'create' => '新建報表',
+                'edit' => '編輯權限',
+                'groups' => [
+                    'all' => '權限組列表',
+                    'create' => '新建權限組',
+                    'edit' => '編輯權限組',
+                    'main' => '權限組',
+                ],
+                'main' => '報表',
+                'management' => '權限管理',
+            ],
+
+            'groups' => [
+                'all' => '分組列表',
+                'create' => '新增分組',
+                'edit' => '編輯分組',
+                'management' => '分組管理',
+                'main' => '報表分組',
+            ],
+
+            'users' => [
+                'all' => '用戶列表',
+                'change-password' => '修改密碼',
+                'create' => '新建用戶',
+                'deactivated' => '停用用戶',
+                'deleted' => '刪除用戶',
+                'edit' => '編輯用戶',
+                'main' => '用戶',
+            ],
+        ],
+
         'log-viewer' => [
             'main' => '日誌查看',
             'dashboard' => '日誌統計',

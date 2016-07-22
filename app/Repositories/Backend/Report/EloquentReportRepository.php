@@ -13,13 +13,13 @@ class EloquentReportRepository implements ReportRepositoryContract
 {
     /**
      * @param  $per_page
-     * @param  string $order_by
+     * @param  mixed $order_by
      * @param  string $sort
      * @return mixed
      */
-    public function getReportsPaginated($per_page, $order_by = 'sort_order', $sort = 'asc')
+    public function getReportsPaginated($per_page, $order_by = ['group', 'report_no'], $sort = 'asc')
     {
-        return Report::with('parameters')
+        return Report::with('group')
             ->orderBy($order_by, $sort)
             ->paginate($per_page);
     }
@@ -49,18 +49,19 @@ class EloquentReportRepository implements ReportRepositoryContract
      */
     public function create($input)
     {
-        if (Report::where('name', $input['name'])->first()) {
+        if (Report::where('report_no', $input['report_no'])->first()) {
             throw new GeneralException(trans('exceptions.backend.report.report.already_exists'));
         }
 
         $report = new Report;
+        $report->report_no = $input['report_no'];
         $report->name = $input['name'];
         $report->format = $input['format'];
-        $report->allow_subscribe = isset($input['allow_subscribe']) ? 'true' : 'false';
-        $report->allow_query = isset($input['allow_query']) ? 'true' : 'false';
+        $report->allow_subscribe = $input['allow_subscribe'];
+        $report->allow_query = $input['allow_query'];
         $report->group_id = isset($input['group_id']) && strlen($input['group_id']) > 0 ? (int)$input['group_id'] : null;
         $report->schedule = $input['schedule'];
-        $report->status = isset($input['status']) ? 1 : 0;
+        $report->status = $input['status'];
         $report->receive_mode = $input['receive_mode'];
         $report->query_url = $input['query_url'];
         $report->description = $input['description'];
@@ -83,11 +84,12 @@ class EloquentReportRepository implements ReportRepositoryContract
 
         $report->name = $input['name'];
         $report->format = $input['format'];
-        $report->allow_subscribe = isset($input['allow_subscribe']) ? 'true' : 'false';
-        $report->allow_query = isset($input['allow_query']) ? 'true' : 'false';
+        $report->report_no = $input['report_no'];
+        $report->allow_subscribe = $input['allow_subscribe'];
+        $report->allow_query = $input['allow_query'];
         $report->group_id = isset($input['group_id']) && strlen($input['group_id']) > 0 ? (int)$input['group_id'] : null;
         $report->schedule = $input['schedule'];
-        $report->status = isset($input['status']) ? 1 : 0;
+        $report->status = $input['status'];
         $report->receive_mode = $input['receive_mode'];
         $report->query_url = $input['query_url'];
         $report->description = $input['description'];
@@ -150,7 +152,7 @@ class EloquentReportRepository implements ReportRepositoryContract
     public function mark($id, $status)
     {
 
-        $report         = $this->findOrThrowException($id);
+        $report = $this->findOrThrowException($id);
         $report->status = $status;
 
         if ($report->save()) {

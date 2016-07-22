@@ -17,7 +17,7 @@ class UpdateSubscriptionRequest extends Request
      */
     public function authorize()
     {
-        return access()->allow('edit-report-subscription');
+        return access()->allow('edit-report-subscriptions');
     }
 
     /**
@@ -29,9 +29,9 @@ class UpdateSubscriptionRequest extends Request
     {
         return [
             'user_id' => 'required',
-            'report_id' => 'required',
             'subscribe_status' => 'required|integer',
             'subscribe_time' => 'date',
+            'receive_mode' => 'required',
         ];
     }
 }

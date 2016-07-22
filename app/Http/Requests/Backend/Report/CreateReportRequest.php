@@ -17,7 +17,7 @@ class CreateReportRequest extends Request
      */
     public function authorize()
     {
-        return access()->allow('create-report');
+        return access()->allow('create-reports');
     }
 
     /**

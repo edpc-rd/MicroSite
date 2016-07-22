@@ -3,21 +3,20 @@
 namespace App\Http\Controllers\Backend\Report;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Backend\Report\CreateReportRequest;
-use App\Http\Requests\Backend\Report\DeleteReportRequest;
-use App\Http\Requests\Backend\Report\EditReportRequest;
-use App\Http\Requests\Backend\Report\StoreReportRequest;
-use App\Http\Requests\Backend\Report\UpdateReportRequest;
-use App\Http\Requests\Backend\Report\MarkReportRequest;
-use App\Repositories\Backend\Report\Group\ReportGroupRepositoryContract;
+use App\Http\Requests\Backend\Report\Subscription\CreateSubscriptionRequest;
+use App\Http\Requests\Backend\Report\Subscription\DeleteSubscriptionRequest;
+use App\Http\Requests\Backend\Report\Subscription\EditSubscriptionRequest;
+use App\Http\Requests\Backend\Report\Subscription\StoreSubscriptionRequest;
+use App\Http\Requests\Backend\Report\Subscription\UpdateSubscriptionRequest;
+use App\Http\Requests\Backend\Report\Subscription\MarkSubscriptionRequest;
+use App\Repositories\Backend\Report\Subscription\UserSubscriptionRepositoryContract;
 use App\Repositories\Backend\Report\ReportRepositoryContract;
 use App\Repositories\Backend\User\UserContract;
-use View;
 
 /**
  * Class ReportController
  */
-class ReportController extends Controller
+class SubscriptionController extends Controller
 {
 
     /**
@@ -144,13 +143,4 @@ class ReportController extends Controller
         return redirect()->back()->withFlashSuccess(trans('alerts.backend.reports.deleted_permanently'));
     }
 
-    /**
-     * @param string $fileName
-     * @return mixed
-     */
-    public function viewHtmlReport($fileName)
-    {
-        View::addExtension('html', 'php');
-        return view($fileName);
-    }
 }

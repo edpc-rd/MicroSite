@@ -17,7 +17,7 @@ class DeleteReportRequest extends Request
      */
     public function authorize()
     {
-        return access()->allow('delete-report');
+        return access()->allow('delete-reports');
     }
 
     /**

@@ -61,7 +61,7 @@ trait ReportAttribute
     public function getEditButtonAttribute()
     {
         if (access()->allow('edit-reports')) {
-            return '<a href="' . route('admin.report.report.edit', $this->report_id) .
+            return '<a href="' . route('admin.report.reports.edit', $this->report_id) .
             '" class="btn btn-xs btn-primary"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="' .
             trans('buttons.general.crud.edit') . '"></i></a> ';
         }
@@ -104,10 +104,29 @@ trait ReportAttribute
     /**
      * @return string
      */
+    public function getStatusLabelAttribute()
+    {
+        switch ($this->status) {
+            case 0:
+                return "<label class='label label-danger'>".trans('labels.general.no')."</label>";
+                break;
+            case 1:
+                return "<label class='label label-info'>".trans('labels.general.yes')."</label>";
+                break;
+            default:
+                return '';
+
+            // No break
+        }
+    }
+
+    /**
+     * @return string
+     */
     public function getDeleteButtonAttribute()
     {
         if (access()->allow('delete-reports')) {
-            return '<a href="' . route('admin.report.report.destroy', $this->report_id) . '"
+            return '<a href="' . route('admin.report.reports.destroy', $this->report_id) . '"
                  data-method="delete"
                  data-trans-button-cancel="' . trans('buttons.general.cancel') . '"
                  data-trans-button-confirm="' . trans('buttons.general.crud.delete') . '"

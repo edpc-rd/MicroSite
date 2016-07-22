@@ -41,6 +41,12 @@
                 </li>
             @endauth
 
+            @permission('view-report-management')
+            <li class="{{ Active::pattern('admin/report/*') }}">
+                <a href="{!!url('admin/report/reports')!!}"><span>{{ trans('menus.backend.report.title') }}</span></a>
+            </li>
+            @endauth
+
             <li class="{{ Active::pattern('admin/log-viewer*') }} treeview">
                 <a href="#">
                     <span>{{ trans('menus.backend.log-viewer.main') }}</span>

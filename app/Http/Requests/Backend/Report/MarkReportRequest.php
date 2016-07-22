@@ -5,10 +5,10 @@ namespace App\Http\Requests\Backend\Report;
 use App\Http\Requests\Request;
 
 /**
- * Class EditReportRequest
- * @package App\Http\Requests\Backend\Report;
+ * Class MarkUserRequest
+ * @package App\Http\Requests\Backend\Report
  */
-class EditReportRequest extends Request
+class MarkReportRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,7 +17,19 @@ class EditReportRequest extends Request
      */
     public function authorize()
     {
-        return access()->allow('edit-reports');
+        //Get the 'mark' id
+        switch ((int) request()->segment(6)) {
+			
+			case 0:
+                return access()->allow('disable-reports');
+            break;
+			
+            case 1:
+                return access()->allow('enable-reports');
+            break;
+        }
+
+        return false;
     }
 
     /**

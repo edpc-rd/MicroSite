@@ -41,6 +41,20 @@ return [
             'restored' => '用戶已成功恢復.',
             'updated' => '用戶已成功更新.',
             'updated_password' => "用戶密碼已成功修改.",
-        ]
+        ],
+        'reports' => [
+            'created' => '成功創建報表.',
+            'deleted' => '成功刪除報表.',
+            'deleted_permanently' => '報表已被永久刪除.',
+            'restored' => '報表已成功恢復.',
+            'updated' => '報表已成功更新.',
+        ],
+        'groups' => [
+            'created' => '成功創建報表分組.',
+            'deleted' => '成功刪除報表分組.',
+            'deleted_permanently' => '報表分組已被永久刪除.',
+            'updated' => '報表分組已成功更新.',
+        ],
+
     ],
 ];

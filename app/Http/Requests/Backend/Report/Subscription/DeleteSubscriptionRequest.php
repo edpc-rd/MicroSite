@@ -17,7 +17,7 @@ class DeleteSubscriptionRequest extends Request
      */
     public function authorize()
     {
-        return access()->allow('delete-report-subscription');
+        return access()->allow('delete-report-subscriptions');
     }
 
     /**

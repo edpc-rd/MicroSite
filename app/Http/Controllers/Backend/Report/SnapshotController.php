@@ -8,7 +8,9 @@ use App\Http\Requests\Backend\Report\DeleteReportRequest;
 use App\Http\Requests\Backend\Report\EditReportRequest;
 use App\Http\Requests\Backend\Report\StoreReportRequest;
 use App\Http\Requests\Backend\Report\UpdateReportRequest;
-use App\Http\Requests\Backend\Report\MarkReportRequest;
+use App\Repositories\Backend\Report\Subscription\UserSubscriptionRepositoryContract;
+use App\Repositories\Backend\Report\Snapshot\ReportSnapshotRepositoryContract;
+use App\Repositories\Backend\Report\Parameter\ReportParameterRepositoryContract;
 use App\Repositories\Backend\Report\Group\ReportGroupRepositoryContract;
 use App\Repositories\Backend\Report\ReportRepositoryContract;
 use App\Repositories\Backend\User\UserContract;
@@ -17,7 +19,7 @@ use View;
 /**
  * Class ReportController
  */
-class ReportController extends Controller
+class SnapshotController extends Controller
 {
 
     /**
@@ -53,17 +55,26 @@ class ReportController extends Controller
     /**
      * @param UserContract $users
      * @param ReportGroupRepositoryContract $groups
+     * @param ReportParameterRepositoryContract $parameters
+     * @param UserSubscriptionRepositoryContract $subscriptions
+     * @param ReportSnapshotRepositoryContract $snapshots
      * @param ReportRepositoryContract $reports
      */
     public function __construct(
         UserContract $users,
         ReportGroupRepositoryContract $groups,
+        ReportParameterRepositoryContract $parameters,
+        UserSubscriptionRepositoryContract $subscriptions,
+        ReportSnapshotRepositoryContract $snapshots,
         ReportRepositoryContract $reports
 
     )
     {
         $this->users = $users;
         $this->groups = $groups;
+        $this->parameters = $parameters;
+        $this->subscriptions = $subscriptions;
+        $this->snapshots = $snapshots;
         $this->reports = $reports;
     }
 
@@ -72,8 +83,8 @@ class ReportController extends Controller
      */
     public function index()
     {
-        return view('backend.report.reports.index')
-            ->withReports($this->reports->getReportsPaginated(50, 'name'));
+        return view('backend.access.index')
+            ->withUsers($this->users->getUsersPaginated(config('access.users.default_per_page'), 1));
     }
 
     /**
@@ -82,8 +93,9 @@ class ReportController extends Controller
      */
     public function create(CreateReportRequest $request)
     {
-        return view('backend.report.reports.create')
-            ->withGroups($this->groups->getAllGroups(true));
+        return view('backend.access.create')
+            ->withRoles($this->roles->getAllRoles('sort_order', 'asc', true))
+            ->withPermissions($this->permissions->getAllPermissions());
     }
 
     /**
@@ -92,21 +104,12 @@ class ReportController extends Controller
      */
     public function store(StoreReportRequest $request)
     {
-        $this->reports->create($request->all());
-        return redirect()->route('admin.report.reports.index')->
-        withFlashSuccess(trans('alerts.backend.reports.created'));
-    }
-
-    /**
-     * @param  $id
-     * @param  $status
-     * @param  MarkReportRequest $request
-     * @return mixed
-     */
-    public function mark($id, $status, MarkReportRequest $request)
-    {
-        $this->reports->mark($id, $status);
-        return redirect()->back()->withFlashSuccess(trans('alerts.backend.reports.updated'));
+        $this->users->create(
+            $request->except('assignees_roles', 'permission_user'),
+            $request->only('assignees_roles'),
+            $request->only('permission_user')
+        );
+        return redirect()->route('admin.access.users.index')->withFlashSuccess(trans('alerts.backend.users.created'));
     }
 
     /**
@@ -116,10 +119,13 @@ class ReportController extends Controller
      */
     public function edit($id, EditReportRequest $request)
     {
-        $report = $this->reports->findOrThrowException($id, true);
-        return view('backend.report.reports.edit')
-            ->withReport($report)
-            ->withGroups($this->groups->getAllGroups(true));
+        $user = $this->users->findOrThrowException($id, true);
+        return view('backend.access.edit')
+            ->withUser($user)
+            ->withUserRoles($user->roles->lists('role_id')->all())
+            ->withRoles($this->roles->getAllRoles('sort_order', 'asc', true))
+            ->withUserPermissions($user->permissions->lists('permission_id')->all())
+            ->withPermissions($this->permissions->getAllPermissions());
     }
 
     /**
@@ -129,8 +135,12 @@ class ReportController extends Controller
      */
     public function update($id, UpdateReportRequest $request)
     {
-        $this->reports->update($id, $request->all());
-        return redirect()->route('admin.report.reports.index')->withFlashSuccess(trans('alerts.backend.reports.updated'));
+        $this->users->update($id,
+            $request->except('assignees_roles', 'permission_user'),
+            $request->only('assignees_roles'),
+            $request->only('permission_user')
+        );
+        return redirect()->route('admin.access.users.index')->withFlashSuccess(trans('alerts.backend.users.updated'));
     }
 
     /**
@@ -138,10 +148,10 @@ class ReportController extends Controller
      * @param  DeleteReportRequest $request
      * @return mixed
      */
-    public function destroy($id, DeleteReportRequest $request)
+    public function delete($id, DeleteReportRequest $request)
     {
-        $this->reports->destroy($id);
-        return redirect()->back()->withFlashSuccess(trans('alerts.backend.reports.deleted_permanently'));
+        $this->users->delete($id);
+        return redirect()->back()->withFlashSuccess(trans('alerts.backend.users.deleted_permanently'));
     }
 
     /**
@@ -150,7 +160,7 @@ class ReportController extends Controller
      */
     public function viewHtmlReport($fileName)
     {
-        View::addExtension('html', 'php');
+        View::addExtension('html','php');
         return view($fileName);
     }
 }

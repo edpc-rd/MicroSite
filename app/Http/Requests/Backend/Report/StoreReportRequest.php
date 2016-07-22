@@ -17,7 +17,7 @@ class StoreReportRequest extends Request
      */
     public function authorize()
     {
-        return access()->allow('create-report');
+        return access()->allow('create-reports');
     }
 
     /**
@@ -31,9 +31,9 @@ class StoreReportRequest extends Request
             'report_no' => 'required|string|max:10|unique:ms_reports',
             'group_id' => 'integer',
             'name' => 'required|string|max:100',
-            'format' => 'required|in:Text,Image,File,MpNews',
+            'format' => 'required|in:TEXT,IMAGE,FILE,MPNEWS',
             'schedule' => 'string|max:100',
-            'status' => 'required|integer',
+            'status' => 'required|in:0,1',
             'allow_subscribe' => 'required|in:true,false',
             'allow_query' => 'required|in:true,false',
             'receive_mode' => 'string|max:50',

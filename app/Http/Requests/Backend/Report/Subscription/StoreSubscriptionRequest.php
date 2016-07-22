@@ -17,7 +17,7 @@ class StoreSubscriptionRequest extends Request
      */
     public function authorize()
     {
-        return access()->allow('create-report-subscription');
+        return access()->allow('create-report-subscriptions');
     }
 
     /**
@@ -30,8 +30,9 @@ class StoreSubscriptionRequest extends Request
         return [
             'user_id' => 'required',
             'report_id' => 'required',
-            'subscribe_status' => 'required|integer',
+            'subscribe_status' => 'required|in:0,1',
             'subscribe_time' => 'date',
+            'receive_mode' => 'required',
         ];
     }
 }

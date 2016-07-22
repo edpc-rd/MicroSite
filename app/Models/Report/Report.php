@@ -32,7 +32,7 @@ class Report extends Model
     protected $guarded = ['report_id'];
 
     /**
-     *
+     *@var array
      */
     public function __construct(array $attributes = [])
     {

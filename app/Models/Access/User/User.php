@@ -51,7 +51,7 @@ class User extends Authenticatable
     protected $dates = ['deleted_at', 'login_at'];
 
     /**
-     *
+     *@var array
      */
     public function __construct(array $attributes = [])
     {

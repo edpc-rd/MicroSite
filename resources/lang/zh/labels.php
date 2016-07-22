@@ -125,6 +125,106 @@ return [
                 ],
             ],
         ],
+        'report' => [
+            'reports' => [
+                'create' => '新建報表',
+                'edit' => '編輯報表',
+
+                'grouped_permissions' => '已分組權限',
+                'label' => '報表',
+                'management' => '報表管理',
+                'no_groups' => '沒有權限組.',
+                'no_permissions' => '沒有選擇權限.',
+                'no_roles' => '沒有設置角色',
+                'no_ungrouped' => '沒有尚未分組的權限.',
+
+                'table' => [
+                    'report_id' => 'ID',
+                    'group' => '報表分組',
+                    'name' => '名稱',
+                    'report_no' => '編號',
+                    'format' => '輸出格式',
+                    'schedule' => '執行計畫',
+                    'allow_subscribe' => '訂閱',
+                    'allow_query' => '實時查詢',
+                    'receive_mode' => '接收途徑',
+                    'status' => '啟用',
+                    'query_url' => '查詢路徑',
+                    'description' => '描述',
+                    'created' => '新增時間',
+                    'updated' => '更新時間',
+                    'total' => '報表合計',
+                ],
+
+                'tabs' => [
+                    'general' => '通用',
+                    'groups' => '全部分組',
+                    'dependencies' => '依賴',
+                    'permissions' => '全部權限',
+                ],
+
+                'ungrouped_permissions' => '未分組權限',
+            ],
+            'groups' => [
+                'create' => '新建報表分組',
+                'edit' => '編輯報表分組',
+                'management' => '報表分組管理',
+
+                'table' => [
+                    'name' => '名稱',
+                ],
+            ],
+
+            'roles' => [
+                'create' => '新建角色',
+                'edit' => '編輯角色',
+                'management' => '角色管理',
+
+                'table' => [
+                    'number_of_users' => '用戶數',
+                    'permissions' => '權限',
+                    'role' => '角色',
+                    'sort' => '排序',
+                    'total' => '角色總數',
+                ],
+            ],
+
+            'users' => [
+                'active' => '啟用的用戶',
+                'all_permissions' => '全部權限',
+                'change_password' => '修改密碼',
+                'change_password_for' => 'Change Password for :user',
+                'create' => '新建用戶',
+                'deactivated' => '停用的用戶',
+                'deleted' => '刪除的用戶',
+                'dependencies' => '依賴',
+                'edit' => '編輯用戶',
+                'management' => '用戶管理',
+                'no_other_permissions' => '沒有其它的權限',
+                'no_permissions' => '沒有權限',
+                'no_roles' => '沒有設置角色.',
+                'permissions' => '權限',
+                'permission_check' => '檢查權限也將檢查它的依賴關係.',
+
+                'table' => [
+                    'confirmed' => '已確認',
+                    'created' => '創建時間',
+                    'email' => '郵箱',
+                    'id' => 'ID',
+                    'last_updated' => '最後更新',
+                    'name' => '登錄賬號',
+                    'nick' => '昵稱',
+                    'weixin_id' => '微信號',
+                    'remark' => '備註',
+                    'last_login' => '最後登錄',
+                    'no_deactivated' => '沒有停用的用戶',
+                    'no_deleted' => '沒有刪除的用戶',
+                    'other_permissions' => '其它權限',
+                    'roles' => '角色',
+                    'total' => '用戶總數',
+                ],
+            ],
+        ],
     ],
 
     'frontend' => [

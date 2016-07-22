@@ -17,7 +17,7 @@ class DeleteReportGroupRequest extends Request
      */
     public function authorize()
     {
-        return access()->allow('delete-group-groups');
+        return access()->allow('delete-report-groups');
     }
 
     /**

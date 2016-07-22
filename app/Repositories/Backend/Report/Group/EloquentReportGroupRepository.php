@@ -106,18 +106,18 @@ class EloquentReportGroupRepository implements ReportGroupRepositoryContract
     public function updateSort($hierarchy)
     {
         $parent_sort = 1;
-        $child_sort = 1;
+        $child_sort  = 1;
 
         foreach ($hierarchy as $group) {
-            $this->find((int)$group['group_id'])->update([
+            $this->find((int) $group['id'])->update([
                 'parent_id' => null,
                 'sort_order' => $parent_sort,
             ]);
 
             if (isset($group['children']) && count($group['children'])) {
                 foreach ($group['children'] as $child) {
-                    $this->find((int)$child['group_id'])->update([
-                        'parent_id' => (int)$group['group_id'],
+                    $this->find((int) $child['id'])->update([
+                        'parent_id' => (int) $group['id'],
                         'sort_order' => $child_sort,
                     ]);
 

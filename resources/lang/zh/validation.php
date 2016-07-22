@@ -146,6 +146,41 @@ return [
                     'send_confirmation_email' => '發送確認郵件',
                 ],
             ],
+            'report' => [
+                'reports' => [
+                    'group' => '報表分組',
+                    'report_no' => '報表編號',
+                    'name' => '報表名稱',
+                    'format' => '輸出格式',
+                    'schedule' => '執行計畫',
+                    'status' => '報表狀態',
+                    'allow_subscribe' => '是否允許訂閱',
+                    'allow_query' => '是否允許實時查詢',
+                    'receive_mode' => '接收模式',
+                    'query_url' => '查詢路徑',
+                    'description' => '描述',
+                ],
+
+                'groups' => [
+                    'name' => '報表分組名稱',
+                    'sort' => '排序',
+                ],
+
+                'users' => [
+                    'active' => '啟用',
+                    'associated_roles' => '關聯的角色',
+                    'confirmed' => '已確認',
+                    'email' => '郵箱地址',
+                    'name' => '登錄帳號',
+                    'nick' => '昵稱',
+                    'weixin_id' => '微信號',
+                    'remark' => '備註',
+                    'other_permissions' => '其它權限',
+                    'password' => '密碼',
+                    'password_confirmation' => '確認密碼',
+                    'send_confirmation_email' => '發送確認郵件',
+                ],
+            ],
         ],
 
         'frontend' => [

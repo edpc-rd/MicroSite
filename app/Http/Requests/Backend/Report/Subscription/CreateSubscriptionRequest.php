@@ -17,7 +17,7 @@ class CreateSubscriptionRequest extends Request
      */
     public function authorize()
     {
-        return access()->allow('create-report-subscription');
+        return access()->allow('create-report-subscriptions');
     }
 
     /**

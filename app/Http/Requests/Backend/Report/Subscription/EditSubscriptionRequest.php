@@ -17,7 +17,7 @@ class EditSubscriptionRequest extends Request
      */
     public function authorize()
     {
-        return access()->allow('edit-report-subscription');
+        return access()->allow('edit-report-subscriptions');
     }
 
     /**

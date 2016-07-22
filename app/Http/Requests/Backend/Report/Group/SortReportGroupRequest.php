@@ -5,10 +5,10 @@ namespace App\Http\Requests\Backend\Report\Group;
 use App\Http\Requests\Request;
 
 /**
- * Class StoreReportGroupRequest
+ * Class SortReportGroupRequest
  * @package App\Http\Requests\Backend\Report\Group
  */
-class StoreReportGroupRequest extends Request
+class SortReportGroupRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,7 +17,7 @@ class StoreReportGroupRequest extends Request
      */
     public function authorize()
     {
-        return access()->allow('create-report-groups');
+        return access()->allow('sort-report-groups');
     }
 
     /**
@@ -28,7 +28,7 @@ class StoreReportGroupRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'required|unique:ms_report_groups',
+            //
         ];
     }
 }

@@ -32,6 +32,20 @@ return [
             ],
         ],
 
+        'report' => [
+            'groups' => [
+                'edit_explanation' => '如果你在左邊區域調整了報表分組的層次結構，需要刷新當前頁面才能在下面反映最新的層次結構.',
+                'hierarchy_saved' => '層次結構已成功保存.',
+                'sort_explanation' => '這個區域可以讓你通過拖拉的方式組織報表分組的層次結構.',
+            ],
+
+            'users' => [
+                'delete_user_confirm' => '您是否確認要永久刪除這個用戶? 系統中任何使用了該用戶ID的地方可能會引起錯誤. 您需要自行承擔風險. 該操作將不能回退.',
+                'if_confirmed_off' => '(If confirmed is off)',
+                'restore_user_confirm' => '是否確認將該用戶恢復到原來的狀態?',
+            ],
+        ],
+
         'dashboard' => [
             'title' => '管理控制台',
             'welcome' => '歡迎',

@@ -17,7 +17,7 @@ class UpdateReportGroupRequest extends Request
      */
     public function authorize()
     {
-        return access()->allow('edit-group-groups');
+        return access()->allow('edit-report-groups');
     }
 
     /**
@@ -29,7 +29,6 @@ class UpdateReportGroupRequest extends Request
     {
         return [
             'name' => 'required',
-            'sort_order' => 'required',
         ];
     }
 }

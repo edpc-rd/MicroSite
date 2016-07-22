@@ -17,7 +17,7 @@ class UpdateReportRequest extends Request
      */
     public function authorize()
     {
-        return access()->allow('edit-report');
+        return access()->allow('edit-reports');
     }
 
     /**
@@ -28,12 +28,12 @@ class UpdateReportRequest extends Request
     public function rules()
     {
         return [
-            'report_no' => 'required|string|max:10|unique:ms_reports',
+            'report_no' => 'required|string|max:10',
             'group_id' => 'integer',
             'name' => 'required|string|max:100',
-            'format' => 'required|in:Text,Image,File,MpNews',
+            'format' => 'required',
             'schedule' => 'string|max:100',
-            'status' => 'required|integer',
+            'status' => 'required|in:0,1',
             'allow_subscribe' => 'required|in:true,false',
             'allow_query' => 'required|in:true,false',
             'receive_mode' => 'string|max:50',
