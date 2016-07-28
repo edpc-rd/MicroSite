@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Requests\Backend\Report\Subscription;
+namespace App\Http\Requests\Backend\Access\User\Subscription;
 
 use App\Http\Requests\Request;
 
 /**
- * Class StoreSubscriptionRequest
- * @package App\Http\Requests\Backend\Report\Subscription
+ * Class CreateSubscriptionRequest
+ * @package App\Http\Requests\Backend\Access\User\Subscription
  */
-class StoreSubscriptionRequest extends Request
+class CreateSubscriptionRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,11 +28,7 @@ class StoreSubscriptionRequest extends Request
     public function rules()
     {
         return [
-            'user_id' => 'required',
-            'report_id' => 'required',
-            'subscribe_status' => 'required|in:0,1',
-            'subscribe_time' => 'date',
-            'receive_mode' => 'required',
+            //
         ];
     }
 }

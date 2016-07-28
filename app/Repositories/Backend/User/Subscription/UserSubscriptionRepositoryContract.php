@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Repositories\Backend\Report\Subscription;
+namespace App\Repositories\Backend\User\Subscription;
 
 /**
- * Interface PermissionDependencyRepositoryContract
- * @package App\Repositories\Backend\Permission\Dependency
+ * Interface UserSubscriptionRepositoryContract
+ * @package App\Repositories\Backend\User\Subscription
  */
 interface UserSubscriptionRepositoryContract
 {
@@ -16,12 +16,20 @@ interface UserSubscriptionRepositoryContract
     public function findOrThrowException($id, $withUsers = false);
 
     /**
+     * @param  $userId
+     * @param  $reportId
+     * @param  bool $withUser
+     * @return mixed
+     */
+    public function findByUserAndReport($userId, $reportId, $withUser = false);
+
+    /**
      * @param  $per_page
      * @param  string $order_by
      * @param  string $sort
      * @return mixed
      */
-    public function getSubscriptionsPaginated($per_page, $order_by = 'report_id', $sort = 'asc');
+    public function getSubscriptionsPaginated($per_page, $order_by = 'user_id', $sort = 'asc');
 
     /**
      * @param  string $order_by
@@ -29,7 +37,7 @@ interface UserSubscriptionRepositoryContract
      * @param  bool $withUser
      * @return mixed
      */
-    public function getAllSubscriptions($order_by = 'report_id', $sort = 'asc', $withUser = true);
+    public function getAllSubscriptions($order_by = 'user_id', $sort = 'asc', $withUser = true);
 
     /**
      * @param  integer $report_id
@@ -52,10 +60,11 @@ interface UserSubscriptionRepositoryContract
     public function getSubscriptionsByUserId($user_id, $status = 1, $order_by = 'user_id', $sort = 'asc', $withUser = true);
 
     /**
-     * @param  $input
+     * @param  $reportId
+     * @param  $userId
      * @return mixed
      */
-    public function create($input);
+    public function create($reportId, $userId);
 
     /**
      * @param  $id
@@ -69,4 +78,12 @@ interface UserSubscriptionRepositoryContract
      * @return mixed
      */
     public function destroy($id);
+
+    /**
+     * @param  $id
+     * @param  $status
+     * @throws GeneralException
+     * @return bool
+     */
+    public function mark($id, $status);
 }

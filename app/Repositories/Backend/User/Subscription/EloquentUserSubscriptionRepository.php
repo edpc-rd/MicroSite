@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Repositories\Backend\Report\Subscription;
+namespace App\Repositories\Backend\User\Subscription;
 
 use App\Exceptions\GeneralException;
-use App\Models\Report\UserSubscription;
+use App\Models\Access\User\UserSubscription;
+use Carbon\Carbon;
 /**
  * Class EloquentUserSubscriptionRepository
- * @packageApp\Repositories\Backend\Report\Subscription
+ * @package App\Models\Access\User\UserSubscription
  */
 class EloquentUserSubscriptionRepository implements UserSubscriptionRepositoryContract
 {
@@ -29,7 +30,7 @@ class EloquentUserSubscriptionRepository implements UserSubscriptionRepositoryCo
      * @param  bool $withUser
      * @return mixed
      */
-    public function getAllSubscriptions($order_by = 'sort_order', $sort = 'asc', $withUser = true)
+    public function getAllSubscriptions($order_by = 'user_id', $sort = 'asc', $withUser = false)
     {
         if ($withUser) {
             return UserSubscription::with('user', 'report')
@@ -69,7 +70,7 @@ class EloquentUserSubscriptionRepository implements UserSubscriptionRepositoryCo
      * @param  bool $withUser
      * @return mixed
      */
-    public function getSubscriptionsByUserId($user_id, $status = 1, $order_by = 'user_id', $sort = 'asc', $withUser = true)
+    public function getSubscriptionsByUserId($user_id, $status = 1, $order_by = 'user_id', $sort = 'asc', $withUser = false)
     {
         if ($withUser) {
             return UserSubscription::with('user', 'report')->where(['user_id' => $user_id, 'subscribe_status' => $status])
@@ -77,29 +78,27 @@ class EloquentUserSubscriptionRepository implements UserSubscriptionRepositoryCo
                 ->get();
         }
 
-        return UserSubscription::where(['user_id' => $user_id, 'subscribe_status' => $status])->orderBy($order_by, $sort)
+        return UserSubscription::where(['user_id' => $user_id])->orderBy($order_by, $sort)
             ->get();
     }
 
     /**
-     * @param  $input
+     * @param  $reportId
+     * @param  $userId
      * @throws GeneralException
      * @return bool
      */
-    public function create($input)
+    public function create($reportId,$userId)
     {
         $subscription = new UserSubscription;
-        $subscription->user_id = isset($input['user_id']) && strlen($input['user_id']) > 0 ? (int)$input['user_id'] : null;
-        $subscription->report_id = isset($input['report_id']) && strlen($input['report_id']) > 0 ? (int)$input['report_id'] : null;
+        $subscription->user_id = isset($userId) && strlen($userId) > 0 ? (int)$userId : null;
+        $subscription->report_id = isset($reportId) && strlen($reportId) > 0 ? (int)$reportId : null;
         $subscription->subscribe_status = 0;
-        $subscription->subscribe_time = DB::raw('CURRENT_TIMESTAMP');
-        $subscription->receive_mode = $input['receive_mode'];
-
 
         if ($subscription->save()) {
             return true;
         }
-        throw new GeneralException(trans('exceptions.backend.report.report.create_error'));
+        throw new GeneralException(trans('exceptions.backend.report.subscriptions.create_error'));
     }
 
     /**
@@ -121,7 +120,7 @@ class EloquentUserSubscriptionRepository implements UserSubscriptionRepositoryCo
             return true;
         }
 
-        throw new GeneralException(trans('exceptions.backend.report.report.update_error'));
+        throw new GeneralException(trans('exceptions.backend.report.subscriptions.update_error'));
     }
 
     /**
@@ -141,7 +140,7 @@ class EloquentUserSubscriptionRepository implements UserSubscriptionRepositoryCo
             return UserSubscription::find($id);
         }
 
-        throw new GeneralException(trans('exceptions.backend.report.subscription.not_found'));
+        throw new GeneralException(trans('exceptions.backend.report.subscriptions.not_found'));
     }
 
     /**
@@ -156,13 +155,67 @@ class EloquentUserSubscriptionRepository implements UserSubscriptionRepositoryCo
 
         //Don't delete the role is there are users associated
         if ($subscription->subscribe_status == 1) {
-            throw new GeneralException(trans('exceptions.backend.report.subscription.cant_delete_active'));
+            throw new GeneralException(trans('exceptions.backend.report.subscriptions.cant_delete_active'));
         }
 
         if ($subscription->delete()) {
             return true;
         }
 
-        throw new GeneralException(trans('exceptions.backend.report.subscription.delete_error'));
+        throw new GeneralException(trans('exceptions.backend.report.subscriptions.delete_error'));
+    }
+
+    /**
+     * @param  $userId
+     * @param  $reportId
+     * @param  bool $withUser
+     * @return mixed
+     */
+    public function findByUserAndReport($userId, $reportId, $withUser = false)
+    {
+        if ($withUser) {
+            return UserSubscription::with('user', 'report')->where(['user_id' => $userId, 'report_id' => $reportId])->first();
+        }
+        return UserSubscription::where(['user_id' => $userId, 'report_id' => $reportId])->first();
+
+    }
+
+    /**
+     * @param  $id
+     * @param  $status
+     * @throws GeneralException
+     * @return bool
+     */
+    public function mark($id, $status)
+    {
+
+        $subscription = $this->findOrThrowException($id);
+        $subscription->subscribe_status = $status;
+        $subscription->subscribe_time = Carbon::now();
+
+        if ($subscription->save()) {
+            return true;
+        }
+
+        throw new GeneralException(trans('exceptions.backend.report.subscriptions.mark'));
+    }
+
+    /**
+     * @param integer $reportId
+     * @param integer $userId
+     * @return string
+     */
+    public function getActionButtons($reportId, $userId)
+    {
+        if (access()->allow('store-report-subscriptions')) {
+            return '<a href="' . route('admin.access.user.subscription.store', [$reportId, $userId]) . '"
+                 data-method="post"
+                 data-trans-button-cancel="' . trans('buttons.general.cancel') . '"
+                 data-trans-button-confirm="' . trans('buttons.backend.access.subscriptions.activate') . '"
+                 data-trans-title="' . trans('strings.backend.general.are_you_sure') . '"
+                 class="btn btn-xs btn-primary"><i class="fa fa-unlock" data-toggle="tooltip" data-placement="top" title="' . trans('buttons.backend.access.subscriptions.activate') . '"></i></a>';
+        }
+
+        return '';
     }
 }

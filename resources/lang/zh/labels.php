@@ -105,6 +105,7 @@ return [
                 'no_roles' => '沒有設置角色.',
                 'permissions' => '權限',
                 'permission_check' => '檢查權限也將檢查它的依賴關係.',
+                'subscription' => '訂閱報表',
 
                 'table' => [
                     'confirmed' => '已確認',
@@ -123,6 +124,20 @@ return [
                     'roles' => '角色',
                     'total' => '用戶總數',
                 ],
+
+                'subscriptions' =>[
+                    'table' => [
+                        'report_id' => 'ID',
+                        'group' => '報表分組',
+                        'name' => '名稱',
+                        'report_no' => '編號',
+                        'format' => '輸出格式',
+                        'allow_subscribe' => '開通',
+                        'subscribe_status' => '訂閱',
+                        'subscribe_time' => '訂閱時間',
+                        'total' => '報表合計',
+                    ],
+                ]
             ],
         ],
         'report' => [

@@ -68,14 +68,14 @@ return [
                 'not_found' => '報表不存在.',
                 'update_error' => '更新報表時出現問題，請重試.',
             ],
-            'subscription' => [
+            'subscriptions' => [
                 'already_exists' => '报表授权已存在，請重新输入.',
-                'cant_delete_active' => '您不能刪除订阅了的報表授权.',
-                'create_error' => '創建報表授权時出現問題，請重試.',
-                'delete_error' => '刪除報表授权時出現問題，請重試.',
-                'mark' => '修改報表授权狀態出現問題，請重試.',
-                'not_found' => '報表不存在.',
-                'update_error' => '更新報表授权時出現問題，請重試.',
+                'cant_delete_active' => '您不能禁用已订阅了的報表.',
+                'create_error' => '開通報表訂閱時出現問題，請重試.',
+                'delete_error' => '刪除報表訂閱時出現問題，請重試.',
+                'mark' => '修改報表訂閱狀態出現問題，請重試.',
+                'not_found' => '報表訂閱不存在.',
+                'update_error' => '更新報表訂閱時出現問題，請重試.',
             ],
             'groups' => [
                 'associated_reports' => '您不能刪除這個群組，因為它有關聯的报表.',

@@ -14,6 +14,9 @@ Route::group([
         Route::get('users/deactivated', 'UserController@deactivated')->name('admin.access.users.deactivated');
         Route::get('users/deleted', 'UserController@deleted')->name('admin.access.users.deleted');
         Route::get('account/confirm/resend/{user_id}', 'UserController@resendConfirmationEmail')->name('admin.account.confirm.resend');
+        Route::delete('subscription/{id}/delete', 'SubscriptionController@destroy')->name('admin.access.subscription.delete');
+
+
 
         /**
          * Specific User
@@ -24,6 +27,10 @@ Route::group([
             Route::get('mark/{status}', 'UserController@mark')->name('admin.access.user.mark')->where(['status' => '[0,1]']);
             Route::get('password/change', 'UserController@changePassword')->name('admin.access.user.change-password');
             Route::post('password/change', 'UserController@updatePassword')->name('admin.access.user.change-password');
+            Route::get('subscriptions', 'UserController@subscriptions')->name('admin.access.user.subscriptions');
+            Route::get('subscription/mark/{status}', 'SubscriptionController@mark')->name('admin.access.user.subscription.mark');
+            Route::post('subscription/{reportId}/store', 'SubscriptionController@store')->name('admin.access.user.subscription.store');
+
         });
     });
 

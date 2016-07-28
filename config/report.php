@@ -27,7 +27,7 @@ return [
     * UserSubscription model used by Report to create correct relations.
     * Update the user_subscription if it is in a different namespace.
     */
-    'user_subscription' => App\Models\Report\UserSubscription::class,
+    'user_subscription' => App\Models\Access\User\UserSubscription::class,
 
     /*
     * Snapshots table used by Access to save snapshots to the database.

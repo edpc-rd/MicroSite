@@ -42,6 +42,12 @@ return [
             'updated' => '用戶已成功更新.',
             'updated_password' => "用戶密碼已成功修改.",
         ],
+        'subscriptions' => [
+            'deactivated' => '關閉報表訂閱成功.',
+            'activated' => '開通報表訂閱成功.',
+            'updated' => '更新訂閱狀態成功.',
+            'created' => '更新訂閱狀態成功.',
+        ],
         'reports' => [
             'created' => '成功創建報表.',
             'deleted' => '成功刪除報表.',

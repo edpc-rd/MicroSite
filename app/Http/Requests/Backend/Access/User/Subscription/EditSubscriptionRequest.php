@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Requests\Backend\Report\Subscription;
+namespace App\Http\Requests\Backend\Access\User\Subscription;
 
 use App\Http\Requests\Request;
 
 /**
- * Class UpdateSubscriptionRequest
- * @package App\Http\Requests\Backend\Report\Subscription
+ * Class EditSubscriptionRequest
+ * @package App\Http\Requests\Backend\Access\User\Subscription
  */
-class UpdateSubscriptionRequest extends Request
+class EditSubscriptionRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,10 +28,7 @@ class UpdateSubscriptionRequest extends Request
     public function rules()
     {
         return [
-            'user_id' => 'required',
-            'subscribe_status' => 'required|integer',
-            'subscribe_time' => 'date',
-            'receive_mode' => 'required',
+            //
         ];
     }
 }

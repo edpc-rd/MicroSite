@@ -7,6 +7,7 @@ use App\Http\Requests\Backend\Access\User\ChangeUserPasswordRequest;
 use App\Http\Requests\Backend\Access\User\CreateUserRequest;
 use App\Http\Requests\Backend\Access\User\DeleteUserRequest;
 use App\Http\Requests\Backend\Access\User\EditUserRequest;
+use App\Http\Requests\Backend\Access\User\EditSubscriptionRequest;
 use App\Http\Requests\Backend\Access\User\MarkUserRequest;
 use App\Http\Requests\Backend\Access\User\PermanentlyDeleteUserRequest;
 use App\Http\Requests\Backend\Access\User\ResendConfirmationEmailRequest;
@@ -18,6 +19,9 @@ use App\Repositories\Backend\Permission\PermissionRepositoryContract;
 use App\Repositories\Backend\Role\RoleRepositoryContract;
 use App\Repositories\Backend\User\UserContract;
 use App\Repositories\Frontend\User\UserContract as FrontendUserContract;
+use App\Repositories\Backend\Report\ReportRepositoryContract;
+use App\Repositories\Backend\User\Subscription\UserSubscriptionRepositoryContract;
+
 
 /**
  * Class UserController
@@ -40,19 +44,35 @@ class UserController extends Controller
     protected $permissions;
 
     /**
-     * @param UserContract                 $users
-     * @param RoleRepositoryContract       $roles
+     * @var UserSubscriptionRepositoryContract
+     */
+    protected $subscriptions;
+
+    /**
+     * @var ReportRepositoryContract
+     */
+    protected $reports;
+
+    /**
+     * @param UserContract $users
+     * @param RoleRepositoryContract $roles
      * @param PermissionRepositoryContract $permissions
+     * @param UserSubscriptionRepositoryContract $subscriptions
+     * @param ReportRepositoryContract $reports
      */
     public function __construct(
         UserContract $users,
         RoleRepositoryContract $roles,
-        PermissionRepositoryContract $permissions
+        PermissionRepositoryContract $permissions,
+        UserSubscriptionRepositoryContract $subscriptions,
+        ReportRepositoryContract $reports
     )
     {
-        $this->users       = $users;
-        $this->roles       = $roles;
+        $this->users = $users;
+        $this->roles = $roles;
         $this->permissions = $permissions;
+        $this->subscriptions = $subscriptions;
+        $this->reports = $reports;
     }
 
     /**
@@ -103,6 +123,19 @@ class UserController extends Controller
             ->withRoles($this->roles->getAllRoles('sort_order', 'asc', true))
             ->withUserPermissions($user->permissions->lists('permission_id')->all())
             ->withPermissions($this->permissions->getAllPermissions());
+    }
+
+    /**
+     * @param  $id
+     * @param  EditSubscriptionRequest $request
+     * @return mixed
+     */
+    public function subscriptions($id, EditSubscriptionRequest $request)
+    {
+        $user = $this->users->findOrThrowException($id, true);
+        return view('backend.access.subscription.index')
+            ->withUser($user)
+            ->withReports($this->reports->getReportsPaginatedByStatus(50));
     }
 
     /**

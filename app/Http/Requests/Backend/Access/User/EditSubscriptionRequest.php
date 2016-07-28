@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Requests\Backend\Report\Subscription;
+namespace App\Http\Requests\Backend\Access\User;
 
 use App\Http\Requests\Request;
 
 /**
- * Class DeleteSubscriptionRequest
- * @package App\Http\Requests\Backend\Report\Subscription
+ * Class EditSubscriptionRequest
+ * @package App\Http\Requests\Backend\Access\User
  */
-class DeleteSubscriptionRequest extends Request
+class EditSubscriptionRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,7 +17,7 @@ class DeleteSubscriptionRequest extends Request
      */
     public function authorize()
     {
-        return access()->allow('delete-report-subscriptions');
+        return access()->allow('edit-user-subscriptions');
     }
 
     /**

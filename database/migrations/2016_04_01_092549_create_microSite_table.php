@@ -264,6 +264,8 @@ class CreateMicroSiteTable extends Migration
                 ->on(config('report.reports_table'))
                 ->onDelete('cascade');
 
+            $table->unique('user_id', 'report_id');
+
         });
         /*Report Tables==============================================================================End*/
 

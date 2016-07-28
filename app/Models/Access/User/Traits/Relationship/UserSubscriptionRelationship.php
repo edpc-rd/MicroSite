@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Report\Traits\Relationship;
+namespace App\Models\Access\User\Traits\Relationship;
 
 /**
  * Class ReportRelationship

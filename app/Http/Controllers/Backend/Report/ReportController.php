@@ -73,7 +73,7 @@ class ReportController extends Controller
     public function index()
     {
         return view('backend.report.reports.index')
-            ->withReports($this->reports->getReportsPaginated(50, 'name'));
+            ->withReports($this->reports->getReportsPaginated(50));
     }
 
     /**

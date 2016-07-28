@@ -23,6 +23,13 @@ return [
                 'resend_email' => '重發確認郵件',
                 'restore_user' => '恢復用戶',
             ],
+            'subscriptions' => [
+                'activate' => '啟用',
+                'deactivate' => '禁用',
+                'subscript' => '訂閱',
+                'un_subscript' => '取消訂閱',
+
+            ],
         ],
 
         'report' => [
@@ -44,6 +51,7 @@ return [
             'update' => '更新',
         ],
 
+        'subscription' => '訂閱',
         'save' => '保存',
         'view' => '查看',
     ],

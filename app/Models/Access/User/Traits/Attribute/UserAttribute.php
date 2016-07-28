@@ -84,7 +84,8 @@ trait UserAttribute
         $this->getChangePasswordButtonAttribute() . ' ' .
         $this->getStatusButtonAttribute() .
         $this->getConfirmedButtonAttribute() .
-        $this->getDeleteButtonAttribute();
+        $this->getDeleteButtonAttribute() . ' ' .
+        $this->getSubscriptionButtonAttribute();
     }
 
     /**
@@ -165,6 +166,18 @@ trait UserAttribute
                  data-trans-button-confirm="'.trans('buttons.general.crud.delete').'"
                  data-trans-title="'.trans('strings.backend.general.are_you_sure').'"
                  class="btn btn-xs btn-danger"><i class="fa fa-trash" data-toggle="tooltip" data-placement="top" title="' . trans('buttons.general.crud.delete') . '"></i></a>';
+        }
+
+        return '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubscriptionButtonAttribute()
+    {
+        if (access()->allow('edit-user-subscriptions')) {
+            return '<a href="' . route('admin.access.user.subscriptions', $this->user_id) . '" class="btn btn-xs btn-success"><i class="fa fa-area-chart" data-toggle="tooltip" data-placement="top" title="' . trans('buttons.general.subscription') . '"></i></a> ';
         }
 
         return '';

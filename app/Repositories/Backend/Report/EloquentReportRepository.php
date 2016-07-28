@@ -17,7 +17,7 @@ class EloquentReportRepository implements ReportRepositoryContract
      * @param  string $sort
      * @return mixed
      */
-    public function getReportsPaginated($per_page, $order_by = ['group', 'report_no'], $sort = 'asc')
+    public function getReportsPaginated($per_page, $order_by = 'report_no', $sort = 'asc')
     {
         return Report::with('group')
             ->orderBy($order_by, $sort)
@@ -30,7 +30,7 @@ class EloquentReportRepository implements ReportRepositoryContract
      * @param  bool $withParameters
      * @return mixed
      */
-    public function getAllReports($order_by = 'sort_order', $sort = 'asc', $withParameters = false)
+    public function getAllReports($order_by = 'report_no', $sort = 'asc', $withParameters = false)
     {
         if ($withParameters) {
             return Report::with('parameters')
@@ -40,6 +40,22 @@ class EloquentReportRepository implements ReportRepositoryContract
 
         return Report::orderBy($order_by, $sort)
             ->get();
+    }
+
+    /**
+     * @param  $per_page
+     * @param  string $order_by
+     * @param  integer $status
+     * @param  string $sort
+     * @return mixed
+     */
+    public function getReportsPaginatedByStatus($per_page, $status = 1, $order_by = 'report_id', $sort = 'asc')
+    {
+        return Report::with('group','subscriptions')
+            ->where('status', $status)
+            ->where('allow_subscribe', 'true')
+            ->orderBy($order_by, $sort)
+            ->paginate($per_page);
     }
 
     /**

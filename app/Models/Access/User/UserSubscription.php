@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Models\Report;
+namespace App\Models\Access\User;
 
-use App\Models\Report\Traits\Attribute\UserSubscriptionAttribute;
-use App\Models\Report\Traits\Relationship\UserSubscriptionRelationship;
+use App\Models\Access\User\Traits\Attribute\UserSubscriptionAttribute;
+use App\Models\Access\User\Traits\Relationship\UserSubscriptionRelationship;
 use Illuminate\Database\Eloquent\Model;
 
 class UserSubscription extends Model
@@ -28,6 +28,11 @@ class UserSubscription extends Model
      * @var array
      */
     protected $dates = ['subscribe_time'];
+
+    /**
+     * @var bool
+     */
+    public $timestamps = false;
 
     /**
      *

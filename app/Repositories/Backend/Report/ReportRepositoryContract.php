@@ -24,6 +24,15 @@ interface ReportRepositoryContract
     public function getReportsPaginated($per_page, $order_by = 'report_id', $sort = 'asc');
 
     /**
+     * @param  $per_page
+     * @param  string $order_by
+     * @param  integer $status
+     * @param  string $sort
+     * @return mixed
+     */
+    public function getReportsPaginatedByStatus($per_page, $status = 1, $order_by = 'report_id', $sort = 'asc');
+
+    /**
      * @param  string $order_by
      * @param  string $sort
      * @param  bool $withParameters
