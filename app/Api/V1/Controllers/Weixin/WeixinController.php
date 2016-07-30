@@ -259,7 +259,7 @@ class WeixinController extends BaseController
                 }
 
                 $xlsName = basename($htmlSnapshot->file_name, "." . substr(strrchr($htmlSnapshot->file_name, '.'), 1));
-                $redirect_url = 'http://microsite.ngrok.cc/third/report/html/' . $xlsName . '?thirdLogin=true';
+                $redirect_url = 'http://59.37.32.137/third/report/html/' . $xlsName . '?thirdLogin=true';
                 $imgPath = $imgSnapshot->file_path . '\\' . $imgSnapshot->file_name;
                 $media_id = app('weixin')->uploadImage($imgPath);
 
