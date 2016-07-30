@@ -8,7 +8,7 @@ use App\Http\Requests\Backend\Report\DeleteReportRequest;
 use App\Http\Requests\Backend\Report\EditReportRequest;
 use App\Http\Requests\Backend\Report\StoreReportRequest;
 use App\Http\Requests\Backend\Report\UpdateReportRequest;
-use App\Repositories\Backend\Report\Subscription\UserSubscriptionRepositoryContract;
+use App\Repositories\Backend\User\Subscription\UserSubscriptionRepositoryContract;
 use App\Repositories\Backend\Report\Snapshot\ReportSnapshotRepositoryContract;
 use App\Repositories\Backend\Report\Parameter\ReportParameterRepositoryContract;
 use App\Repositories\Backend\Report\Group\ReportGroupRepositoryContract;

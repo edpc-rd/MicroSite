@@ -16,7 +16,7 @@ use App\Api\V1\Requests\Weixin\UploadImageRequest;
 use App\Api\V1\Requests\Weixin\SendNewsRequest;
 use App\Api\V1\Requests\Weixin\SendMpNewsRequest;
 use App\Api\V1\Requests\Weixin\SendMpNewsByIdRequest;
-use App\Repositories\Backend\Report\Subscription\UserSubscriptionRepositoryContract;
+use App\Repositories\Backend\User\Subscription\UserSubscriptionRepositoryContract;
 use App\Repositories\Backend\Report\Snapshot\ReportSnapshotRepositoryContract;
 use App\Repositories\Backend\Report\Parameter\ReportParameterRepositoryContract;
 use App\Repositories\Backend\Report\Group\ReportGroupRepositoryContract;

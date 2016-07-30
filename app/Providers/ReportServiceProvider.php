@@ -58,8 +58,8 @@ class ReportServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            \App\Repositories\Backend\Report\Subscription\UserSubscriptionRepositoryContract::class,
-            \App\Repositories\Backend\Report\Subscription\EloquentUserSubscriptionRepository::class
+            \App\Repositories\Backend\User\Subscription\UserSubscriptionRepositoryContract::class,
+            \App\Repositories\Backend\User\Subscription\EloquentUserSubscriptionRepository::class
         );
 
         $this->app->bind(
