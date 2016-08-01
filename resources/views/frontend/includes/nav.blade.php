@@ -11,9 +11,12 @@
             </button>
 
             <!-- Branding Image -->
+            <img class="navbar-img" src="img/274725345431741427.png"/>
+
             <a class="navbar-brand" href="{!! route('frontend.index') !!}">
                 {!! app_name() !!}
             </a>
+
         </div><!--navbar-header-->
 
         <div class="collapse navbar-collapse" id="frontend-navbar-collapse">
