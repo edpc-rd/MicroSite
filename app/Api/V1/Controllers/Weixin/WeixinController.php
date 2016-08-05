@@ -92,7 +92,7 @@ class WeixinController extends BaseController
         // 您可以直接echo 或者返回给框架
         die($server->serve());
 
-        $server->on('message', function($message) {
+        /*$server->on('message', function($message) {
             return Message::make('text')->content('您好！' . $message->FromUserName . ':' . $message->Content );
         });
 
@@ -105,7 +105,7 @@ class WeixinController extends BaseController
 
         $result = $server->serve();
 
-        echo $result;
+        echo $result; */
     }
 
     public function sendMsgToTag(SendMsgRequest $request)
