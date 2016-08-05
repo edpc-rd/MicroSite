@@ -90,7 +90,7 @@ class WeixinController extends BaseController
         $server = app('weixin')->server();
 
         // 您可以直接echo 或者返回给框架
-        //die($server->serve());
+        die($server->serve());
 
         $server->on('message', function($message) {
             return Message::make('text')->content('您好！' . $message->FromUserName . ':' . $message->Content );
@@ -259,7 +259,7 @@ class WeixinController extends BaseController
                 }
 
                 $xlsName = basename($htmlSnapshot->file_name, "." . substr(strrchr($htmlSnapshot->file_name, '.'), 1));
-                $redirect_url = 'http://59.37.32.137/third/report/html/' . $xlsName . '?thirdLogin=true';
+                $redirect_url = 'http://' . $_SERVER['SERVER_NAME'] . '/third/report/html/' . $xlsName . '?thirdLogin=true';
                 $imgPath = $imgSnapshot->file_path . '\\' . $imgSnapshot->file_name;
                 $media_id = app('weixin')->uploadImage($imgPath);
 
