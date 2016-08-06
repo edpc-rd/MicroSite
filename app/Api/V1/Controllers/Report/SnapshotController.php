@@ -75,17 +75,17 @@ class SnapshotController extends BaseController
 
         switch ($clientType) {
             case 'application/vnd.ms-excel':
-                $filePath = base_path() . '\resources\uploads\reports\excel';
+                $filePath = base_path() . '/resources/uploads/reports/excel';
                 $fileType = self::TYPE_EXCEL;
                 break;
             case 'text/html':
-                $filePath = base_path() . '\resources\uploads\reports\html';
+                $filePath = base_path() . '/resources/uploads/reports/html';
                 $fileType = self::TYPE_HTML;
                 break;
             case 'image/jpeg':
             case 'image/gif':
             case 'image/png':
-                $filePath = base_path() . '\resources\uploads\reports\image';
+                $filePath = base_path() . '/resources/uploads/reports/image';
                 $fileType = self::TYPE_IMAGE;
                 break;
             default:
