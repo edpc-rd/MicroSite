@@ -130,13 +130,13 @@ class WeixinController extends BaseController
 
     public function getFile(GetFileRequest $request)
     {
-        $filePath = base_path() . '\resources\downloads\\' . $request->get('fileName');
+        $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'downloads'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->getFile($request->get('media_id'), $filePath);
     }
 
     public function getForeverFile(GetForeverFileRequest $request)
     {
-        $filePath = base_path() . '\resources\downloads\\' . $request->get('fileName');
+        $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'downloads'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->getForeverFile($request->get('media_id'), $filePath);
     }
 
@@ -147,31 +147,31 @@ class WeixinController extends BaseController
 
     public function uploadFile(UploadFileRequest $request)
     {
-        $filePath = base_path() . '\resources\uploads\reports\excel\\' . $request->get('fileName');
+        $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'excel'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->uploadFile($filePath);
     }
 
     public function uploadImage(UploadImageRequest $request)
     {
-        $filePath = base_path() . '\resources\uploads\reports\image\\' . $request->get('fileName');
+        $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'image'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->uploadImage($filePath);
     }
 
     public function uploadNewsImg(UploadImageRequest $request)
     {
-        $filePath = base_path() . '\resources\uploads\reports\image\\' . $request->get('fileName');
+        $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'image'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->uploadNewsImg($filePath);
     }
 
     public function uploadForeverMedia(UploadFileRequest $request)
     {
-        $filePath = base_path() . '\resources\uploads\reports\excel\\' . $request->get('fileName');
+        $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'excel'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->uploadForeverMedia($filePath);
     }
 
     public function sendNews(SendNewsRequest $request)
     {
-        $filePath = base_path() . '\resources\uploads\reports\image\\' . $request->get('fileName');
+        $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'image'.DIRECTORY_SEPARATOR . $request->get('fileName');
         $picUrl = app('weixin')->uploadNewsImg($filePath);
         $users = $request->get('users');
         $newsItem = new NewsItem();
@@ -187,7 +187,7 @@ class WeixinController extends BaseController
     {
         $redirect_url = $request->get('url');
         $users = $request->get('users');
-        $filePath = base_path() . '\resources\uploads\reports\image\\' . $request->get('fileName');
+        $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'image'.DIRECTORY_SEPARATOR . $request->get('fileName');
         $media_id = app('weixin')->uploadImage($filePath);
         $newsItem = new MpNewsItem();
         $newsItem->title = $request->get('title');
@@ -235,7 +235,7 @@ class WeixinController extends BaseController
                 break;
             case 'IMAGE': {
                 $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'IMAGE');
-                $filePath = $snapshot->file_path . '\\' . $snapshot->file_name;
+                $filePath = $snapshot->file_path . DIRECTORY_SEPARATOR . $snapshot->file_name;
                 $media_id = app('weixin')->uploadImage($filePath);
 
                 return app('weixin')->sendImgToUser($media_id['media_id'], $userNames);
@@ -243,7 +243,7 @@ class WeixinController extends BaseController
                 break;
             case 'FILE': {
                 $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'EXCEL');
-                $filePath = $snapshot->file_path . '\\' . $snapshot->file_name;
+                $filePath = $snapshot->file_path . DIRECTORY_SEPARATOR . $snapshot->file_name;
                 $media_id = app('weixin')->uploadFile($filePath);
 
                 return app('weixin')->sendFileToUser($media_id, $userNames);
@@ -260,7 +260,7 @@ class WeixinController extends BaseController
 
                 $xlsName = basename($htmlSnapshot->file_name, "." . substr(strrchr($htmlSnapshot->file_name, '.'), 1));
                 $redirect_url = 'http://' . $_SERVER['SERVER_NAME'] . '/third/report/html/' . $xlsName . '?thirdLogin=true';
-                $imgPath = $imgSnapshot->file_path . '\\' . $imgSnapshot->file_name;
+                $imgPath = $imgSnapshot->file_path . DIRECTORY_SEPARATOR . $imgSnapshot->file_name;
                 $media_id = app('weixin')->uploadImage($imgPath);
 
                 $newsItem = new MpNewsItem();
