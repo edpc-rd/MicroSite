@@ -3,7 +3,8 @@
 Homestead.yaml
 Homestead.json
 .env
-
+env
+/public/uploads
 /public/css/frontend.css
 /public/css/frontend.css.map
 /public/css/backend.css
