@@ -19,9 +19,11 @@ use Log;
 class SnapshotController extends BaseController
 {
     const TYPE_IMAGE = 'IMAGE';
+    const TYPE_JPEG = 'JPEG';
     const TYPE_HTML = 'HTML';
     const TYPE_EXCEL = 'EXCEL';
     const TYPE_TEXT = 'TEXT';
+    const TYPE_CSV = 'CSV';
     /**
      * @var UserContract
      */
@@ -82,13 +84,21 @@ class SnapshotController extends BaseController
                 $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'html';
                 $fileType = self::TYPE_HTML;
                 break;
+            case 'text/csv':
+                $filePath = public_path() . DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'csv';
+                $fileType = self::TYPE_CSV;
+                break;
             case 'image/jpeg':
+                $filePath = public_path() . DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'img';
+                $fileType = self::TYPE_JPEG;
+                break;
             case 'image/gif':
             case 'image/png':
                 $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'image';
                 $fileType = self::TYPE_IMAGE;
                 break;
             default:
+                Log::info('上傳報表文件：文件名稱[' . $clientName . ']、類型[' . $clientType . ']');
                 throw new Exception('上傳報表文件不支持此類型：' . $clientType , 30003);
         }
 

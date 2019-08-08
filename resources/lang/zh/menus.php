@@ -93,7 +93,7 @@ return [
         ],
 
         'sidebar' => [
-            'dashboard' => '儀表看板',
+            'dashboard' => '管理看板',
             'general' => '常用功能',
         ],
     ],

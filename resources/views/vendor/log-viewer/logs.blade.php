@@ -2,8 +2,8 @@
 
 @section('page-header')
     <h1>
-        Log Viewer
-        <small>By <a href="https://github.com/ARCANEDEV/LogViewer" target="_blank">ARCANEDEV</a></small>
+        日誌管理
+        <small><a href="https://github.com/ARCANEDEV/LogViewer" target="_blank"></a></small>
     </h1>
 @endsection
 
@@ -117,7 +117,7 @@
                                 @endif
                             </th>
                         @endforeach
-                        <th class="text-right">Actions</th>
+                        <th class="text-right">操作</th>
                     </tr>
                     </thead>
                     <tbody>

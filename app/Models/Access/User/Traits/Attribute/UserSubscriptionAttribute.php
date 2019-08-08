@@ -26,7 +26,7 @@ trait UserSubscriptionAttribute
             return '<a href="' . route('admin.access.subscription.delete', [$this->id]) . '"
                  data-method="delete"
                  data-trans-button-cancel="' . trans('buttons.general.cancel') . '"
-                 data-trans-button-confirm="' . trans('buttons.backend.access.subscriptions.deactivate') . '"
+                 data-trans-button-confirm="' . trans('buttons.backend.access.subscriptions.dtv') . '"
                  data-trans-title="' . trans('strings.backend.general.are_you_sure') . '"
                  class="btn btn-xs btn-danger"><i class="fa fa-lock" data-toggle="tooltip" data-placement="top" title="' . trans('buttons.backend.access.subscriptions.deactivate') . '"></i></a>';
         }

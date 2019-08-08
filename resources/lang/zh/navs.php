@@ -22,7 +22,7 @@ return [
     ],
 
     'frontend' => [
-        'dashboard' => '看板',
+        'dashboard' => '用户信息',
         'home' => '主頁',
         'login' => '登錄',
         'macros' => 'Macros',

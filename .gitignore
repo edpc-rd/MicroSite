@@ -13,6 +13,8 @@ Homestead.json
 /public/js/backend.js
 /public/js/backend.js.map
 
+/resources/uploads/
+
 .DS_Store
 Thumbs.db
 *.sublime-project

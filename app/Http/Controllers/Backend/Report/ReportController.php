@@ -153,4 +153,10 @@ class ReportController extends Controller
         View::addExtension('html', 'php');
         return view($fileName);
     }
+
+    public  function viewImageReport($fileName)
+    {
+        View::addExtension('jpeg','php');
+        return view($fileName);
+    }
 }

@@ -22,7 +22,7 @@ return [
 	|
 	| The application name for use within the UI of the application
 	*/
-    'name' => '網購營運信息分發平台',
+    'name' => '網購營運訊息分發平台',
 
     /*
     |--------------------------------------------------------------------------

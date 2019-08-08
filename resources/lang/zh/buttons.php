@@ -26,6 +26,7 @@ return [
             'subscriptions' => [
                 'activate' => '啟用',
                 'deactivate' => '禁用',
+                'dtv' => '确定',
                 'subscript' => '訂閱',
                 'un_subscript' => '取消訂閱',
 

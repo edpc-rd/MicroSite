@@ -3738,13 +3738,17 @@ tbody.collapse.in {
   font-size: 18px;
   line-height: 20px;
   height: 50px; }
+.navbar-img {
+  float: left;
+  padding: 5px 15px;
+  height: 50px; }
   .navbar-brand:hover, .navbar-brand:focus {
     text-decoration: none; }
   .navbar-brand > img {
     display: block; }
   @media (min-width: 768px) {
     .navbar > .container .navbar-brand,
-    .navbar > .container-fluid .navbar-brand {
+    .navbar > .container-fluid .navbar-brand .navbar-img {
       margin-left: -15px; } }
 
 .navbar-toggle {
@@ -3909,7 +3913,7 @@ tbody.collapse.in {
   background-color: #f8f8f8;
   border-color: #e7e7e7; }
   .navbar-default .navbar-brand {
-    color: #777; }
+    color: #000000 }
     .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
       color: #5e5e5e;
       background-color: transparent; }

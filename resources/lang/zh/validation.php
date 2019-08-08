@@ -122,7 +122,7 @@ return [
                     ],
 
                     'name' => '名稱',
-                    'system' => '系統?',
+                    'system' => '系統權限?',
                 ],
 
                 'roles' => [

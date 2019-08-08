@@ -50,9 +50,9 @@ $(function(){
         e.preventDefault();
         var form = this;
         var link = $('a[data-method="delete"]');
-        var cancel = (link.attr('data-trans-button-cancel')) ? link.attr('data-trans-button-cancel') : "Cancel";
-        var confirm = (link.attr('data-trans-button-confirm')) ? link.attr('data-trans-button-confirm') : "Yes, delete";
-        var title = (link.attr('data-trans-title')) ? link.attr('data-trans-title') : "Warning";
+        var cancel = (link.attr('data-trans-button-cancel')) ? link.attr('data-trans-button-cancel') : "取消";
+        var confirm = (link.attr('data-trans-button-confirm')) ? link.attr('data-trans-button-confirm') : "確定";
+        var title = (link.attr('data-trans-title')) ? link.attr('data-trans-title') : "是否確定";
         var text = (link.attr('data-trans-text')) ? link.attr('data-trans-text') : "Are you sure you want to delete this item?";
 
         swal({

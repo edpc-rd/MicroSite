@@ -31,7 +31,7 @@ class LoginRequest extends Request
             'email'    => 'required|email',
             'password' => 'required',
             //'g-recaptcha-response' => 'required|captcha',
-            'captcha' => 'required|captcha'
+            //'captcha' => 'required|captcha'
         ];
     }
 }
