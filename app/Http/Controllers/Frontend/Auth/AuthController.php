@@ -39,4 +39,48 @@ class AuthController extends Controller
     {
         $this->user = $user;
     }
+
+    /**
+     * 清除多余报表
+     */
+    public function reportClenr(){
+        $path = '../resources/uploads/reports';
+        $files = $this->getDir($path);
+        if(!empty($files)){
+            foreach ($files as $v){
+                //获取文件修改时间
+                $time = filemtime($v);
+                //获取一个月之前的时间
+                $beforetime = strtotime("-1 month");
+                if($time < $beforetime){  //一个月内没有修改过的文件删除掉
+                    @unlink($v);
+                }
+            }
+        }
+    }
+    /**
+     * 使用scandir 遍历目录
+     *
+     * @param $path
+     * @return array
+     */
+    function getDir($path = '../resources/uploads/reports')
+    {
+        //判断目录是否为空
+        if(!file_exists($path)) {
+            return [];
+        }
+
+        $files = scandir($path);
+        $fileItem = [];
+        foreach($files as $v) {
+            $newPath = $path .DIRECTORY_SEPARATOR . $v;
+            if(is_dir($newPath) && $v != '.' && $v != '..') {
+                $fileItem = array_merge($fileItem, $this->getDir($newPath));
+            }else if(is_file($newPath)){
+                $fileItem[] = $newPath;
+            }
+        }
+        return $fileItem;
+    }
 }

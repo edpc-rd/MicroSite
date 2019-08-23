@@ -59,6 +59,7 @@ return [
             'continue' => '繼續',
             'member_since' => '用戶註冊自',
             'search_placeholder' => '搜索...',
+            'search_placeholder_nick' => '搜索昵稱...',
 
             'see_all' => [
                 'messages' => '查看全部消息',

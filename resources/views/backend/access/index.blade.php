@@ -18,7 +18,14 @@
                 @include('backend.access.includes.partials.header-buttons')
             </div>
         </div><!-- /.box-header -->
-
+        <form action="#" method="get" class="btn-primary">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="{{ trans('strings.backend.general.search_placeholder_nick') }}" value="{{ !empty($_GET['q'])?$_GET['q']:''}}"/>
+                <span class="input-group-btn">
+                    <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
+                  </span>
+            </div>
+        </form>
         <div class="box-body">
             <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover">

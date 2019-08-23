@@ -21,6 +21,7 @@ use App\Repositories\Backend\User\UserContract;
 use App\Repositories\Frontend\User\UserContract as FrontendUserContract;
 use App\Repositories\Backend\Report\ReportRepositoryContract;
 use App\Repositories\Backend\User\Subscription\UserSubscriptionRepositoryContract;
+use Illuminate\Http\Request;
 
 
 /**
@@ -78,10 +79,14 @@ class UserController extends Controller
     /**
      * @return mixed
      */
-    public function index()
+    public function index(Request $request)
     {
+        $user_nick = '';
+        if(!empty($request->input('q'))){
+          $user_nick = trim($request->input('q'));
+        }
         return view('backend.access.index')
-            ->withUsers($this->users->getUsersPaginated(config('access.users.default_per_page'), 1));
+            ->withUsers($this->users->getUsersPaginated(config('access.users.default_per_page'), 1,'user_id','asc',$user_nick));
     }
 
     /**
