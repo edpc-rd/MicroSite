@@ -47,9 +47,12 @@ class EloquentUserRepository implements UserContract
     public function getUsersPaginated($per_page, $status = 1, $order_by = 'user_id', $sort = 'asc',$user_nick = '')
     {
         $user = User::where('status', $status);
+
+        //HPQ 20190823  增加获取用户昵称参数
         if(!empty($user_nick)){
             $user = $user->where('user_nick', 'like', '%'.$user_nick.'%');
         }
+
         return $user->orderBy($order_by, $sort)
             ->paginate($per_page);
     }

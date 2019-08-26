@@ -81,12 +81,14 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        //HPQ 20190823 添加接收昵称参数
         $user_nick = '';
         if(!empty($request->input('q'))){
           $user_nick = trim($request->input('q'));
         }
+
         return view('backend.access.index')
-            ->withUsers($this->users->getUsersPaginated(config('access.users.default_per_page'), 1,'user_id','asc',$user_nick));
+            ->withUsers($this->users->getUsersPaginated(config('access.users.default_per_page'), 1,'user_id','asc',$user_nick)); 
     }
 
     /**
