@@ -15,7 +15,7 @@
                 </div>
 
                 <div class="panel-body">
-                    <img  src="img/514763841780230236.png"/>
+                    <img width="100%" src="img/514763841780230236.png"/>
                 </div>
             </div><!-- panel -->
 
