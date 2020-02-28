@@ -253,7 +253,7 @@ class WeixinController extends BaseController
                 try{
                     $imgSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'IMAGE');
                     $htmlSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'HTML');
-                    $xlsSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'EXCEL');
+//                    $xlsSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'EXCEL');   //取消獲取EXCEL信息    2020-02-28   Hpq
                 }catch(\Exception $e){
                     throw new Exception('發送報表失敗，獲取報表快照錯誤',30007);
                 }
@@ -266,7 +266,7 @@ class WeixinController extends BaseController
                 $newsItem = new MpNewsItem();
                 $newsItem->title = $imgSnapshot->abstract;
                 $newsItem->thumb_media_id = $media_id['media_id'];
-                $newsItem->content = $xlsSnapshot->abstract;
+                $newsItem->content = $htmlSnapshot->abstract;    //重獲取EXCEL信息改爲獲取Html信息   2020-02-28   Hpq
                 $newsItem->digest = $htmlSnapshot->abstract;
                 $newsItem->show_cover_pic = 1;
 
