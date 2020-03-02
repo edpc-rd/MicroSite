@@ -39,8 +39,9 @@ class ThirdAuthenticate
      */
     public function handle($request, Closure $next)
     {
+        $id = $request->get('id')?intval($request->get('id')):0;
         if ($request->exists('thirdLogin')) {
-            if ($this->thirdLogin()) {
+            if ($this->thirdLogin($id)) {
                 return $next($request);
             }
         }

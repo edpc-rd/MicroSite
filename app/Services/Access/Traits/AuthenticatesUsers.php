@@ -106,8 +106,9 @@ trait AuthenticatesUsers
      * @return boolean
      * @throws GeneralException
      */
-    public function thirdLogin()
+    public function thirdLogin($id = 0)
     {
+        app('weixin')->setWxConfig($id);
         $member = app('weixin')->getMemberInfo();
         $user = $this->user->findByName($member['UserId']);
 
