@@ -3,6 +3,7 @@
 namespace App\Api\V1\Controllers\Weixin;
 
 use App\Api\V1\Controllers\BaseController;
+use App\Api\V1\Requests\Weixin\ServeRequest;
 use App\Models\Wxconfig;
 use Stoneworld\Wechat\Message;
 use Stoneworld\Wechat\Messages\NewsItem;
@@ -86,9 +87,10 @@ class WeixinController extends BaseController
     }
 
 
-    public function serve()
+    public function serve(ServeRequest $request)
     {
-        $server = app('weixin')->server();
+        $id = ($request->get('id'))?$request->get('id'):0;
+        $server = app('weixin')->server($id);
 
         // 您可以直接echo 或者返回给框架
         die($server->serve());
