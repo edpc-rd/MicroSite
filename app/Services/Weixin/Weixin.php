@@ -2,6 +2,7 @@
 
 namespace App\Services\Weixin;
 
+use App\Models\Wxconfig;
 use Stoneworld\Wechat\Server;
 use Stoneworld\Wechat\Broadcast;
 use Stoneworld\Wechat\Message;
@@ -55,11 +56,7 @@ class Weixin
     public function __construct($app)
     {
         $this->app = $app;
-        $this->agentId = config('qy-wechat.agent_id');
-        $this->media = new Media(config('qy-wechat.app_id'), config('qy-wechat.secret'));
-        $this->broadcast = new Broadcast(config('qy-wechat.app_id'), config('qy-wechat.secret'));
-        $this->auth = new Auth(config('qy-wechat.app_id'), config('qy-wechat.secret'));
-        $this->memLogin = new MemberLogin(config('qy-wechat.app_id'), config('qy-wechat.secret'));
+        $this->setWxConfig(0);
     }
 
     /**
@@ -83,7 +80,7 @@ class Weixin
      * @param
      * @return json $result
      */
-    public function server()
+    public function server($id = 0)
     {
         $options = array(
             'token' => config('qy-wechat.token'), //填写应用接口的Token
@@ -92,6 +89,16 @@ class Weixin
             'appsecret' => config('qy-wechat.secret'), //填写高级调用功能的密钥
             'agentid' => config('qy-wechat.agent_id'),  //应用的id
         );
+        if($id >= 1 ){
+            $config = Wxconfig::where(array('id'=> $id))->first();
+            $options = array(
+                'token' => $config->token, //填写应用接口的Token
+                'encodingaeskey' => $config->appid, //填写加密用的EncodingAESKey
+                'appid' => $config->app_id, //填写高级调用功能的app id
+                'appsecret' => $config->secret, //填写高级调用功能的密钥
+                'agentid' => $config->agentid,  //应用的id
+            );
+        }
         $server = new Server($options);
         return $server;
     }
@@ -285,4 +292,28 @@ class Weixin
         return $result;
     }
 
+    /** 重新设置微信配置
+     * @param $id 微信企业号 id
+     */
+    public function setWxConfig($id = 0){
+        if($id < 1 ){
+            $this->agentId = config('qy-wechat.agent_id');
+            $this->media = new Media(config('qy-wechat.app_id'), config('qy-wechat.secret'));
+            $this->broadcast = new Broadcast(config('qy-wechat.app_id'), config('qy-wechat.secret'));
+            $this->auth = new Auth(config('qy-wechat.app_id'), config('qy-wechat.secret'));
+            $this->memLogin = new MemberLogin(config('qy-wechat.app_id'), config('qy-wechat.secret'));
+        }else{
+            $config = Wxconfig::where(array('id'=> $id))->first();
+            $this->agentId = $config->agentid;
+            $this->media = new Media($config->appid, $config->secret);
+            $this->broadcast = new Broadcast($config->appid, $config->secret);
+            $this->auth = new Auth($config->appid, $config->secret);
+            $this->memLogin = new MemberLogin($config->appid, $config->secret);
+        }
+        return $this->agentId;
+    }
+
+    public function getAgentId(){
+        return $this->agentId;
+    }
 }

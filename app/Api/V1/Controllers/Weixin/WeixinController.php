@@ -3,6 +3,7 @@
 namespace App\Api\V1\Controllers\Weixin;
 
 use App\Api\V1\Controllers\BaseController;
+use App\Models\Wxconfig;
 use Stoneworld\Wechat\Message;
 use Stoneworld\Wechat\Messages\NewsItem;
 use Stoneworld\Wechat\Messages\MpNewsItem;
@@ -226,55 +227,68 @@ class WeixinController extends BaseController
             throw new Exception('發送報表失敗，報表狀態為未啟用',30006);
         }
 
-        switch (strtoupper($report->format)) {
-            case 'TEXT': {
-                $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'TEXT');
-                $content = $snapshot->abstract;
-                return app('weixin')->sendMsgToUser($content, $userNames);
-            };
-                break;
-            case 'IMAGE': {
-                $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'IMAGE');
-                $filePath = $snapshot->file_path . DIRECTORY_SEPARATOR . $snapshot->file_name;
-                $media_id = app('weixin')->uploadImage($filePath);
+        //企业微信id
+        $wxid = $request->get('toAll');
+        if($request->get('wxid') != 0){
+            $wxconfig = Wxconfig::where(array('id' => $wxid))->get();
+        }else{
+            $wxconfig = Wxconfig::get();
+        }
 
-                return app('weixin')->sendImgToUser($media_id['media_id'], $userNames);
-            }
-                break;
-            case 'FILE': {
-                $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'EXCEL');
-                $filePath = $snapshot->file_path . DIRECTORY_SEPARATOR . $snapshot->file_name;
-                $media_id = app('weixin')->uploadFile($filePath);
+        if($wxconfig){
+            foreach ($wxconfig as $key => $val){
+                app('weixin')->setWxconfig($val->id);
+                switch (strtoupper($report->format)) {
+                    case 'TEXT': {
+                        $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'TEXT');
+                        $content = $snapshot->abstract;
+                        return app('weixin')->sendMsgToUser($content, $userNames);
+                    };
+                        break;
+                    case 'IMAGE': {
+                        $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'IMAGE');
+                        $filePath = $snapshot->file_path . DIRECTORY_SEPARATOR . $snapshot->file_name;
+                        $media_id = app('weixin')->uploadImage($filePath);
 
-                return app('weixin')->sendFileToUser($media_id, $userNames);
-            }
-                break;
-            case 'MPNEWS': {
-                try{
-                    $imgSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'IMAGE');
-                    $htmlSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'HTML');
+                        return app('weixin')->sendImgToUser($media_id['media_id'], $userNames);
+                    }
+                        break;
+                    case 'FILE': {
+                        $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'EXCEL');
+                        $filePath = $snapshot->file_path . DIRECTORY_SEPARATOR . $snapshot->file_name;
+                        $media_id = app('weixin')->uploadFile($filePath);
+
+                        return app('weixin')->sendFileToUser($media_id, $userNames);
+                    }
+                        break;
+                    case 'MPNEWS': {
+                        try{
+                            $imgSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'IMAGE');
+                            $htmlSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'HTML');
 //                    $xlsSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'EXCEL');   //取消獲取EXCEL信息    2020-02-28   Hpq
-                }catch(\Exception $e){
-                    throw new Exception('發送報表失敗，獲取報表快照錯誤',30007);
+                        }catch(\Exception $e){
+                            throw new Exception('發送報表失敗，獲取報表快照錯誤',30007);
+                        }
+
+                        $xlsName = basename($htmlSnapshot->file_name, "." . substr(strrchr($htmlSnapshot->file_name, '.'), 1));
+                        $redirect_url = 'http://' . $_SERVER['SERVER_NAME'] . '/third/report/html/' . $xlsName . '?thirdLogin=true';
+                        $imgPath = $imgSnapshot->file_path . DIRECTORY_SEPARATOR . $imgSnapshot->file_name;
+                        $media_id = app('weixin')->uploadImage($imgPath);
+
+                        $newsItem = new MpNewsItem();
+                        $newsItem->title = $imgSnapshot->abstract;
+                        $newsItem->thumb_media_id = $media_id['media_id'];
+                        $newsItem->content = $htmlSnapshot->abstract;    //重獲取EXCEL信息改爲獲取Html信息   2020-02-28   Hpq
+                        $newsItem->digest = $htmlSnapshot->abstract;
+                        $newsItem->show_cover_pic = 1;
+
+                        return app('weixin')->sendMpNews($newsItem, $redirect_url, $userNames);
+                    }
+                        break;
+                    default:
+                        throw new Exception('發送報表失敗，不支持的發送類型',30008);
                 }
-
-                $xlsName = basename($htmlSnapshot->file_name, "." . substr(strrchr($htmlSnapshot->file_name, '.'), 1));
-                $redirect_url = 'http://' . $_SERVER['SERVER_NAME'] . '/third/report/html/' . $xlsName . '?thirdLogin=true';
-                $imgPath = $imgSnapshot->file_path . DIRECTORY_SEPARATOR . $imgSnapshot->file_name;
-                $media_id = app('weixin')->uploadImage($imgPath);
-
-                $newsItem = new MpNewsItem();
-                $newsItem->title = $imgSnapshot->abstract;
-                $newsItem->thumb_media_id = $media_id['media_id'];
-                $newsItem->content = $htmlSnapshot->abstract;    //重獲取EXCEL信息改爲獲取Html信息   2020-02-28   Hpq
-                $newsItem->digest = $htmlSnapshot->abstract;
-                $newsItem->show_cover_pic = 1;
-
-                return app('weixin')->sendMpNews($newsItem, $redirect_url, $userNames);
             }
-                break;
-            default:
-                throw new Exception('發送報表失敗，不支持的發送類型',30008);
         }
     }
 }
