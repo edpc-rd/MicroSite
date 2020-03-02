@@ -305,10 +305,10 @@ class Weixin
         }else{
             $config = Wxconfig::where(array('id'=> $id))->first();
             $this->agentId = $config->agentid;
-            $this->media = new Media($config->appid, $config->secret);
-            $this->broadcast = new Broadcast($config->appid, $config->secret);
-            $this->auth = new Auth($config->appid, $config->secret);
-            $this->memLogin = new MemberLogin($config->appid, $config->secret);
+            $this->media = new Media($config->appid, $config->appsecret);
+            $this->broadcast = new Broadcast($config->appid, $config->appsecret);
+            $this->auth = new Auth($config->appid, $config->appsecret);
+            $this->memLogin = new MemberLogin($config->appid, $config->appsecret);
         }
         return $this->agentId;
     }
