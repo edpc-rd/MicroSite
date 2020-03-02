@@ -93,9 +93,9 @@ class Weixin
             $config = Wxconfig::where(array('id'=> $id))->first();
             $options = array(
                 'token' => $config->token, //填写应用接口的Token
-                'encodingaeskey' => $config->appid, //填写加密用的EncodingAESKey
-                'appid' => $config->app_id, //填写高级调用功能的app id
-                'appsecret' => $config->secret, //填写高级调用功能的密钥
+                'encodingaeskey' => $config->aeskey, //填写加密用的EncodingAESKey
+                'appid' => $config->appid, //填写高级调用功能的app id
+                'appsecret' => $config->appsecret, //填写高级调用功能的密钥
                 'agentid' => $config->agentid,  //应用的id
             );
         }
