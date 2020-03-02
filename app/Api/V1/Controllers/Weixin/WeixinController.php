@@ -89,7 +89,7 @@ class WeixinController extends BaseController
 
     public function serve(ServeRequest $request)
     {
-        $wid = ($request->get('id'))?intval($request->get('id')):0;
+        $id = ($request->get('id'))?intval($request->get('id')):0;
         $server = app('weixin')->server($id);
 //        file_put_contents('/web/website/laravel/MicroSiteTest/serve.txt',$id."\n",FILE_APPEND);
         // 您可以直接echo 或者返回给框架
