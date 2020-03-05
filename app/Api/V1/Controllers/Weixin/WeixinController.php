@@ -4,7 +4,7 @@ namespace App\Api\V1\Controllers\Weixin;
 
 use App\Api\V1\Controllers\BaseController;
 use App\Api\V1\Requests\Weixin\ServeRequest;
-use App\Models\Wxconfig\Wxconfig;
+use App\Repositories\Backend\Wxconfig\WxconfigRepositoryContract;
 use Stoneworld\Wechat\Message;
 use Stoneworld\Wechat\Messages\NewsItem;
 use Stoneworld\Wechat\Messages\MpNewsItem;
@@ -62,6 +62,11 @@ class WeixinController extends BaseController
     protected $reports;
 
     /**
+     * @var WxconfigRepositoryContract
+     */
+    protected $wxconfigs;
+
+    /**
      * @param UserContract $users
      * @param ReportGroupRepositoryContract $groups
      * @param ReportParameterRepositoryContract $parameters
@@ -75,7 +80,8 @@ class WeixinController extends BaseController
         ReportParameterRepositoryContract $parameters,
         UserSubscriptionRepositoryContract $subscriptions,
         ReportSnapshotRepositoryContract $snapshots,
-        ReportRepositoryContract $reports
+        ReportRepositoryContract $reports,
+        WxconfigRepositoryContract $wxconfigs
     )
     {
         $this->users = $users;
@@ -84,6 +90,7 @@ class WeixinController extends BaseController
         $this->subscriptions = $subscriptions;
         $this->snapshots = $snapshots;
         $this->reports = $reports;
+        $this->wxconfigs = $wxconfigs;
     }
 
 
@@ -115,7 +122,7 @@ class WeixinController extends BaseController
     {
         //企业微信id BY HPQ 2020-03-03
         try{
-            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
             app('weixin')->setWxconfig($wxconfig->id);
         }catch(\Exception $e){
             throw new Exception('發送報表失敗，企业微信配置不存在',30050);
@@ -127,7 +134,7 @@ class WeixinController extends BaseController
     {
         //企业微信id BY HPQ 2020-03-03
         try{
-            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
             app('weixin')->setWxconfig($wxconfig->id);
         }catch(\Exception $e){
             throw new Exception('發送報表失敗，企业微信配置不存在',30050);
@@ -139,7 +146,7 @@ class WeixinController extends BaseController
     {
         //企业微信id BY HPQ 2020-03-03
         try{
-            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
             app('weixin')->setWxconfig($wxconfig->id);
         }catch(\Exception $e){
             throw new Exception('發送報表失敗，企业微信配置不存在',30050);
@@ -156,7 +163,7 @@ class WeixinController extends BaseController
     {
         //企业微信id BY HPQ 2020-03-03
         try{
-            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
             app('weixin')->setWxconfig($wxconfig->id);
         }catch(\Exception $e){
             throw new Exception('發送報表失敗，企业微信配置不存在',30050);
@@ -170,7 +177,7 @@ class WeixinController extends BaseController
     {
         //企业微信id BY HPQ 2020-03-03
         try{
-            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
             app('weixin')->setWxconfig($wxconfig->id);
         }catch(\Exception $e){
             throw new Exception('發送報表失敗，企业微信配置不存在',30050);
@@ -184,7 +191,7 @@ class WeixinController extends BaseController
     {
         //企业微信id BY HPQ 2020-03-03
         try{
-            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
             app('weixin')->setWxconfig($wxconfig->id);
         }catch(\Exception $e){
             throw new Exception('發送報表失敗，企业微信配置不存在',30050);
@@ -196,7 +203,7 @@ class WeixinController extends BaseController
     {
         //企业微信id BY HPQ 2020-03-03
         try{
-            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
             app('weixin')->setWxconfig($wxconfig->id);
         }catch(\Exception $e){
             throw new Exception('發送報表失敗，企业微信配置不存在',30050);
@@ -210,7 +217,7 @@ class WeixinController extends BaseController
     {
         //企业微信id BY HPQ 2020-03-03
         try{
-            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
             app('weixin')->setWxconfig($wxconfig->id);
         }catch(\Exception $e){
             throw new Exception('發送報表失敗，企业微信配置不存在',30050);
@@ -224,7 +231,7 @@ class WeixinController extends BaseController
     {
         //企业微信id BY HPQ 2020-03-03
         try{
-            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
             app('weixin')->setWxconfig($wxconfig->id);
         }catch(\Exception $e){
             throw new Exception('發送報表失敗，企业微信配置不存在',30050);
@@ -238,7 +245,7 @@ class WeixinController extends BaseController
     {
         //企业微信id BY HPQ 2020-03-03
         try{
-            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
             app('weixin')->setWxconfig($wxconfig->id);
         }catch(\Exception $e){
             throw new Exception('發送報表失敗，企业微信配置不存在',30050);
@@ -252,7 +259,7 @@ class WeixinController extends BaseController
     {
         //企业微信id BY HPQ 2020-03-03
         try{
-            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
             app('weixin')->setWxconfig($wxconfig->id);
         }catch(\Exception $e){
             throw new Exception('發送報表失敗，企业微信配置不存在',30050);
@@ -273,7 +280,7 @@ class WeixinController extends BaseController
     {
         //企业微信id BY HPQ 2020-03-03
         try{
-            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
             app('weixin')->setWxconfig($wxconfig->id);
         }catch(\Exception $e){
             throw new Exception('發送報表失敗，企业微信配置不存在',30050);
@@ -321,7 +328,7 @@ class WeixinController extends BaseController
 
         //企业微信id  BY HPQ 2020-03-03
         try{
-            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
             app('weixin')->setWxconfig($wxconfig->id);
         }catch(\Exception $e){
             throw new Exception('發送報表失敗，企业微信配置不存在',30050);
