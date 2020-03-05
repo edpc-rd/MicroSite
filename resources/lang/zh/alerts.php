@@ -55,6 +55,13 @@ return [
             'restored' => '報表已成功恢復.',
             'updated' => '報表已成功更新.',
         ],
+        'wxconfigs' => [
+            'created' => '成功創建企業微信.',
+            'deleted' => '成功刪除企業微信.',
+            'deleted_permanently' => '企業微信已被永久刪除.',
+            'restored' => '企業微信已成功恢復.',
+            'updated' => '企業微信已成功更新.',
+        ],
         'groups' => [
             'created' => '成功創建報表分組.',
             'deleted' => '成功刪除報表分組.',

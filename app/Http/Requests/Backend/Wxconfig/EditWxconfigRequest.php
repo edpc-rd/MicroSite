@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Api\V1\Requests\Weixin;
+namespace App\Http\Requests\Backend\Wxconfig;
 
 use App\Http\Requests\Request;
 
 /**
- * Class SendImgRequest
- * @package App\Api\V1\Requests\Weixin
+ * Class EditWxconfigRequest
+ * @package App\Http\Requests\Backend\Wxconfig;
  */
-class SendImgRequest extends Request
+class EditWxconfigRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,7 +17,7 @@ class SendImgRequest extends Request
      */
     public function authorize()
     {
-        return true;
+        return access()->allow('edit-Wxconfigs');
     }
 
     /**
@@ -28,9 +28,7 @@ class SendImgRequest extends Request
     public function rules()
     {
         return [
-            'media_id' => 'required|string',
-            'users' => 'required|string',
-            'wxId' => 'required|exists:ms_wx_config,id',
+            //
         ];
     }
 }

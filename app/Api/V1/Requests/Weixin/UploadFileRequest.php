@@ -29,6 +29,7 @@ class UploadFileRequest extends Request
     {
         return [
             'fileName' => 'required|string',
+            'wxId' => 'required|exists:ms_wx_config,id',
         ];
     }
 }

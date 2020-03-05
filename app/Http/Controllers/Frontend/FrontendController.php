@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Wxconfig;
+use App\Models\Wxconfig\Wxconfig;
 
 /**
  * Class FrontendController
@@ -19,13 +19,6 @@ class FrontendController extends Controller
         javascript()->put([
             'test' => 'it works!',
         ]);
-//        $agentid = app('weixin')->getAgentId();
-//        $user = app('weixin')->setWxConfig(1);
-//        var_dump($agentid);die;
-//        $wx = Wxconfig::where(array('id' => 1))->get();
-//        foreach ($wx as $val){
-//            var_dump($val);die;
-//        }
 
         return view('frontend.index');
     }

@@ -181,6 +181,18 @@ return [
                     'send_confirmation_email' => '發送確認郵件',
                 ],
             ],
+            'wxconfig' => [
+                'wxconfigs' => [
+                    'id' => '企業微信ID',
+                    'name' => '企業微信名稱',
+                    'appid' => 'APPID',
+                    'appsecret' => 'APPSECRET',
+                    'agentid' => '應用ID',
+                    'status' => '報表狀態',
+                    'token' => 'Token',
+                    'aeskey' => 'AESKEY',
+                ],
+            ],
         ],
 
         'frontend' => [

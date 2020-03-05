@@ -92,6 +92,17 @@ return [
             'logs' => '日誌列表',
         ],
 
+        'wxconfig' => [
+            'title' => '企業微信配置管理',
+            'wxconfigs' => [
+                'all' => '配置列表',
+                'create' => '新建配置',
+                'edit' => '編輯權限',
+                'main' => '企業微信配置',
+                'management' => '權限管理',
+            ],
+        ],
+
         'sidebar' => [
             'dashboard' => '管理看板',
             'general' => '常用功能',

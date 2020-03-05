@@ -2,7 +2,7 @@
 
 namespace App\Services\Weixin;
 
-use App\Models\Wxconfig;
+use App\Models\Wxconfig\Wxconfig;
 use Stoneworld\Wechat\Server;
 use Stoneworld\Wechat\Broadcast;
 use Stoneworld\Wechat\Message;

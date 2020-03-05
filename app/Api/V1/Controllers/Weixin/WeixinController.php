@@ -4,7 +4,7 @@ namespace App\Api\V1\Controllers\Weixin;
 
 use App\Api\V1\Controllers\BaseController;
 use App\Api\V1\Requests\Weixin\ServeRequest;
-use App\Models\Wxconfig;
+use App\Models\Wxconfig\Wxconfig;
 use Stoneworld\Wechat\Message;
 use Stoneworld\Wechat\Messages\NewsItem;
 use Stoneworld\Wechat\Messages\MpNewsItem;
@@ -113,16 +113,37 @@ class WeixinController extends BaseController
 
     public function sendMsgToTag(SendMsgRequest $request)
     {
+        //企业微信id BY HPQ 2020-03-03
+        try{
+            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            app('weixin')->setWxconfig($wxconfig->id);
+        }catch(\Exception $e){
+            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
+        }
         return app('weixin')->sendMsgToTag($request->get('content'), $request->get('tagId'));
     }
 
     public function sendMsgToUser(SendMsgRequest $request)
     {
+        //企业微信id BY HPQ 2020-03-03
+        try{
+            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            app('weixin')->setWxconfig($wxconfig->id);
+        }catch(\Exception $e){
+            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
+        }
         return app('weixin')->sendMsgToUser($request->get('content'), $request->get('users'));
     }
 
     public function sendImgToUser(SendImgRequest $request)
     {
+        //企业微信id BY HPQ 2020-03-03
+        try{
+            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            app('weixin')->setWxconfig($wxconfig->id);
+        }catch(\Exception $e){
+            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
+        }
         return app('weixin')->sendImgToUser($request->get('media_id'), $request->get('users'));
     }
 
@@ -133,47 +154,110 @@ class WeixinController extends BaseController
 
     public function getFile(GetFileRequest $request)
     {
+        //企业微信id BY HPQ 2020-03-03
+        try{
+            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            app('weixin')->setWxconfig($wxconfig->id);
+        }catch(\Exception $e){
+            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
+        }
+
         $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'downloads'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->getFile($request->get('media_id'), $filePath);
     }
 
     public function getForeverFile(GetForeverFileRequest $request)
     {
+        //企业微信id BY HPQ 2020-03-03
+        try{
+            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            app('weixin')->setWxconfig($wxconfig->id);
+        }catch(\Exception $e){
+            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
+        }
+
         $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'downloads'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->getForeverFile($request->get('media_id'), $filePath);
     }
 
     public function getForeverFileList(ForeverFileListRequest $request)
     {
+        //企业微信id BY HPQ 2020-03-03
+        try{
+            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            app('weixin')->setWxconfig($wxconfig->id);
+        }catch(\Exception $e){
+            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
+        }
         return app('weixin')->getForeverFileList($request->get('type'));
     }
 
     public function uploadFile(UploadFileRequest $request)
     {
+        //企业微信id BY HPQ 2020-03-03
+        try{
+            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            app('weixin')->setWxconfig($wxconfig->id);
+        }catch(\Exception $e){
+            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
+        }
+
         $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'excel'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->uploadFile($filePath);
     }
 
     public function uploadImage(UploadImageRequest $request)
     {
+        //企业微信id BY HPQ 2020-03-03
+        try{
+            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            app('weixin')->setWxconfig($wxconfig->id);
+        }catch(\Exception $e){
+            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
+        }
+
         $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'image'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->uploadImage($filePath);
     }
 
     public function uploadNewsImg(UploadImageRequest $request)
     {
+        //企业微信id BY HPQ 2020-03-03
+        try{
+            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            app('weixin')->setWxconfig($wxconfig->id);
+        }catch(\Exception $e){
+            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
+        }
+
         $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'image'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->uploadNewsImg($filePath);
     }
 
     public function uploadForeverMedia(UploadFileRequest $request)
     {
+        //企业微信id BY HPQ 2020-03-03
+        try{
+            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            app('weixin')->setWxconfig($wxconfig->id);
+        }catch(\Exception $e){
+            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
+        }
+
         $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'excel'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->uploadForeverMedia($filePath);
     }
 
     public function sendNews(SendNewsRequest $request)
     {
+        //企业微信id BY HPQ 2020-03-03
+        try{
+            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            app('weixin')->setWxconfig($wxconfig->id);
+        }catch(\Exception $e){
+            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
+        }
+
         $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'image'.DIRECTORY_SEPARATOR . $request->get('fileName');
         $picUrl = app('weixin')->uploadNewsImg($filePath);
         $users = $request->get('users');
@@ -182,12 +266,19 @@ class WeixinController extends BaseController
         $newsItem->description = $request->get('description');
         $newsItem->pic_url = $picUrl;
         $newsItem->url = $request->get('url');
-
         return app('weixin')->sendNews($newsItem, $users);
     }
 
     public function sendMpNews(SendMpNewsRequest $request)
     {
+        //企业微信id BY HPQ 2020-03-03
+        try{
+            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            app('weixin')->setWxconfig($wxconfig->id);
+        }catch(\Exception $e){
+            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
+        }
+
         $redirect_url = $request->get('url');
         $users = $request->get('users');
         $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'image'.DIRECTORY_SEPARATOR . $request->get('fileName');
@@ -199,7 +290,6 @@ class WeixinController extends BaseController
         $newsItem->content = $request->get('content');
         $newsItem->digest = $request->get('digest');
         $newsItem->show_cover_pic = $request->get('show_cover_pic');
-
         return app('weixin')->sendMpNews($newsItem, $redirect_url, $users);
     }
 
@@ -229,68 +319,63 @@ class WeixinController extends BaseController
             throw new Exception('發送報表失敗，報表狀態為未啟用',30006);
         }
 
-        //企业微信id
-        $wxid = $request->get('toAll');
-        if($request->get('wxid') != 0){
-            $wxconfig = Wxconfig::where(array('id' => $wxid))->get();
-        }else{
-            $wxconfig = Wxconfig::get();
+        //企业微信id  BY HPQ 2020-03-03
+        try{
+            $wxconfig = Wxconfig::findOrFail($request->get('wxId'));
+            app('weixin')->setWxconfig($wxconfig->id);
+        }catch(\Exception $e){
+            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
         }
 
-        if($wxconfig){
-            foreach ($wxconfig as $key => $val){
-                app('weixin')->setWxconfig($val->id);
-                switch (strtoupper($report->format)) {
-                    case 'TEXT': {
-                        $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'TEXT');
-                        $content = $snapshot->abstract;
-                        return app('weixin')->sendMsgToUser($content, $userNames);
-                    };
-                        break;
-                    case 'IMAGE': {
-                        $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'IMAGE');
-                        $filePath = $snapshot->file_path . DIRECTORY_SEPARATOR . $snapshot->file_name;
-                        $media_id = app('weixin')->uploadImage($filePath);
+        switch (strtoupper($report->format)) {
+            case 'TEXT': {
+                $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'TEXT');
+                $content = $snapshot->abstract;
+                return app('weixin')->sendMsgToUser($content, $userNames);
+            };
+                break;
+            case 'IMAGE': {
+                $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'IMAGE');
+                $filePath = $snapshot->file_path . DIRECTORY_SEPARATOR . $snapshot->file_name;
+                $media_id = app('weixin')->uploadImage($filePath);
 
-                        return app('weixin')->sendImgToUser($media_id['media_id'], $userNames);
-                    }
-                        break;
-                    case 'FILE': {
-                        $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'EXCEL');
-                        $filePath = $snapshot->file_path . DIRECTORY_SEPARATOR . $snapshot->file_name;
-                        $media_id = app('weixin')->uploadFile($filePath);
-
-                        return app('weixin')->sendFileToUser($media_id, $userNames);
-                    }
-                        break;
-                    case 'MPNEWS': {
-                        try{
-                            $imgSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'IMAGE');
-                            $htmlSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'HTML');
-//                    $xlsSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'EXCEL');   //取消獲取EXCEL信息    2020-02-28   Hpq
-                        }catch(\Exception $e){
-                            throw new Exception('發送報表失敗，獲取報表快照錯誤',30007);
-                        }
-
-                        $xlsName = basename($htmlSnapshot->file_name, "." . substr(strrchr($htmlSnapshot->file_name, '.'), 1));
-                        $redirect_url = 'http://' . $_SERVER['SERVER_NAME'] . '/third/report/html/' . $xlsName . '?thirdLogin=true&id='.$val->id;
-                        $imgPath = $imgSnapshot->file_path . DIRECTORY_SEPARATOR . $imgSnapshot->file_name;
-                        $media_id = app('weixin')->uploadImage($imgPath);
-
-                        $newsItem = new MpNewsItem();
-                        $newsItem->title = $imgSnapshot->abstract;
-                        $newsItem->thumb_media_id = $media_id['media_id'];
-                        $newsItem->content = $htmlSnapshot->abstract;    //重獲取EXCEL信息改爲獲取Html信息   2020-02-28   Hpq
-                        $newsItem->digest = $htmlSnapshot->abstract;
-                        $newsItem->show_cover_pic = 1;
-
-                        return app('weixin')->sendMpNews($newsItem, $redirect_url, $userNames);
-                    }
-                        break;
-                    default:
-                        throw new Exception('發送報表失敗，不支持的發送類型',30008);
-                }
+                return app('weixin')->sendImgToUser($media_id['media_id'], $userNames);
             }
+                break;
+            case 'FILE': {
+                $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'EXCEL');
+                $filePath = $snapshot->file_path . DIRECTORY_SEPARATOR . $snapshot->file_name;
+                $media_id = app('weixin')->uploadFile($filePath);
+
+                return app('weixin')->sendFileToUser($media_id, $userNames);
+            }
+                break;
+            case 'MPNEWS': {
+                try{
+                    $imgSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'IMAGE');
+                    $htmlSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'HTML');
+//                    $xlsSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'EXCEL');   //取消獲取EXCEL信息    2020-02-28   Hpq
+                }catch(\Exception $e){
+                    throw new Exception('發送報表失敗，獲取報表快照錯誤',30007);
+                }
+
+                $xlsName = basename($htmlSnapshot->file_name, "." . substr(strrchr($htmlSnapshot->file_name, '.'), 1));
+                $redirect_url = 'http://' . $_SERVER['SERVER_NAME'] . '/third/report/html/' . $xlsName . '?thirdLogin=true&id='.$wxconfig->id;
+                $imgPath = $imgSnapshot->file_path . DIRECTORY_SEPARATOR . $imgSnapshot->file_name;
+                $media_id = app('weixin')->uploadImage($imgPath);
+
+                $newsItem = new MpNewsItem();
+                $newsItem->title = $imgSnapshot->abstract;
+                $newsItem->thumb_media_id = $media_id['media_id'];
+                $newsItem->content = $htmlSnapshot->abstract;    //重獲取EXCEL信息改爲獲取Html信息   2020-02-28   Hpq
+                $newsItem->digest = $htmlSnapshot->abstract;
+                $newsItem->show_cover_pic = 1;
+
+                return app('weixin')->sendMpNews($newsItem, $redirect_url, $userNames);
+            }
+                break;
+            default:
+                throw new Exception('發送報表失敗，不支持的發送類型',30008);
         }
     }
 }

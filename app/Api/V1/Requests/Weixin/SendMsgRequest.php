@@ -31,6 +31,7 @@ class SendMsgRequest extends Request
             'content' => 'required|string',
             'tagId' => 'sometimes|required|integer',
             'users' => 'sometimes|required|string',
+            'wxId' => 'required|exists:ms_wx_config,id',
         ];
     }
 }

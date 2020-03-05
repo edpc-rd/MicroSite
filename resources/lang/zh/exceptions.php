@@ -95,6 +95,25 @@ return [
                 'not_found' => '報表快照不存在.',
             ],
         ],
+        'wxconfig' => [
+            'wxconfig' => [
+                'already_exists' => '該企業微信已存在，請重新選擇其他名稱.',
+                'cant_delete_active' => '您不能刪除啟用了的企業微信.',
+                'create_error' => '創建企業微信時出現問題，請重試.',
+                'delete_error' => '刪除企業微信時出現問題，請重試.',
+                'mark' => '修改企業微信狀態出現問題，請重試.',
+                'has_users' => '您不能刪除該企業微信，因為已有用戶訂閱它.',
+                'needs_parameter' => '您必須為企業微信選擇至少一個參數.',
+                'not_found' => '企業微信不存在.',
+                'update_error' => '更新企業微信時出現問題，請重試.',
+            ],
+            'parameter' => [
+                'create_error' => '創建企業微信参数時出現問題，請重試.',
+                'delete_error' => '刪除企業微信参数時出現問題，請重試.',
+                'update_error' => '更新企業微信参数時出現問題，請重試.',
+                'not_found' => '企業微信参数不存在.',
+            ],
+        ],
     ],
 
     'frontend' => [

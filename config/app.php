@@ -178,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ReportServiceProvider::class,
         App\Providers\WeixinServiceProvider::class,
+        App\Providers\WxconfigServiceProvider::class,
 
 
         /*

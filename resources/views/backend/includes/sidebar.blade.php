@@ -47,6 +47,12 @@
             </li>
             @endauth
 
+            @permission('view-wxconfig-management')
+            <li class="{{ Active::pattern('admin/wxconfig/*') }}">
+                <a href="{!!url('admin/wxconfig/wxconfigs')!!}"><span>{{ trans('menus.backend.wxconfig.title') }}</span></a>
+            </li>
+            @endauth
+
             <li class="{{ Active::pattern('admin/log-viewer*') }} treeview">
                 <a href="#">
                     <span>{{ trans('menus.backend.log-viewer.main') }}</span>

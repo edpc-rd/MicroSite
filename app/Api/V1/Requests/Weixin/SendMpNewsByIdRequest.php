@@ -29,6 +29,7 @@ class SendMpNewsByIdRequest extends Request
     {
         return [
             'reportId' => 'required|exists:ms_reports,report_id',
+            'wxId' => 'required|exists:ms_wx_config,id',
         ];
     }
 }

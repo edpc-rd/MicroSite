@@ -39,9 +39,9 @@ class ThirdAuthenticate
      */
     public function handle($request, Closure $next)
     {
-        $id = $request->get('id')?intval($request->get('id')):0;
+        $id = $request->get('id')?intval($request->get('id')):0;    //獲取企業微信id by hpq 2020-02-03
         if ($request->exists('thirdLogin')) {
-            if ($this->thirdLogin($id)) {
+            if ($this->thirdLogin($id)) {   //根據企業微信id授權 by hpq 2020-02-03
                 return $next($request);
             }
         }

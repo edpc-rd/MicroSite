@@ -30,6 +30,7 @@ class GetForeverFileRequest extends Request
         return [
             'media_id' => 'required|string',
             'fileName' => 'required|string',
+            'wxId' => 'required|exists:ms_wx_config,id',
         ];
     }
 }

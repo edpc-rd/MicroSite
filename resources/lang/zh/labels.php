@@ -240,6 +240,33 @@ return [
                 ],
             ],
         ],
+        'wxconfig' => [
+            'wxconfigs' => [
+                'create' => '新建配置',
+                'edit' => '編輯配置',
+                'label' => '企業微信配置',
+                'management' => '企業微信管理',
+                'no_permissions' => '沒有選擇權限.',
+
+                'table' => [
+                    'id' => 'ID',
+                    'name' => '企業微信名稱   ',
+                    'appid' => 'APPID',
+                    'appsecret' => 'APPSECRET',
+                    'agentid' => '應用ID',
+                    'token' => 'Token',
+                    'aeskey' => 'AESKEY',
+                    'created' => '新增時間',
+                    'updated' => '更新時間',
+                    'total' => '企業微信合計',
+                ],
+                'tabs' => [
+                    'general' => '通用',
+                    'dependencies' => '依賴',
+                    'permissions' => '全部權限',
+                ],
+            ],
+        ],
     ],
 
     'frontend' => [
