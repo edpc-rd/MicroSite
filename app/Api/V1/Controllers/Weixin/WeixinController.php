@@ -73,6 +73,7 @@ class WeixinController extends BaseController
      * @param UserSubscriptionRepositoryContract $subscriptions
      * @param ReportSnapshotRepositoryContract $snapshots
      * @param ReportRepositoryContract $reports
+     * @param WxconfigRepositoryContract $wxconfigs
      */
     public function __construct(
         UserContract $users,
@@ -121,36 +122,21 @@ class WeixinController extends BaseController
     public function sendMsgToTag(SendMsgRequest $request)
     {
         //企业微信id BY HPQ 2020-03-03
-        try{
-            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
-            app('weixin')->setWxconfig($wxconfig->id);
-        }catch(\Exception $e){
-            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
-        }
+        $this->setWeixin(intval($request->get('wxId')));
         return app('weixin')->sendMsgToTag($request->get('content'), $request->get('tagId'));
     }
 
     public function sendMsgToUser(SendMsgRequest $request)
     {
         //企业微信id BY HPQ 2020-03-03
-        try{
-            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
-            app('weixin')->setWxconfig($wxconfig->id);
-        }catch(\Exception $e){
-            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
-        }
+        $this->setWeixin(intval($request->get('wxId')));
         return app('weixin')->sendMsgToUser($request->get('content'), $request->get('users'));
     }
 
     public function sendImgToUser(SendImgRequest $request)
     {
         //企业微信id BY HPQ 2020-03-03
-        try{
-            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
-            app('weixin')->setWxconfig($wxconfig->id);
-        }catch(\Exception $e){
-            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
-        }
+        $this->setWeixin(intval($request->get('wxId')));
         return app('weixin')->sendImgToUser($request->get('media_id'), $request->get('users'));
     }
 
@@ -162,12 +148,7 @@ class WeixinController extends BaseController
     public function getFile(GetFileRequest $request)
     {
         //企业微信id BY HPQ 2020-03-03
-        try{
-            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
-            app('weixin')->setWxconfig($wxconfig->id);
-        }catch(\Exception $e){
-            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
-        }
+        $this->setWeixin(intval($request->get('wxId')));
 
         $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'downloads'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->getFile($request->get('media_id'), $filePath);
@@ -176,12 +157,7 @@ class WeixinController extends BaseController
     public function getForeverFile(GetForeverFileRequest $request)
     {
         //企业微信id BY HPQ 2020-03-03
-        try{
-            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
-            app('weixin')->setWxconfig($wxconfig->id);
-        }catch(\Exception $e){
-            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
-        }
+        $this->setWeixin(intval($request->get('wxId')));
 
         $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'downloads'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->getForeverFile($request->get('media_id'), $filePath);
@@ -190,24 +166,14 @@ class WeixinController extends BaseController
     public function getForeverFileList(ForeverFileListRequest $request)
     {
         //企业微信id BY HPQ 2020-03-03
-        try{
-            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
-            app('weixin')->setWxconfig($wxconfig->id);
-        }catch(\Exception $e){
-            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
-        }
+        $this->setWeixin(intval($request->get('wxId')));
         return app('weixin')->getForeverFileList($request->get('type'));
     }
 
     public function uploadFile(UploadFileRequest $request)
     {
         //企业微信id BY HPQ 2020-03-03
-        try{
-            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
-            app('weixin')->setWxconfig($wxconfig->id);
-        }catch(\Exception $e){
-            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
-        }
+        $this->setWeixin(intval($request->get('wxId')));
 
         $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'excel'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->uploadFile($filePath);
@@ -216,12 +182,7 @@ class WeixinController extends BaseController
     public function uploadImage(UploadImageRequest $request)
     {
         //企业微信id BY HPQ 2020-03-03
-        try{
-            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
-            app('weixin')->setWxconfig($wxconfig->id);
-        }catch(\Exception $e){
-            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
-        }
+        $this->setWeixin(intval($request->get('wxId')));
 
         $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'image'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->uploadImage($filePath);
@@ -230,12 +191,7 @@ class WeixinController extends BaseController
     public function uploadNewsImg(UploadImageRequest $request)
     {
         //企业微信id BY HPQ 2020-03-03
-        try{
-            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
-            app('weixin')->setWxconfig($wxconfig->id);
-        }catch(\Exception $e){
-            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
-        }
+        $this->setWeixin(intval($request->get('wxId')));
 
         $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'image'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->uploadNewsImg($filePath);
@@ -244,12 +200,7 @@ class WeixinController extends BaseController
     public function uploadForeverMedia(UploadFileRequest $request)
     {
         //企业微信id BY HPQ 2020-03-03
-        try{
-            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
-            app('weixin')->setWxconfig($wxconfig->id);
-        }catch(\Exception $e){
-            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
-        }
+        $this->setWeixin(intval($request->get('wxId')));
 
         $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'excel'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->uploadForeverMedia($filePath);
@@ -258,12 +209,7 @@ class WeixinController extends BaseController
     public function sendNews(SendNewsRequest $request)
     {
         //企业微信id BY HPQ 2020-03-03
-        try{
-            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
-            app('weixin')->setWxconfig($wxconfig->id);
-        }catch(\Exception $e){
-            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
-        }
+        $this->setWeixin(intval($request->get('wxId')));
 
         $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'image'.DIRECTORY_SEPARATOR . $request->get('fileName');
         $picUrl = app('weixin')->uploadNewsImg($filePath);
@@ -279,12 +225,7 @@ class WeixinController extends BaseController
     public function sendMpNews(SendMpNewsRequest $request)
     {
         //企业微信id BY HPQ 2020-03-03
-        try{
-            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
-            app('weixin')->setWxconfig($wxconfig->id);
-        }catch(\Exception $e){
-            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
-        }
+        $this->setWeixin(intval($request->get('wxId')));
 
         $redirect_url = $request->get('url');
         $users = $request->get('users');
@@ -327,12 +268,7 @@ class WeixinController extends BaseController
         }
 
         //企业微信id  BY HPQ 2020-03-03
-        try{
-            $wxconfig = $this->wxconfigs->findOrThrowException($request->get('wxId'));
-            app('weixin')->setWxconfig($wxconfig->id);
-        }catch(\Exception $e){
-            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
-        }
+        $this->setWeixin(intval($request->get('wxId')));
 
         switch (strtoupper($report->format)) {
             case 'TEXT': {
@@ -383,6 +319,17 @@ class WeixinController extends BaseController
                 break;
             default:
                 throw new Exception('發送報表失敗，不支持的發送類型',30008);
+        }
+    }
+
+    //設置微信配置
+    private function setWeixin($id){
+        //企业微信id BY HPQ 2020-03-03
+        try{
+            $wxconfig = $this->wxconfigs->findOrThrowException($id);
+            app('weixin')->setWxconfig($wxconfig->id);
+        }catch(\Exception $e){
+            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
         }
     }
 }

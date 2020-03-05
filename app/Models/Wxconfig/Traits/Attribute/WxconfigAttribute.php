@@ -14,6 +14,7 @@ trait WxconfigAttribute
     public function getActionButtonsAttribute()
     {
         return $this->getEditButtonAttribute() . ' ' .
+        $this->getStatusButtonAttribute() . ' ' .
         $this->getDeleteButtonAttribute();
     }
 
@@ -26,6 +27,38 @@ trait WxconfigAttribute
             return '<a href="' . route('admin.wxconfig.wxconfigs.edit', $this->id) .
             '" class="btn btn-xs btn-primary"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="' .
             trans('buttons.general.crud.edit') . '"></i></a> ';
+        }
+
+        return '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatusButtonAttribute()
+    {
+        switch ($this->status) {
+            case 0:
+                if (access()->allow('reactivate-wxconfigs')) {
+                    return '<a href="' . route('admin.wxconfig.wxconfig.mark', [$this->id, 1]) .
+                        '" class="btn btn-xs btn-success"><i class="fa fa-play" data-toggle="tooltip" data-placement="top" title="' .
+                        trans('buttons.backend.wxconfig.wxconfig.activate') . '"></i></a> ';
+                }
+
+                break;
+
+            case 1:
+                if (access()->allow('deactivate-wxconfigs')) {
+                    return '<a href="' . route('admin.wxconfig.wxconfig.mark', [$this->id, 0]) .
+                        '" class="btn btn-xs btn-warning"><i class="fa fa-pause" data-toggle="tooltip" data-placement="top" title="' .
+                        trans('buttons.backend.wxconfig.wxconfig.deactivate') . '"></i></a> ';
+                }
+
+                break;
+
+            default:
+                return '';
+            // No break
         }
 
         return '';

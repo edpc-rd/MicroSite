@@ -97,6 +97,10 @@ class EloquentWxconfigRepository implements WxconfigRepositoryContract
             return Wxconfig::find($id);
         }
 
+        if(!is_null(Wxconfig::where('status',1)->first()) && $id == 0){
+            return Wxconfig::where('status',1)->first();
+        }
+
         throw new GeneralException(trans('exceptions.backend.wxconfig.wxconfigs.not_found'));
     }
 
@@ -120,5 +124,27 @@ class EloquentWxconfigRepository implements WxconfigRepositoryContract
         }
 
         throw new GeneralException(trans('exceptions.backend.wxconfig.wxconfigs.delete_error'));
+    }
+
+    /**
+     * @param  $id
+     * @param  $status
+     * @throws GeneralException
+     * @return bool
+     */
+    public function mark($id, $status)
+    {
+
+        $wxconfig = $this->findOrThrowException($id);
+        $wxconfig->status = $status;
+        if(intval($status) == 1){
+            Wxconfig::where('status',1)->update(array('status' => 0));
+        }
+
+        if ($wxconfig->save()) {
+            return true;
+        }
+
+        throw new GeneralException(trans('exceptions.backend.wxconfig.wxconfig.mark'));
     }
 }

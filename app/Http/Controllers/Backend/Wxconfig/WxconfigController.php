@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\Wxconfig\CreateWxconfigRequest;
 use App\Http\Requests\Backend\Wxconfig\DeleteWxconfigRequest;
 use App\Http\Requests\Backend\Wxconfig\EditWxconfigRequest;
+use App\Http\Requests\Backend\Wxconfig\MarkWxconfigRequest;
 use App\Http\Requests\Backend\Wxconfig\UpdateWxconfigRequest;
 use App\Http\Requests\Backend\Wxconfig\StoreWxconfigRequest;
 use App\Repositories\Backend\Wxconfig\WxconfigRepositoryContract;
@@ -75,6 +76,18 @@ class WxconfigController extends Controller
         $this->wxconfigs->create($request->all());
         return redirect()->route('admin.wxconfig.wxconfigs.index')->
         withFlashSuccess(trans('alerts.backend.wxconfigs.created'));
+    }
+
+    /**
+     * @param  $id
+     * @param  $status
+     * @param  MarkReportRequest $request
+     * @return mixed
+     */
+    public function mark($id, $status, MarkWxconfigRequest $request)
+    {
+        $this->wxconfigs->mark($id, $status);
+        return redirect()->back()->withFlashSuccess(trans('alerts.backend.wxconfigs.updated'));
     }
 
     /**

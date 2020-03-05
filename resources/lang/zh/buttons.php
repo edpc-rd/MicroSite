@@ -40,6 +40,13 @@ return [
                 'delete_permanently' => '永久刪除',
             ],
         ],
+        'wxconfig' => [
+            'wxconfig' => [
+                'activate' => '默認配置',
+                'deactivate' => '取消默認',
+                'delete_permanently' => '永久刪除',
+            ],
+        ],
     ],
 
     'general' => [
