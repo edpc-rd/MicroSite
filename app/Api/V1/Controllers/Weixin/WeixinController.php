@@ -268,7 +268,7 @@ class WeixinController extends BaseController
         }
 
         //企业微信id  BY HPQ 2020-03-03
-        $this->setWeixin(intval($request->get('wxId')));
+        $wxconfig = $this->setWeixin(intval($request->get('wxId')));
 
         switch (strtoupper($report->format)) {
             case 'TEXT': {
@@ -297,21 +297,22 @@ class WeixinController extends BaseController
                 try{
                     $imgSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'IMAGE');
                     $htmlSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'HTML');
-//                    $xlsSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'EXCEL');   //取消獲取EXCEL信息    2020-02-28   Hpq
+                    $xlsSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'EXCEL');   //取消獲取EXCEL信息    2020-02-28   Hpq
                 }catch(\Exception $e){
                     throw new Exception('發送報表失敗，獲取報表快照錯誤',30007);
                 }
 
                 $xlsName = basename($htmlSnapshot->file_name, "." . substr(strrchr($htmlSnapshot->file_name, '.'), 1));
                 $redirect_url = 'http://' . $_SERVER['SERVER_NAME'] . '/third/report/html/' . $xlsName . '?thirdLogin=true&id='.$wxconfig->id;
+                $download_url = 'http://' . $_SERVER['SERVER_NAME'] . '/third/report/excel/' . $xlsName . '?thirdLogin=true&id='.$wxconfig->id.'&reportId='.$request->get('reportId');
                 $imgPath = $imgSnapshot->file_path . DIRECTORY_SEPARATOR . $imgSnapshot->file_name;
                 $media_id = app('weixin')->uploadImage($imgPath);
 
                 $newsItem = new MpNewsItem();
                 $newsItem->title = $imgSnapshot->abstract;
                 $newsItem->thumb_media_id = $media_id['media_id'];
-                $newsItem->content = $htmlSnapshot->abstract;    //重獲取EXCEL信息改爲獲取Html信息   2020-02-28   Hpq
-                $newsItem->digest = $htmlSnapshot->abstract;
+                $newsItem->content = $newsItem->content = $htmlSnapshot->abstract.'<br /><a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid='.$wxconfig->appid.'&redirect_uri='.urlencode($download_url).'&response_type=code&scope=snsapi_base&state=STATE&connect_redirect=1#wechat_redirect">點此獲取Excel格式報表</a>';    //重獲取EXCEL信息改爲獲取Html信息   2020-02-28   Hpq
+                $newsItem->digest = $xlsSnapshot->abstract;
                 $newsItem->show_cover_pic = 1;
 
                 return app('weixin')->sendMpNews($newsItem, $redirect_url, $userNames);
@@ -331,5 +332,6 @@ class WeixinController extends BaseController
         }catch(\Exception $e){
             throw new Exception('發送報表失敗，企业微信配置不存在',30050);
         }
+        return $wxconfig;
     }
 }

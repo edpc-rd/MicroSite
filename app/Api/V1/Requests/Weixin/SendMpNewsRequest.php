@@ -36,7 +36,7 @@ class SendMpNewsRequest extends Request
             'show_cover_pic' => 'required|integer',
             'url' => 'required|string',
             'author' => 'string',
-            'wxId' => 'required|exists:ms_wx_config,id',
+//            'wxId' => 'required|exists:ms_wx_config,id',
         ];
     }
 }

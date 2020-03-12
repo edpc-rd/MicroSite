@@ -29,7 +29,7 @@ class ForeverFileListRequest extends Request
     {
         return [
             'type' => 'required|in:mpnews,image,voice,video,file',
-            'wxId' => 'required|exists:ms_wx_config,id',
+//            'wxId' => 'required|exists:ms_wx_config,id',
         ];
     }
 }

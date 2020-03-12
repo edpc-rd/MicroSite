@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Api\V1\Requests\Weixin;
+namespace App\Http\Requests\Backend\Report;
 
 use App\Http\Requests\Request;
 
 /**
- * Class SendImgRequest
- * @package App\Api\V1\Requests\Weixin
+ * Class SendExcelRequest
+ * @package App\Http\Requests\Backend\Report
  */
-class SendImgRequest extends Request
+class SendExcelRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,9 +28,7 @@ class SendImgRequest extends Request
     public function rules()
     {
         return [
-            'media_id' => 'required|string',
-            'users' => 'required|string',
-//            'wxId' => 'required|exists:ms_wx_config,id',
+            //
         ];
     }
 }

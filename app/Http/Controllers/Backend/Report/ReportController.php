@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\Report\CreateReportRequest;
 use App\Http\Requests\Backend\Report\DeleteReportRequest;
 use App\Http\Requests\Backend\Report\EditReportRequest;
+use App\Http\Requests\Backend\Report\SendExcelRequest;
 use App\Http\Requests\Backend\Report\StoreReportRequest;
 use App\Http\Requests\Backend\Report\UpdateReportRequest;
 use App\Http\Requests\Backend\Report\MarkReportRequest;
 use App\Repositories\Backend\Report\Group\ReportGroupRepositoryContract;
 use App\Repositories\Backend\Report\ReportRepositoryContract;
+use App\Repositories\Backend\Report\Snapshot\ReportSnapshotRepositoryContract;
 use App\Repositories\Backend\User\UserContract;
+use App\Repositories\Backend\Wxconfig\WxconfigRepositoryContract;
 use View;
 
 /**
@@ -58,13 +61,17 @@ class ReportController extends Controller
     public function __construct(
         UserContract $users,
         ReportGroupRepositoryContract $groups,
-        ReportRepositoryContract $reports
+        ReportRepositoryContract $reports,
+        ReportSnapshotRepositoryContract $snapshots,
+        WxconfigRepositoryContract $wxconfigs
 
     )
     {
         $this->users = $users;
         $this->groups = $groups;
         $this->reports = $reports;
+        $this->snapshots = $snapshots;
+        $this->wxconfigs = $wxconfigs;
     }
 
     /**
@@ -158,5 +165,31 @@ class ReportController extends Controller
     {
         View::addExtension('jpeg','php');
         return view($fileName);
+    }
+
+    //add by 2020-03-11 Hpq 發送文件消息
+    public  function viewExcelReport($fileName,SendExcelRequest $request)
+    {
+        $member = app('weixin')->getMemberInfo();
+        try{
+            $wxconfig = $this->wxconfigs->findOrThrowException(intval($request->get('id')));
+            app('weixin')->setWxconfig($wxconfig->id);
+        }catch(\Exception $e){
+            throw new Exception('發送報表失敗，企业微信配置不存在',30050);
+        }
+        try {
+            $report = $this->reports->findOrThrowException($request->get('reportId'));
+        } catch (\Exception $e) {
+            throw new Exception('發送報表失敗，報表或用戶ID錯誤',30004);
+        }
+        try{
+            $xlsSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'EXCEL');
+        }catch(\Exception $e){
+            throw new Exception('發送報表失敗，獲取報表快照錯誤',30007);
+        }
+        $excelPath = $xlsSnapshot->file_path . DIRECTORY_SEPARATOR . $xlsSnapshot->file_name;
+        $media_id = app('weixin')->uploadFile($excelPath);
+        app('weixin')->sendFileToUser($media_id, array($member['UserId']));
+        echo "<h1>已向您發送Excel格式的報表！</h1>";
     }
 }

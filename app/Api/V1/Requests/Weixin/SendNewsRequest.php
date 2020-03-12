@@ -33,7 +33,7 @@ class SendNewsRequest extends Request
             'title' => 'required|string',
             'description' => 'required|string',
             'url' => 'required|string',
-            'wxId' => 'required|exists:ms_wx_config,id',
+//            'wxId' => 'required|exists:ms_wx_config,id',
         ];
     }
 }
