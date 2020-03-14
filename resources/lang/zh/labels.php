@@ -244,6 +244,7 @@ return [
             'wxconfigs' => [
                 'create' => '新建配置',
                 'edit' => '編輯配置',
+                'upload' => '上傳校驗文件',
                 'label' => '企業微信配置',
                 'management' => '企業微信管理',
                 'no_permissions' => '沒有選擇權限.',

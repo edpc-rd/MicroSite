@@ -98,6 +98,7 @@ return [
                 'all' => '配置列表',
                 'create' => '新建配置',
                 'edit' => '編輯權限',
+                'upload' => '上傳校驗文件',
                 'main' => '企業微信配置',
                 'management' => '權限管理',
             ],

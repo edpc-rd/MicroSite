@@ -45,18 +45,20 @@ return [
                 'activate' => '默認配置',
                 'deactivate' => '取消默認',
                 'delete_permanently' => '永久刪除',
+                'check' => '向企業微信發送測試消息',
             ],
         ],
     ],
 
     'general' => [
         'cancel' => '取消',
-
+        'back' => '返回',
         'crud' => [
             'create' => '創建',
             'delete' => '刪除',
             'edit' => '編輯',
             'update' => '更新',
+            'check' => '檢測',
         ],
 
         'subscription' => '訂閱',

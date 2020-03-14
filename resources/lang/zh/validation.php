@@ -191,6 +191,8 @@ return [
                     'status' => '報表狀態',
                     'token' => 'Token',
                     'aeskey' => 'AESKEY',
+                    'check' => '對接檢測',
+                    'upload' => '校驗文件',
                 ],
             ],
         ],

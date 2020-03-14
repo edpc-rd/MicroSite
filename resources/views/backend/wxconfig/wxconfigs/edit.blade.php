@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-    {!! Form::model($wxconfig, ['route' => ['admin.wxconfig.wxconfigs.update', $wxconfig->id], 'class' => 'form-horizontal', 'role' => 'form', 'method' => 'PATCH']) !!}
+    {!! Form::model($wxconfig, ['route' => ['admin.wxconfig.wxconfigs.update', $wxconfig->id], 'class' => 'form-horizontal', 'role' => 'form', 'method' => 'PATCH','files' => true]) !!}
 
     <div class="box box-success">
         <div class="box-header with-border">
@@ -78,15 +78,26 @@
                 </div>
             </div><!--form control-->
 
-            {{--<div class="form-group">--}}
-                {{--{!! Form::label('status', trans('validation.attributes.backend.wxconfig.wxconfigs.status'), ['class' => 'col-lg-2 control-label']) !!}--}}
-                {{--<div class="col-lg-10">--}}
-                    {{--<select name="status" class="form-control">--}}
-                        {{--<option value=0 {!! $wxconfig->status == 0 ? 'selected' : '' !!}> 禁用</option>--}}
-                        {{--<option value=1 {!! $wxconfig->status == 1 ? 'selected' : '' !!}> 啟用</option>--}}
-                    {{--</select>--}}
-                {{--</div>--}}
-            {{--</div><!--form control-->--}}
+            <div class="form-group">
+                {!! Form::label('check', trans('validation.attributes.backend.wxconfig.wxconfigs.check'), ['class' => 'col-lg-2 control-label']) !!}
+                <div class="col-lg-10" style="padding-top:7px;">
+                    <a href="{{route('admin.wxconfig.wxconfig.check', $wxconfig->id)}}"
+                       data-method="post"
+                       data-trans-button-cancel="{{trans('buttons.general.cancel')}}"
+                       data-trans-button-confirm="{{trans('buttons.general.crud.check')}}"
+                       data-trans-title="{{trans('strings.backend.general.are_you_sure')}}"
+                       class="btn btn-xs btn-warning">{{trans('buttons.backend.wxconfig.wxconfig.check')}}</a>
+                    <br /><span style="color: red">保存後在檢測</span>
+                </div>
+
+            </div><!--form control-->
+
+            <div class="form-group">
+                {!! Form::label('file', trans('validation.attributes.backend.wxconfig.wxconfigs.upload'), ['class' => 'col-lg-2 control-label']) !!}
+                <div class="col-lg-10" style="padding-top:5px;">
+                    {!! Form::file('file', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.backend.wxconfig.wxconfigs.upload')]) !!}
+                </div>
+            </div><!--form control-->
 
         </div><!-- /.box-body -->
     </div><!--box-->
@@ -95,7 +106,7 @@
         <div class="box-body">
             <div class="pull-left">
                 <a href="{{route('admin.wxconfig.wxconfigs.index')}}"
-                   class="btn btn-danger btn-xs">{{ trans('buttons.general.cancel') }}</a>
+                   class="btn btn-danger btn-xs">{{ trans('buttons.general.back') }}</a>
             </div>
 
             <div class="pull-right">

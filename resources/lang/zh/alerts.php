@@ -61,6 +61,8 @@ return [
             'deleted_permanently' => '企業微信已被永久刪除.',
             'restored' => '企業微信已成功恢復.',
             'updated' => '企業微信已成功更新.',
+            'succ' => '已成功向企業微信發送測試消息！',
+            'fail' => '向企業微信發送測試消息失敗！',
         ],
         'groups' => [
             'created' => '成功創建報表分組.',

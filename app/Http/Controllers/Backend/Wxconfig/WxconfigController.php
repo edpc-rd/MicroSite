@@ -104,13 +104,26 @@ class WxconfigController extends Controller
 
     /**
      * @param  $id
+     * @param  EditWxconfigRequest $request
+     * @return mixed
+     */
+    public function check($id, MarkWxconfigRequest $request)
+    {
+        if($this->wxconfigs->check($id))
+            return redirect()->back()->withFlashSuccess(trans('alerts.backend.wxconfigs.succ'));
+        return redirect()->back()->withFlashDanger(trans('alerts.backend.wxconfigs.fail'));
+    }
+
+    /**
+     * @param  $id
      * @param  UpdateWxconfigRequest $request
      * @return mixed
      */
     public function update($id, UpdateWxconfigRequest $request)
     {
         $this->wxconfigs->update($id, $request->all());
-        return redirect()->route('admin.wxconfig.wxconfigs.index')->withFlashSuccess(trans('alerts.backend.wxconfigs.updated'));
+        return redirect()->back()->withFlashSuccess(trans('alerts.backend.wxconfigs.updated'));
+//        return redirect()->route('admin.wxconfig.wxconfigs.index')->withFlashSuccess(trans('alerts.backend.wxconfigs.updated'));
     }
 
     /**

@@ -21,6 +21,16 @@ trait WxconfigAttribute
     /**
      * @return string
      */
+    public function getSendButtonsAttribute()
+    {
+        return '<a href="' . route('admin.wxconfig.wxconfig.check',  [$this->id]) .
+            '" class="btn btn-xs btn-primary"><i class="fa fa-check-square" data-toggle="tooltip" data-placement="top" title="' .
+            trans('buttons.general.crud.check') . '"></i></a> ';
+    }
+
+    /**
+     * @return string
+     */
     public function getEditButtonAttribute()
     {
         if (access()->allow('edit-wxconfigs')) {

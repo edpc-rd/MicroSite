@@ -1,0 +1,119 @@
+
+	-- 開始結束日期
+	SET @BeginTime = CONVERT(DATETIME, CONVERT(varchar(100), @QueryDateFrom, 103) + ' 00:00:00');
+	SET @EndTime = CONVERT(DATETIME, CONVERT(varchar(100), @QueryDateTo, 103) + ' 23:59:59');
+	
+	IF Object_id('tempdb..#temp_TradeAccountdet') IS NOT NULL DROP TABLE #temp_TradeAccountdet;
+	IF Object_id('tempdb..#temp_CmpMapping') IS NOT NULL DROP TABLE #temp_CmpMapping;
+	IF Object_id('tempdb..#temp001') IS NOT NULL DROP TABLE #temp001;
+	IF Object_id('tempdb..#temp002') IS NOT NULL DROP TABLE #temp002;
+	IF Object_id('tempdb..#temp003') IS NOT NULL DROP TABLE #temp003;
+	
+	-- 創建臨時表存放品牌字頭和歸屬公司的對照
+	CREATE TABLE #temp_CmpMapping (bnd_abbr varchar(10),cmp_id char(1),cmp_name nvarchar(20));
+
+	INSERT INTO #temp_CmpMapping
+	SELECT BrandAbbr as bnd_abbr, 'E' as cmp_id, N'電貿' as cmp_name FROM DimBrand;
+	
+	-- 將指定品牌歸屬到歐泊公司（如果有新增品牌歸屬到其它公司，需修這裡的代碼）
+	UPDATE #temp_CmpMapping SET cmp_id = 'O', cmp_name = N'歐泊' WHERE bnd_abbr in ('JY','JA','JT')
+	
+	-- 獲取符合條件的賬單明細記錄，並存放到臨時表
+	SELECT loc_id, eshop_name, type, use_type, account_time, income_amt, expenses_amt, by_oid, belong_cmp, 
+		CONVERT(nvarchar(20),'') as cmp_name, CONVERT(int,4) as sort 
+	INTO #temp_TradeAccountDet
+	FROM EShopData_J.dbo.vw_eShopTradeAccount
+	WHERE cmp_id = 'J' AND loc_id IN (select COL from Split(@ShopCode,',')) AND account_time Between @BeginTime AND @EndTime
+	
+	-- 根據賬單歸屬的公司品牌獲取對應的公司名稱
+	UPDATE #temp_TradeAccountDet SET cmp_name = b.cmp_name
+	FROM #temp_TradeAccountDet a 
+	JOIN #temp_CmpMapping b ON a.belong_cmp = b.bnd_abbr;
+
+	-- 將有子訂單但又找不到公司歸屬的轉為不區分子訂單，按佣金佔比來拆分到公司
+	UPDATE #temp_TradeAccountDet SET by_oid = 0 WHERE by_oid = 1 AND belong_cmp = '';
+	
+	-- 將歸屬貨款的科目標記序號為1，交易佣金標記為3，方便後面的識別和排序
+	UPDATE #temp_TradeAccountDet SET sort = 1 WHERE type IN (N'交易退款',N'交易付款',N'在?支付')	
+	UPDATE #temp_TradeAccountDet SET sort = 3 WHERE use_type = N'?件服??-天?佣金'
+	
+	-- 將type屬於其他類型的交易退款歸屬到貨款裏面
+	UPDATE #temp_TradeAccountDet SET sort = 1 WHERE sort <> 1 and LEFT(use_type,5) = N'交易退款-';
+	UPDATE #temp_TradeAccountDet SET sort = 1 WHERE sort <> 1 and type = N'其它' AND use_type = N'';
+	
+	-- 按店鋪、賬單科目、年月、是否分子訂單、公司來匯總賬單金額
+	SELECT loc_id, eshop_name, type, use_type, YEAR(account_time) as yea_id, MONTH(account_time) as mon_id, by_oid, cmp_name, sort, 
+		SUM(income_amt + expenses_amt) as amt
+	INTO #temp001
+	FROM #temp_TradeAccountDet 
+	GROUP BY loc_id, eshop_name, type, use_type, YEAR(account_time), MONTH(account_time), by_oid, cmp_name, sort;
+	
+	-- 插入一條貨款小計的記錄
+	INSERT INTO #temp001
+	SELECT loc_id, eshop_name, N'貨款小計' as type, '' as use_type, yea_id, mon_id, 0 as by_oid, '' as cmp_name, 2 as sort, SUM(amt) as amt 
+	FROM #temp001
+	WHERE sort = 1
+	GROUP BY loc_id, eshop_name, yea_id, mon_id;
+	
+	-- 插入一條小計的記錄
+	INSERT INTO #temp001
+	SELECT loc_id, eshop_name, N'小計' as type, '' as use_type, yea_id, mon_id, 0 as by_oid, '' as cmp_name, 5 as sort, SUM(amt) as amt
+	FROM #temp001
+	WHERE sort <> 2
+	GROUP BY loc_id, eshop_name, yea_id, mon_id;
+	
+	-- 將不分公司的賬單匯總和歸屬公司臨時表關聯，每個公司產生一條對應的賬單匯總記錄，作為最終輸出結果集
+	SELECT a.*, b.cmp_name, CONVERT(money,0) as cmp_amt 
+	INTO #temp002 
+	FROM (
+		select loc_id, eshop_name, type, use_type, yea_id, mon_id, by_oid, sort, SUM(amt) as amt
+		from #temp001
+		group by loc_id, eshop_name, type, use_type, yea_id, mon_id, by_oid, sort) as a
+	JOIN (select distinct cmp_name from #temp_CmpMapping) b ON b.cmp_name <> '';	
+	
+	-- 將有分子訂單的非貨款的賬單科目按公司匯總，並更新到輸出記錄
+	UPDATE #temp002 set cmp_amt = b.amt
+	FROM #temp002 a
+	JOIN (
+		select loc_id, eshop_name, type, use_type, yea_id, mon_id, by_oid, sort, cmp_name, SUM(amt) as amt
+		from #temp001 
+		where sort in (3,4) and by_oid = 1 
+		group by loc_id, eshop_name, type, use_type, yea_id, mon_id, by_oid, sort, cmp_name) as b 
+	ON a.loc_id = b.loc_id AND a.type = b.type AND a.use_type = b.use_type AND a.yea_id = b.yea_id AND a.mon_id = b.mon_id 
+	AND a.by_oid = b.by_oid AND a.sort = b.sort AND a.cmp_name = b.cmp_name;
+		
+	-- 計算分公司的佣金佔比，用於計算其它賬單科目的分公司金額
+	SELECT a.loc_id, a.yea_id, a.mon_id, a.cmp_name, a.amt / Convert(float,b.amt) as ratio
+	INTO #temp003
+	FROM (
+		select loc_id, yea_id, mon_id, cmp_name, SUM(amt) as amt from #temp001	where sort = 3
+		group by loc_id, yea_id, mon_id, cmp_name) as a
+	JOIN (select loc_id, yea_id, mon_id, SUM(amt) as amt from #temp001 where sort = 3 group by loc_id, yea_id, mon_id) as b 
+	ON a.loc_id = b.loc_id AND a.yea_id = b.yea_id and a.mon_id = b.mon_id;
+	
+	-- 用佣金佔比將不分子訂單的賬單科目的金額拆分為不同公司
+	UPDATE #temp002 set cmp_amt = a.amt * b.ratio
+	FROM #temp002 a
+	JOIN #temp003 b on a.yea_id = b.yea_id and a.mon_id = b.mon_id and a.cmp_name = b.cmp_name
+	WHERE a.by_oid = 0 and sort in (2,4);
+	
+	-- 更新小計的分公司匯總金額
+	UPDATE #temp002 set cmp_amt = b.amt
+	FROM #temp002 a
+	JOIN (select yea_id, mon_id, cmp_name, SUM(cmp_amt) as amt
+		  from #temp002 
+		  where sort not in (1,5)
+		  group by yea_id, mon_id, cmp_name) as b
+	ON a.yea_id = b.yea_id and a.mon_id = b.mon_id and a.cmp_name = b.cmp_name
+	WHERE a.sort = 5;
+	
+	-- 輸出結果集
+	SELECT loc_id, eshop_name, type, use_type, yea_id, mon_id, sort, 
+		case when by_oid = 0 then N'否' else N'是' end as by_oid, cmp_name, amt, cmp_amt
+	FROM #temp002 ORDER BY sort;
+	
+	IF Object_id('tempdb..#temp_TradeAccountdet') IS NOT NULL DROP TABLE #temp_TradeAccountdet;
+	IF Object_id('tempdb..#temp_CmpMapping') IS NOT NULL DROP TABLE #temp_CmpMapping;
+	IF Object_id('tempdb..#temp001') IS NOT NULL DROP TABLE #temp001;
+	IF Object_id('tempdb..#temp002') IS NOT NULL DROP TABLE #temp002;
+	IF Object_id('tempdb..#temp003') IS NOT NULL DROP TABLE #temp003;
