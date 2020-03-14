@@ -87,10 +87,11 @@ class EloquentWxconfigRepository implements WxconfigRepositoryContract
         $wxconfig->agentid = $input['agentid'];
 
         $file = $wxconfig->file;   //获取旧的校验文件
-        $wxconfig->file = $this->uploadFile($id, $input);
-
-        //删除旧的校验文件
-        @unlink(base_path() . DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.$file);
+        if(isset($input['file'])){
+            $wxconfig->file = $this->uploadFile($id, $input);
+            //删除旧的校验文件
+            @unlink(base_path() . DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.$file);
+        }
 
         if ($wxconfig->save()) {
             return true;
@@ -183,7 +184,7 @@ class EloquentWxconfigRepository implements WxconfigRepositoryContract
         throw new GeneralException(trans('exceptions.backend.wxconfig.wxconfig.check'));
     }
 
-    public function uploadFile($id,$input)
+    public function uploadFile($input)
     {
         $file = $input['file'];
         $clientName = $file->getClientOriginalName();
