@@ -88,7 +88,7 @@ class EloquentWxconfigRepository implements WxconfigRepositoryContract
 
         $file = $wxconfig->file;   //获取旧的校验文件
         if(isset($input['file'])){
-            $wxconfig->file = $this->uploadFile($id, $input);
+            $wxconfig->file = $this->uploadFile($input);
             //删除旧的校验文件
             @unlink(base_path() . DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.$file);
         }
