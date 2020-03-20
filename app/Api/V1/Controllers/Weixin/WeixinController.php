@@ -311,8 +311,12 @@ class WeixinController extends BaseController
                 $newsItem = new MpNewsItem();
                 $newsItem->title = $imgSnapshot->abstract;
                 $newsItem->thumb_media_id = $media_id['media_id'];
-                $newsItem->content = $newsItem->content = $htmlSnapshot->abstract.'<br /><a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid='.$wxconfig->appid.'&redirect_uri='.urlencode($download_url).'&response_type=code&scope=snsapi_base&state=STATE&connect_redirect=1#wechat_redirect">點此獲取Excel格式報表</a>';    //重獲取EXCEL信息改爲獲取Html信息   2020-02-28   Hpq
-                $newsItem->digest = $xlsSnapshot->abstract;
+                if($xlsSnapshot){
+                    $newsItem->content = $htmlSnapshot->abstract.'<br /><a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid='.$wxconfig->appid.'&redirect_uri='.urlencode($download_url).'&response_type=code&scope=snsapi_base&state=STATE&connect_redirect=1#wechat_redirect">點此獲取Excel格式報表</a>';    //重獲取EXCEL信息改爲獲取Html信息   2020-02-28   Hpq
+                }else{
+                    $newsItem->content = $htmlSnapshot->abstract;
+                }
+                $newsItem->digest = $htmlSnapshot->abstract;
                 $newsItem->show_cover_pic = 1;
 
                 return app('weixin')->sendMpNews($newsItem, $redirect_url, $userNames);
