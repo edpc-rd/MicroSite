@@ -140,6 +140,7 @@ return [
                     'nick' => '昵稱',
                     'weixin_id' => '微信號',
                     'remark' => '備註',
+                    'send_wxid' => '發送企業微信',
                     'other_permissions' => '其它權限',
                     'password' => '密碼',
                     'password_confirmation' => '確認密碼',

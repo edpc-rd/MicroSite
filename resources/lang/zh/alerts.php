@@ -54,6 +54,7 @@ return [
             'deleted_permanently' => '報表已被永久刪除.',
             'restored' => '報表已成功恢復.',
             'updated' => '報表已成功更新.',
+            'send' => '成功發送報表.',
         ],
         'wxconfigs' => [
             'created' => '成功創建企業微信.',

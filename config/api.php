@@ -20,6 +20,8 @@ return [
 
     'standardsTree' => env('API_STANDARDS_TREE', 'x'),
 
+    'apitoken' => env('API_TOKEN', 'x'),
+
     /*
     |--------------------------------------------------------------------------
     | API Subtype

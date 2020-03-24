@@ -36,6 +36,7 @@ return [
         'report' => [
             'report' => [
                 'activate' => '啟用',
+                'send' => '重發',
                 'deactivate' => '停用',
                 'delete_permanently' => '永久刪除',
             ],

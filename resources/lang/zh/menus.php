@@ -84,6 +84,7 @@ return [
                 'edit' => '編輯用戶',
                 'main' => '用戶',
             ],
+            'report-send-logs' => '發送日誌列表',
         ],
 
         'log-viewer' => [

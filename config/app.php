@@ -179,6 +179,7 @@ return [
         App\Providers\ReportServiceProvider::class,
         App\Providers\WeixinServiceProvider::class,
         App\Providers\WxconfigServiceProvider::class,
+        App\Providers\LogsServiceProvider::class,
 
 
         /*

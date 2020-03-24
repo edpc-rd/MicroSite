@@ -54,6 +54,11 @@ class ReportController extends Controller
     protected $reports;
 
     /**
+     * @var WxconfigRepositoryContract
+     */
+    protected $wxconfigs;
+
+    /**
      * @param UserContract $users
      * @param ReportGroupRepositoryContract $groups
      * @param ReportRepositoryContract $reports
@@ -126,6 +131,7 @@ class ReportController extends Controller
         $report = $this->reports->findOrThrowException($id, true);
         return view('backend.report.reports.edit')
             ->withReport($report)
+            ->withWxConfig($this->wxconfigs->getAllWxconfigs())
             ->withGroups($this->groups->getAllGroups(true));
     }
 

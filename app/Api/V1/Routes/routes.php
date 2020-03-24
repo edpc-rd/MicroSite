@@ -30,6 +30,7 @@ $api->version('v1', function ($api) {
         $api->post('/weixin/uploadFile', 'WeixinController@uploadFile');
         $api->post('/weixin/uploadImage', 'WeixinController@uploadImage');
         $api->post('/weixin/sendReportById', 'WeixinController@sendReportById');
+        $api->post('/weixin/SendReportAgain', 'WeixinController@SendReportAgain');
 
     });
 

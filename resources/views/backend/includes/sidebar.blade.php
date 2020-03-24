@@ -53,21 +53,23 @@
             </li>
             @endauth
 
-            <li class="{{ Active::pattern('admin/log-viewer*') }} treeview">
+            <li class="{{ Active::pattern('admin/log-viewer*') }} {{ Active::pattern('admin/logs/*') }} treeview">
                 <a href="#">
                     <span>{{ trans('menus.backend.log-viewer.main') }}</span>
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
-                <ul class="treeview-menu {{ Active::pattern('admin/log-viewer*', 'menu-open') }}" style="display: none; {{ Active::pattern('admin/log-viewer*', 'display: block;') }}">
+                <ul class="treeview-menu {{ Active::pattern('admin/log-viewer*', 'menu-open') }} {{ Active::pattern('admin/logs/*', 'menu-open') }}" style="display: none; {{ Active::pattern('admin/log-viewer*', 'display: block;') }}{{ Active::pattern('admin/logs*', 'display: block;') }}">
                     <li class="{{ Active::pattern('admin/log-viewer') }}">
                         <a href="{!! url('admin/log-viewer') !!}">{{ trans('menus.backend.log-viewer.dashboard') }}</a>
                     </li>
                     <li class="{{ Active::pattern('admin/log-viewer/logs') }}">
                         <a href="{!! url('admin/log-viewer/logs') !!}">{{ trans('menus.backend.log-viewer.logs') }}</a>
                     </li>
+                    <li class="{{ Active::pattern('admin/logs/report-send-logs') }}">
+                        <a href="{!! url('admin/logs/report-send-logs') !!}">{{ trans('menus.backend.report.report-send-logs') }}</a>
+                    </li>
                 </ul>
             </li>
-
         </ul><!-- /.sidebar-menu -->
     </section>
     <!-- /.sidebar -->

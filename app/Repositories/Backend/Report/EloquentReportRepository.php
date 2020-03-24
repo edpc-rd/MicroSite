@@ -81,6 +81,7 @@ class EloquentReportRepository implements ReportRepositoryContract
         $report->receive_mode = $input['receive_mode'];
         $report->query_url = $input['query_url'];
         $report->description = $input['description'];
+        $report->send_wxid = intval($input['send_wxid']);
 
         if ($report->save()) {
             return true;
@@ -109,6 +110,7 @@ class EloquentReportRepository implements ReportRepositoryContract
         $report->receive_mode = $input['receive_mode'];
         $report->query_url = $input['query_url'];
         $report->description = $input['description'];
+        $report->send_wxid = intval($input['send_wxid']);
 
         if ($report->save()) {
             return true;

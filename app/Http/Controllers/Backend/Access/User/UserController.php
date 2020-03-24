@@ -18,6 +18,7 @@ use App\Http\Requests\Backend\Access\User\UpdateUserRequest;
 use App\Repositories\Backend\Permission\PermissionRepositoryContract;
 use App\Repositories\Backend\Role\RoleRepositoryContract;
 use App\Repositories\Backend\User\UserContract;
+use App\Repositories\Backend\Wxconfig\WxconfigRepositoryContract;
 use App\Repositories\Frontend\User\UserContract as FrontendUserContract;
 use App\Repositories\Backend\Report\ReportRepositoryContract;
 use App\Repositories\Backend\User\Subscription\UserSubscriptionRepositoryContract;
@@ -54,6 +55,8 @@ class UserController extends Controller
      */
     protected $reports;
 
+    protected $wxconfig;
+
     /**
      * @param UserContract $users
      * @param RoleRepositoryContract $roles
@@ -66,7 +69,8 @@ class UserController extends Controller
         RoleRepositoryContract $roles,
         PermissionRepositoryContract $permissions,
         UserSubscriptionRepositoryContract $subscriptions,
-        ReportRepositoryContract $reports
+        ReportRepositoryContract $reports,
+        WxconfigRepositoryContract $wxconfig
     )
     {
         $this->users = $users;
@@ -74,6 +78,7 @@ class UserController extends Controller
         $this->permissions = $permissions;
         $this->subscriptions = $subscriptions;
         $this->reports = $reports;
+        $this->wxconfig = $wxconfig;
     }
 
     /**
@@ -129,7 +134,8 @@ class UserController extends Controller
             ->withUserRoles($user->roles->lists('role_id')->all())
             ->withRoles($this->roles->getAllRoles('sort_order', 'asc', true))
             ->withUserPermissions($user->permissions->lists('permission_id')->all())
-            ->withPermissions($this->permissions->getAllPermissions());
+            ->withPermissions($this->permissions->getAllPermissions())
+            ->withWxConfig($this->wxconfig->getAllWxconfigs());
     }
 
     /**

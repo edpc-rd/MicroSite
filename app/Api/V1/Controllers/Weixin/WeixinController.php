@@ -3,7 +3,12 @@
 namespace App\Api\V1\Controllers\Weixin;
 
 use App\Api\V1\Controllers\BaseController;
+use App\Api\V1\Requests\Weixin\SendReportAgainRequest;
 use App\Api\V1\Requests\Weixin\ServeRequest;
+use App\Models\Access\User\User;
+use App\Models\Report\ReportSendLogs;
+use App\Models\Wxconfig\Wxconfig;
+use App\Repositories\Backend\Report\ReportSendLogs\ReportSendLogsRepositoryContract;
 use App\Repositories\Backend\Wxconfig\WxconfigRepositoryContract;
 use Stoneworld\Wechat\Message;
 use Stoneworld\Wechat\Messages\NewsItem;
@@ -67,6 +72,11 @@ class WeixinController extends BaseController
     protected $wxconfigs;
 
     /**
+     * @var ReportSendLogsRepositoryContract
+     */
+    protected $logs;
+
+    /**
      * @param UserContract $users
      * @param ReportGroupRepositoryContract $groups
      * @param ReportParameterRepositoryContract $parameters
@@ -82,7 +92,8 @@ class WeixinController extends BaseController
         UserSubscriptionRepositoryContract $subscriptions,
         ReportSnapshotRepositoryContract $snapshots,
         ReportRepositoryContract $reports,
-        WxconfigRepositoryContract $wxconfigs
+        WxconfigRepositoryContract $wxconfigs,
+        ReportSendLogsRepositoryContract $logs
     )
     {
         $this->users = $users;
@@ -92,6 +103,7 @@ class WeixinController extends BaseController
         $this->snapshots = $snapshots;
         $this->reports = $reports;
         $this->wxconfigs = $wxconfigs;
+        $this->logs = $logs;
     }
 
 
@@ -267,64 +279,70 @@ class WeixinController extends BaseController
             throw new Exception('發送報表失敗，報表狀態為未啟用',30006);
         }
 
-        //企业微信id  BY HPQ 2020-03-03
-        $wxconfig = $this->setWeixin(intval($request->get('wxId')));
-
-        switch (strtoupper($report->format)) {
-            case 'TEXT': {
-                $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'TEXT');
-                $content = $snapshot->abstract;
-                return app('weixin')->sendMsgToUser($content, $userNames);
-            };
-                break;
-            case 'IMAGE': {
-                $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'IMAGE');
-                $filePath = $snapshot->file_path . DIRECTORY_SEPARATOR . $snapshot->file_name;
-                $media_id = app('weixin')->uploadImage($filePath);
-
-                return app('weixin')->sendImgToUser($media_id['media_id'], $userNames);
+        //獲取需要指定的發送企業微信的用戶
+        $us = User::wherein('user_name',$userNames)->where('send_wxid','!=',0)->get();
+        if($us){
+            foreach ($us as $u) {
+                $arrUs[$u->send_wxid][]['UserName'] = $u->user_name;
+                $arrUs[$u->send_wxid][]['Email'] = $u->email;
+                $arrUs[$u->send_wxid][]['send_wxid'] = $u->send_wxid;
             }
-                break;
-            case 'FILE': {
-                $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'EXCEL');
-                $filePath = $snapshot->file_path . DIRECTORY_SEPARATOR . $snapshot->file_name;
-                $media_id = app('weixin')->uploadFile($filePath);
 
-                return app('weixin')->sendFileToUser($media_id, $userNames);
+            //生成需要發送的信息 和 排除指定發送企業微信的用戶
+            foreach ($arrUs as $k => $arrU){
+                $sendNames = array_column($arrU, 'UserName');
+                $arrSend[$k]['UserName'] = $sendNames;
+                $arrSend[$k]['send_wxid'] = $k;
+                $userNames = array_diff($userNames,$sendNames);
             }
-                break;
-            case 'MPNEWS': {
-                try{
-                    $imgSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'IMAGE');
-                    $htmlSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'HTML');
-                    $xlsSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'EXCEL');   //取消獲取EXCEL信息    2020-02-28   Hpq
-                }catch(\Exception $e){
-                    throw new Exception('發送報表失敗，獲取報表快照錯誤',30007);
-                }
-
-                $xlsName = basename($htmlSnapshot->file_name, "." . substr(strrchr($htmlSnapshot->file_name, '.'), 1));
-                $redirect_url = 'http://' . $_SERVER['SERVER_NAME'] . '/third/report/html/' . $xlsName . '?thirdLogin=true&id='.$wxconfig->id;
-                $download_url = 'http://' . $_SERVER['SERVER_NAME'] . '/third/report/excel/' . $xlsName . '?thirdLogin=true&id='.$wxconfig->id.'&reportId='.$request->get('reportId');
-                $imgPath = $imgSnapshot->file_path . DIRECTORY_SEPARATOR . $imgSnapshot->file_name;
-                $media_id = app('weixin')->uploadImage($imgPath);
-
-                $newsItem = new MpNewsItem();
-                $newsItem->title = $imgSnapshot->abstract;
-                $newsItem->thumb_media_id = $media_id['media_id'];
-                if($xlsSnapshot){
-                    $newsItem->content = $htmlSnapshot->abstract.'<br /><a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid='.$wxconfig->appid.'&redirect_uri='.urlencode($download_url).'&response_type=code&scope=snsapi_base&state=STATE&connect_redirect=1#wechat_redirect">點此獲取Excel格式報表</a>';    //重獲取EXCEL信息改爲獲取Html信息   2020-02-28   Hpq
-                }else{
-                    $newsItem->content = $htmlSnapshot->abstract;
-                }
-                $newsItem->digest = $htmlSnapshot->abstract;
-                $newsItem->show_cover_pic = 1;
-
-                return app('weixin')->sendMpNews($newsItem, $redirect_url, $userNames);
-            }
-                break;
-            default:
-                throw new Exception('發送報表失敗，不支持的發送類型',30008);
         }
+
+        //獲取報表指定發送的企業微信
+        $wxid = 0;
+        //報表指定發送的企業微信
+        if($report->send_wxid)
+            $wxid = $report->send_wxid;
+
+        //獲取發送報表指定的企業微信
+        if(intval($request->get('wxId')))
+            $wxid = intval($request->get('wxId'));
+
+        //需要發送信息的合集
+        $arrSend[] = array(
+            'UserName' => $userNames,
+            'send_wxid' => $wxid
+        );
+
+        $data = array(
+            'message' => '',
+            'code' => 0,
+            'status_code' => 0,
+            'send_id' => 'SN' . time()     //發送批次號
+        );
+
+        foreach ($arrSend as $arr){
+            try {
+                //企业微信id  BY HPQ 2020-03-03
+                $wxconfig = $this->setWeixin($arr['send_wxid']);
+                $msg_data = $this->SendReport($arr,$report,$wxconfig);
+            }catch (\Exception $e){
+                $msg_data['code'] = $e->getCode();
+                $msg_data['message'] = $e->getMessage();
+                $msg_data['status_code'] = 500;
+            }
+            if($msg_data['status_code'] == 500){
+                $data['status_code'] = 500;
+            }
+            if($arr['send_wxid'] == 0){
+                $wxconfig['name'] .='[默認]';
+            }
+            $data['message'] .= $wxconfig['name'] . '-' . $wxconfig['id'] . ':' . $msg_data['message'] .';';
+
+            //發送日誌
+            ReportSendLogs::create(array('report_id' => $report->report_id,'user_name' => serialize($arr['UserName']),'send_id' => $data['send_id'],'wxid' =>$arr['send_wxid'],'status' =>($msg_data['status_code']==500?-1:0),'message' => $msg_data['message'] ));
+        }
+
+        return $data;
     }
 
     //設置微信配置
@@ -338,4 +356,79 @@ class WeixinController extends BaseController
         }
         return $wxconfig;
     }
+
+    public function SendReport($arr,$report,$wxconfig){
+        $report->format = 'TEXT';
+        $content = 'TEXT';
+        switch (strtoupper($report->format)) {
+            case 'TEXT':
+                {
+//                    $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'TEXT');
+//                    $content = $snapshot->abstract;
+                    return app('weixin')->sendMsgToUser($content, $arr['UserName']);
+                };
+                break;
+            case 'IMAGE':
+                {
+                    $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'IMAGE');
+                    $filePath = $snapshot->file_path . DIRECTORY_SEPARATOR . $snapshot->file_name;
+                    $media_id = app('weixin')->uploadImage($filePath);
+
+                    return app('weixin')->sendImgToUser($media_id['media_id'], $arr['UserName']);
+                }
+                break;
+            case 'FILE':
+                {
+                    $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'EXCEL');
+                    $filePath = $snapshot->file_path . DIRECTORY_SEPARATOR . $snapshot->file_name;
+                    $media_id = app('weixin')->uploadFile($filePath);
+
+                    return app('weixin')->sendFileToUser($media_id, $arr['UserName']);
+                }
+                break;
+            case 'MPNEWS':
+                {
+                    try {
+                        $imgSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'IMAGE');
+                        $htmlSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'HTML');
+                        $xlsSnapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'EXCEL');   //取消獲取EXCEL信息    2020-02-28   Hpq
+                    } catch (\Exception $e) {
+                        throw new Exception('發送報表失敗，獲取報表快照錯誤', 30007);
+                    }
+
+                    $xlsName = basename($htmlSnapshot->file_name, "." . substr(strrchr($htmlSnapshot->file_name, '.'), 1));
+                    $redirect_url = 'http://' . $_SERVER['SERVER_NAME'] . '/third/report/html/' . $xlsName . '?thirdLogin=true&id=' . $wxconfig->id;
+                    $download_url = 'http://' . $_SERVER['SERVER_NAME'] . '/third/report/excel/' . $xlsName . '?thirdLogin=true&id=' . $wxconfig->id . '&reportId=' . $report->report_id;
+                    $imgPath = $imgSnapshot->file_path . DIRECTORY_SEPARATOR . $imgSnapshot->file_name;
+                    $media_id = app('weixin')->uploadImage($imgPath);
+
+                    $newsItem = new MpNewsItem();
+                    $newsItem->title = $imgSnapshot->abstract;
+                    $newsItem->thumb_media_id = $media_id['media_id'];
+                    if ($xlsSnapshot) {
+                        $newsItem->content = $htmlSnapshot->abstract . '<br /><a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=' . $wxconfig->appid . '&redirect_uri=' . urlencode($download_url) . '&response_type=code&scope=snsapi_base&state=STATE&connect_redirect=1#wechat_redirect">點此獲取Excel格式報表</a>';    //重獲取EXCEL信息改爲獲取Html信息   2020-02-28   Hpq
+                    } else {
+                        $newsItem->content = $htmlSnapshot->abstract;
+                    }
+                    $newsItem->digest = $htmlSnapshot->abstract;
+                    $newsItem->show_cover_pic = 1;
+
+                    return app('weixin')->sendMpNews($newsItem, $redirect_url, $arr['UserName']);
+                }
+                break;
+            default:
+                throw new Exception('發送報表失敗，不支持的發送類型', 30008);
+        }
+    }
+
+    //發送失敗重新發送
+    public function SendReportAgain(SendReportAgainRequest $request)
+    {
+        $logs = $this->logs->findOrThrowException($request->get('id'));
+        $arr['UserName'] = unserialize($logs->user_name);
+        $report = $this->reports->findOrThrowException($logs->report_id);
+        $wxconfig = $this->setWeixin($logs->wxid);
+        return $this->SendReport($arr, $report, $wxconfig);
+    }
+
 }

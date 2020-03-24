@@ -204,6 +204,24 @@ return [
                 ],
             ],
 
+            'logs' => [
+//                'create' => '新建角色',
+//                'edit' => '編輯角色',
+                'management' => '報表發送列表',
+
+                'table' => [
+                    'id' => 'ID',
+                    'report_id' => '報表ID',
+                    'send_id' => '發送批次',
+                    'wxid' => '企業微信ID',
+                    'status' => '狀態',
+                    'message' => '錯誤信息',
+                    'created' => '新增時間',
+                    'updated' => '更新時間',
+                    'total' => '合計',
+                ],
+            ],
+
             'users' => [
                 'active' => '啟用的用戶',
                 'all_permissions' => '全部權限',

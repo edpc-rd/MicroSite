@@ -67,6 +67,7 @@ return [
                 'needs_parameter' => '您必須為報表選擇至少一個參數.',
                 'not_found' => '報表不存在.',
                 'update_error' => '更新報表時出現問題，請重試.',
+                'send_error' => '重新發送失敗,請重試.',
             ],
             'subscriptions' => [
                 'already_exists' => '报表授权已存在，請重新输入.',

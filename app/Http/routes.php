@@ -36,6 +36,7 @@ Route::group(['namespace' => 'Backend', 'prefix' => 'admin', 'middleware' => 'ad
     require(__DIR__ . '/Routes/Backend/LogViewer.php');
     require(__DIR__ . '/Routes/Backend/Report.php');
     require(__DIR__ . '/Routes/Backend/Wxconfig.php');
+    require(__DIR__ . '/Routes/Backend/Logs.php');
 });
 
 Route::group(['namespace' => 'Api'], function () {
