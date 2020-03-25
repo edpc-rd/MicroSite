@@ -2,16 +2,8 @@
 
 namespace App\Repositories\Backend\Report\ReportSendLogs;
 
-use App\Api\V1\Controllers\Weixin\WeixinController;
 use App\Exceptions\GeneralException;
 use App\Models\Report\ReportSendLogs;
-use App\Repositories\Backend\Report\Group\ReportGroupRepositoryContract;
-use App\Repositories\Backend\Report\Parameter\ReportParameterRepositoryContract;
-use App\Repositories\Backend\Report\ReportRepositoryContract;
-use App\Repositories\Backend\Report\Snapshot\ReportSnapshotRepositoryContract;
-use App\Repositories\Backend\User\Subscription\UserSubscriptionRepositoryContract;
-use App\Repositories\Backend\User\UserContract;
-use App\Repositories\Backend\Wxconfig\WxconfigRepositoryContract;
 use Stoneworld\Wechat\Utils\Http;
 
 /**
@@ -20,68 +12,6 @@ use Stoneworld\Wechat\Utils\Http;
  */
 class EloquentReportSendLogsRepository implements ReportSendLogsRepositoryContract
 {
-    /**
-     * @var UserContract
-     */
-    protected $users;
-
-    /**
-     * @var ReportGroupRepositoryContract
-     */
-    protected $groups;
-
-    /**
-     * @var ReportParameterRepositoryContract
-     */
-    protected $parameters;
-
-    /**
-     * @var UserSubscriptionRepositoryContract
-     */
-    protected $subscriptions;
-
-    /**
-     * @var ReportSnapshotRepositoryContract
-     */
-    protected $snapshots;
-
-    /**
-     * @var ReportRepositoryContract
-     */
-    protected $reports;
-
-    /**
-     * @var WxconfigRepositoryContract
-     */
-    protected $wxconfigs;
-
-    /**
-     * @param UserContract $users
-     * @param ReportGroupRepositoryContract $groups
-     * @param ReportParameterRepositoryContract $parameters
-     * @param UserSubscriptionRepositoryContract $subscriptions
-     * @param ReportSnapshotRepositoryContract $snapshots
-     * @param ReportRepositoryContract $reports
-     * @param WxconfigRepositoryContract $wxconfigs
-     */
-    public function __construct(
-        UserContract $users,
-        ReportGroupRepositoryContract $groups,
-        ReportParameterRepositoryContract $parameters,
-        UserSubscriptionRepositoryContract $subscriptions,
-        ReportSnapshotRepositoryContract $snapshots,
-        ReportRepositoryContract $reports,
-        WxconfigRepositoryContract $wxconfigs
-    )
-    {
-        $this->users = $users;
-        $this->groups = $groups;
-        $this->parameters = $parameters;
-        $this->subscriptions = $subscriptions;
-        $this->snapshots = $snapshots;
-        $this->reports = $reports;
-        $this->wxconfigs = $wxconfigs;
-    }
     /**
      * @param  $per_page
      * @param  mixed $order_by
