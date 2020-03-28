@@ -213,7 +213,7 @@ return [
                     'id' => 'ID',
                     'report_id' => '報表ID',
                     'send_id' => '發送批次',
-                    'wxid' => '企業微信ID',
+                    'wxid' => '企業微信',
                     'status' => '狀態',
                     'message' => '錯誤信息',
                     'created' => '新增時間',
