@@ -279,33 +279,34 @@ class WeixinController extends BaseController
             throw new Exception('發送報表失敗，報表狀態為未啟用',30006);
         }
 
-        //獲取需要指定的發送企業微信的用戶
-        $us = User::wherein('user_name',$userNames)->where('send_wxid','!=',0)->get();
-        if($us){
-            foreach ($us as $u) {
-                $arrUs[$u->send_wxid][]['UserName'] = $u->user_name;
-                $arrUs[$u->send_wxid][]['Email'] = $u->email;
-                $arrUs[$u->send_wxid][]['send_wxid'] = $u->send_wxid;
-            }
-
-            //生成需要發送的信息 和 排除指定發送企業微信的用戶
-            foreach ($arrUs as $k => $arrU){
-                $sendNames = array_column($arrU, 'UserName');
-                $arrSend[$k]['UserName'] = $sendNames;
-                $arrSend[$k]['send_wxid'] = $k;
-                $userNames = array_diff($userNames,$sendNames);
-            }
-        }
-
-        //獲取報表指定發送的企業微信
-        $wxid = 0;
-        //報表指定發送的企業微信
-        if($report->send_wxid)
-            $wxid = $report->send_wxid;
-
-        //獲取發送報表指定的企業微信
-        if(intval($request->get('wxId')))
+        if(intval($request->get('wxId')) > 0){    //指定發送企業微信
             $wxid = intval($request->get('wxId'));
+        }else{
+            //獲取需要指定的發送企業微信的用戶
+            $us = User::wherein('user_name',$userNames)->where('send_wxid','!=',0)->get();
+            if($us){
+                foreach ($us as $u) {
+                    $arrUs[$u->send_wxid][]['UserName'] = $u->user_name;
+                    $arrUs[$u->send_wxid][]['Email'] = $u->email;
+                    $arrUs[$u->send_wxid][]['send_wxid'] = $u->send_wxid;
+                }
+
+                //生成需要發送的信息 和 排除指定發送企業微信的用戶
+                foreach ($arrUs as $k => $arrU){
+                    $sendNames = array_column($arrU, 'UserName');
+                    $arrSend[$k]['UserName'] = $sendNames;
+                    $arrSend[$k]['send_wxid'] = $k;
+                    $userNames = array_diff($userNames,$sendNames);
+                }
+            }
+
+            //獲取報表指定發送的企業微信
+            $wxid = 0;
+            //報表指定發送的企業微信
+            if($report->send_wxid)
+                $wxid = $report->send_wxid;
+
+        }
 
         //需要發送信息的合集
         $arrSend[] = array(
@@ -358,13 +359,13 @@ class WeixinController extends BaseController
     }
 
     public function SendReport($arr,$report,$wxconfig){
-        $report->format = 'TEXT';
-        $content = 'TEXT';
+//        $report->format = 'TEXT';
+//        $content = 'TEXT';
         switch (strtoupper($report->format)) {
             case 'TEXT':
                 {
-//                    $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'TEXT');
-//                    $content = $snapshot->abstract;
+                    $snapshot = $this->snapshots->getSnapshotsByReportId($report->report_id, 'TEXT');
+                    $content = $snapshot->abstract;
                     return app('weixin')->sendMsgToUser($content, $arr['UserName']);
                 };
                 break;
