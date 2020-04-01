@@ -284,7 +284,7 @@ class WeixinController extends BaseController
         }else{
             //獲取需要指定的發送企業微信的用戶
             $us = User::wherein('user_name',$userNames)->where('send_wxid','!=',0)->get();
-            if($us){
+            if(count($us)){
                 foreach ($us as $u) {
                     $arrUs[$u->send_wxid][]['UserName'] = $u->user_name;
                     $arrUs[$u->send_wxid][]['Email'] = $u->email;
