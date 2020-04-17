@@ -121,6 +121,18 @@
                 </div>
             </div><!--form control-->
 
+            <div class="form-group">
+                {!! Form::label('send_wxid', trans('validation.attributes.backend.access.users.send_wxid'), ['class' => 'col-lg-2 control-label']) !!}
+                <div class="col-lg-10">
+                    <select name="send_wxid" class="form-control">
+                        <option value='0' selected> 無 </option>
+                        @foreach ($wx_config as $wx)
+                            <option value='{{$wx->id}}'> {{$wx->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div><!--form control-->
+
         </div><!-- /.box-body -->
     </div><!--box-->
 

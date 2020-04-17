@@ -95,6 +95,7 @@ class ReportController extends Controller
     public function create(CreateReportRequest $request)
     {
         return view('backend.report.reports.create')
+            ->withWxConfig($this->wxconfigs->getAllWxconfigs())
             ->withGroups($this->groups->getAllGroups(true));
     }
 
