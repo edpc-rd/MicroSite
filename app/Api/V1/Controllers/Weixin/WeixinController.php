@@ -259,6 +259,9 @@ class WeixinController extends BaseController
             $report = $this->reports->findOrThrowException($request->get('reportId'));
             if ($request->get('toAll') == 0) {
                 $users = $report->users()->get();
+                if(count($users) == 0)
+                    return array('code'=> 0 ,'status_code' => 0,'message'=>'無人訂閱次報表！');
+
                 foreach ($users as $user) {
                     $arrUsers[]['UserName'] = $user->user_name;
                     $arrUsers[]['Email'] = $user->email;
@@ -269,7 +272,7 @@ class WeixinController extends BaseController
                 $userNames = '@all';
             }
         } catch (\Exception $e) {
-            throw new Exception('發送報表失敗，報表或用戶ID錯誤',30004);
+            throw new Exception('發送報表失敗，報表ID錯誤',30004);
         }
 
         if ($report->receive_mode == 'email') {
