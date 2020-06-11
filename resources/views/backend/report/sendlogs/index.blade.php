@@ -54,7 +54,7 @@
                             {{--<td>{!! $report->receive_mode !!}</td>--}}
                             {{--<td>{!! $report->query_url !!}</td>--}}
                             {{--<td>{!! $report->status_label !!}</td>--}}
-                            <td class="visible-lg">{!! $report->updated_at->toDateString() !!}</td>
+                            <td class="visible-lg">{!! $report->updated_at->toDateTimeString() !!}</td>
                             <td>{!! $report->action_buttons !!}</td>
                         </tr>
                     @endforeach
