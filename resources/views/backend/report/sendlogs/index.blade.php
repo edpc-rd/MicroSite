@@ -25,6 +25,7 @@
                     <tr>
                         <th>{{ trans('labels.backend.report.logs.table.id') }}</th>
                         <th>{{ trans('labels.backend.report.logs.table.report_id') }}</th>
+                        <th>{{ trans('labels.backend.report.logs.table.report_name') }}</th>
                         <th>{{ trans('labels.backend.report.logs.table.send_id') }}</th>
                         <th>{{ trans('labels.backend.report.logs.table.wxid') }}</th>
                         <th>{{ trans('labels.backend.report.logs.table.status') }}</th>
@@ -44,6 +45,7 @@
                         <tr>
                             <td>{!! $report->id !!}</td>
                             <td>{!! $report->report_id !!}</td>
+                            <td>{!! $report->report->name !!}</td>
                             <td>{!! $report->send_id !!}</td>
                             <td>{!! $report->wx_name !!}</td>
                             <td>{!! $report->status_code !!}</td>

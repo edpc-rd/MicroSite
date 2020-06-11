@@ -2,6 +2,7 @@
 
 namespace App\Models\Report\Traits\Attribute;
 
+use App\Models\Report\Report;
 use App\Models\Wxconfig\Wxconfig;
 
 /**
@@ -14,6 +15,12 @@ trait ReportSendLogsAttribute
         $wxinfo = Wxconfig::where('status',1)->first();
         $wxconfig = Wxconfig::pluck('name','id');
         return $wxconfig[$this->wxid==0?$wxinfo->id:$this->wxid];
+    }
+
+    public function getNameAttribute(){
+        $wxinfo = Wxconfig::where('status',1)->first();
+        $Report = Report::where('report_id',$thsi->report_id);
+        return $Report[$this->wxid==0?$wxinfo->id:$this->wxid];
     }
 
     public function getStatusCodeAttribute(){

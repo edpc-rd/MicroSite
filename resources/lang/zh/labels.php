@@ -212,6 +212,7 @@ return [
                 'table' => [
                     'id' => 'ID',
                     'report_id' => '報表ID',
+                    'report_name' => '報表名稱',
                     'send_id' => '發送批次',
                     'wxid' => '企業微信',
                     'status' => '狀態',

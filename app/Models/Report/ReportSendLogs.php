@@ -3,11 +3,12 @@
 namespace App\Models\Report;
 
 use App\Models\Report\Traits\Attribute\ReportSendLogsAttribute;
+use App\Models\Report\Traits\Relationship\ReportSendLogsRelationship;
 use Illuminate\Database\Eloquent\Model;
 
 class ReportSendLogs extends Model
 {
-    use ReportSendLogsAttribute;
+    use ReportSendLogsAttribute,ReportSendLogsRelationship;
     /**
      * The primary key for the model.
      *
