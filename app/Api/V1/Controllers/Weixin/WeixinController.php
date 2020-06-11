@@ -325,15 +325,21 @@ class WeixinController extends BaseController
         );
 
         foreach ($arrSend as $arr){
-            try {
-                //企业微信id  BY HPQ 2020-03-03
-                $wxconfig = $this->setWeixin($arr['send_wxid']);
-                $msg_data = $this->SendReport($arr,$report,$wxconfig);
-            }catch (\Exception $e){
-                $msg_data['code'] = $e->getCode();
-                $msg_data['message'] = $e->getMessage();
-                $msg_data['status_code'] = 500;
+            for ($i = 0;$i < 3;$i++){       //重試三次
+                try {
+                    //企业微信id  BY HPQ 2020-03-03
+                    $wxconfig = $this->setWeixin($arr['send_wxid']);
+                    $msg_data = $this->SendReport($arr,$report,$wxconfig);
+                    if($msg_data['code'] == 0)      //成功則跳出
+                        break;
+                }catch (\Exception $e){
+                    $msg_data['code'] = $e->getCode();
+                    $msg_data['message'] = $e->getMessage();
+                    $msg_data['status_code'] = 500;
+                    sleep(1);    //失敗則一秒後重試
+                }
             }
+
             if($msg_data['status_code'] == 500){
                 $data['status_code'] = 500;
             }
