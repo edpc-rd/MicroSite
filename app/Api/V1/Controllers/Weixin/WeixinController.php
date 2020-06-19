@@ -324,6 +324,9 @@ class WeixinController extends BaseController
             'send_id' => 'SN' . time()     //發送批次號
         );
 
+        //临时设置超时时间
+        set_time_limit(300);                          // 设置脚本最大执行时间 为180秒 永不过期
+
         foreach ($arrSend as $arr){
             for ($i = 0;$i < 3;$i++){       //重試三次
                 try {
@@ -336,7 +339,7 @@ class WeixinController extends BaseController
                     $msg_data['code'] = $e->getCode();
                     $msg_data['message'] = $e->getMessage();
                     $msg_data['status_code'] = 500;
-                    sleep(1);    //失敗則一秒後重試
+                    sleep(60);    //失敗則60秒後重試
                 }
             }
 
