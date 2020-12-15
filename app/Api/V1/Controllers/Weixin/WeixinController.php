@@ -338,21 +338,22 @@ class WeixinController extends BaseController
                 }catch (\Exception $e){
                     $msg_data['code'] = $e->getCode();
                     $msg_data['message'] = $e->getMessage();
+                    $data['message'] = '错误码：'.$e->getCode(). '错误信息：'.$e->getMessage() . ",";
                     $msg_data['status_code'] = 500;
                     sleep(60);    //失敗則60秒後重試
                 }
             }
 
-            if($msg_data['status_code'] == 500){
+            if($msg_data['code'] != 0){
                 $data['status_code'] = 500;
             }
             if($arr['send_wxid'] == 0){
                 $wxconfig['name'] .='[默認]';
             }
-            $data['message'] .= $wxconfig['name'] . '-' . $wxconfig['id'] . ':' . $msg_data['message'] .';';
+            $data['message'] = $wxconfig['name'] . '-' . $wxconfig['id'] . ':' . trim($data['message'],",") .';';
 
             //發送日誌
-            ReportSendLogs::create(array('report_id' => $report->report_id,'user_name' => serialize($arr['UserName']),'send_id' => $data['send_id'],'wxid' =>$arr['send_wxid'],'status' =>($msg_data['status_code']==500?-1:0),'message' => $msg_data['message'] ));
+            ReportSendLogs::create(array('report_id' => $report->report_id,'user_name' => serialize($arr['UserName']),'send_id' => $data['send_id'],'wxid' =>$arr['send_wxid'],'status' =>($msg_data['status_code']==500?-1:0),'message' => $data['message'] ));
         }
 
         return $data;
