@@ -19,7 +19,7 @@ trait ReportSendLogsAttribute
 
     public function getNameAttribute(){
         $wxinfo = Wxconfig::where('status',1)->first();
-        $Report = Report::where('report_id',$thsi->report_id);
+        $Report = Report::where('report_id',$this->report_id);
         return $Report[$this->wxid==0?$wxinfo->id:$this->wxid];
     }
 
@@ -40,20 +40,24 @@ trait ReportSendLogsAttribute
      */
     public function getStatusButtonAttribute()
     {
-        switch ($this->status) {
-            case 0:
-                return '';
-                break;
-            default:
-                if (access()->allow('reactivate-logs')) {
-                    return '<a href="' . route('admin.logs.logs.mark', [$this->id, 0]) .
-                        '" class="btn btn-xs btn-success"><i class="fa fa-play" data-toggle="tooltip" data-placement="top" title="' .
-                        trans('buttons.backend.report.report.send') . '"></i></a> ';
-                }
-                return '';
+//        switch ($this->status) {
+//            case 0:
+//                return '';
+//                break;
+//            default:
+//                if (access()->allow('reactivate-logs')) {
+//                    return '<a href="' . route('admin.logs.logs.mark', [$this->id, 0]) .
+//                        '" class="btn btn-xs btn-success"><i class="fa fa-play" data-toggle="tooltip" data-placement="top" title="' .
+//                        trans('buttons.backend.report.report.send') . '"></i></a> ';
+//                }
+//                return '';
             // No break
+//        }
+        if (access()->allow('reactivate-logs')) {
+            return '<a href="' . route('admin.logs.logs.mark', [$this->id, 0]) .
+                '" class="btn btn-xs btn-success"><i class="fa fa-play" data-toggle="tooltip" data-placement="top" title="' .
+                trans('buttons.backend.report.report.send') . '"></i></a> ';
         }
-
         return '';
     }
 }
