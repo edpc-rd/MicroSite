@@ -346,7 +346,7 @@ class WeixinController extends BaseController
             if($arr['send_wxid'] == 0){
                 $wxconfig['name'] .='[默認]';
             }
-            $data['message'] = $wxconfig['name'] . '-' . $wxconfig['id'] . ';返回码：'. $msg_data['code'] . ';信息:' . trim($msg_data['message'],",") .';';
+            $data['message'] = $wxconfig['name'] . '-' . $wxconfig['id'] . ':' . $msg_data['code'] .':'. trim($msg_data['message'],",") .';';
 
             //發送日誌
             ReportSendLogs::create(array('report_id' => $report->report_id,'user_name' => serialize($arr['UserName']),'send_id' => $data['send_id'],'wxid' =>$arr['send_wxid'],'status' =>($msg_data['status_code']==500?-1:0),'message' => $data['message'] ));
