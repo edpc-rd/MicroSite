@@ -325,23 +325,34 @@ class WeixinController extends BaseController
         );
 
         //临时设置超时时间
-        set_time_limit(300);                          // 设置脚本最大执行时间 为180秒 永不过期
+//        set_time_limit(300);                          // 设置脚本最大执行时间   0 永不过期
 
         foreach ($arrSend as $arr){
-            for ($i = 0;$i < 3;$i++){       //重試三次
-                try {
-                    //企业微信id  BY HPQ 2020-03-03
-                    $wxconfig = $this->setWeixin($arr['send_wxid']);
-                    $msg_data = $this->SendReport($arr,$report,$wxconfig);
-                    if($msg_data['code'] == 0)      //成功則跳出
-                        break;
-                }catch (\Exception $e){
-                    $msg_data['code'] = $e->getCode();
-                    $msg_data['message'] = $e->getMessage();
-                    $data['message'] = '错误码：'.$e->getCode(). '错误信息：'.$e->getMessage() . ",";
-                    $msg_data['status_code'] = 500;
-                    sleep(60);    //失敗則60秒後重試
-                }
+//            for ($i = 0;$i < 3;$i++){       //重試三次
+//                try {
+//                    //企业微信id  BY HPQ 2020-03-03
+//                    $wxconfig = $this->setWeixin($arr['send_wxid']);
+//                    $msg_data = $this->SendReport($arr,$report,$wxconfig);
+//                    if($msg_data['code'] == 0)      //成功則跳出
+//                        break;
+//                }catch (\Exception $e){
+//                    $msg_data['code'] = $e->getCode();
+//                    $msg_data['message'] = $e->getMessage();
+//                    $data['message'] = '错误码：'.$e->getCode(). '错误信息：'.$e->getMessage() . ",";
+//                    $msg_data['status_code'] = 500;
+//                    sleep(60);    //失敗則60秒後重試
+//                }
+//            }
+
+            try {
+                //企业微信id  BY HPQ 2020-03-03
+                $wxconfig = $this->setWeixin($arr['send_wxid']);
+                $msg_data = $this->SendReport($arr,$report,$wxconfig);
+            }catch (\Exception $e){
+                $msg_data['code'] = $e->getCode();
+                $msg_data['message'] = $e->getMessage();
+                $data['message'] = '错误码：'.$e->getCode(). '错误信息：'.$e->getMessage() . ",";
+                $msg_data['status_code'] = 500;
             }
 
             if($msg_data['code'] != 0){
