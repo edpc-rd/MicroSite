@@ -350,7 +350,7 @@ class WeixinController extends BaseController
                 $msg_data = $this->SendReport($arr,$report,$wxconfig);
             }catch (\Exception $e){
                 $data['code'] = 30001;
-                $msg_data['code'] = $e->getCode();
+                $msg_data['code'] = $e->getCode() != 0?$e->getCode():500;
                 $msg_data['message'] = $e->getMessage();
                 $data['message'] = '错误码：'.$e->getCode(). '错误信息：'.$e->getMessage() . ",";
                 $msg_data['status_code'] = 500;
