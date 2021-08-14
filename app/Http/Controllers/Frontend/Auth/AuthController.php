@@ -50,8 +50,8 @@ class AuthController extends Controller
             foreach ($files as $v){
                 //获取文件修改时间
                 $time = filemtime($v);
-                //获取一个月之前的时间
-                $beforetime = strtotime("-1 month");
+                //获取15天之前的时间
+                $beforetime = strtotime("-15 days");
                 if($time < $beforetime){  //一个月内没有修改过的文件删除掉
                     @unlink($v);
                 }

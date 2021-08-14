@@ -71,8 +71,8 @@ class SnapshotController extends BaseController
         $expiration_at = strtotime($request->get('expiration_at'));
         $fileSize = $file->getSize() / 1024;
 
-        if ($fileSize > 25000) {
-            throw new Exception('上傳報表文件失敗，文件不能大於25M', 30002);
+        if ($fileSize > 30720) {
+            throw new Exception('上傳報表文件失敗，文件不能大於30M', 30002);
         }
 
         switch ($clientType) {
