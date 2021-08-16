@@ -77,6 +77,11 @@ class WeixinController extends BaseController
     protected $logs;
 
     /**
+     * 基础地址
+     */
+    protected $base_path;
+
+    /**
      * @param UserContract $users
      * @param ReportGroupRepositoryContract $groups
      * @param ReportParameterRepositoryContract $parameters
@@ -104,6 +109,8 @@ class WeixinController extends BaseController
         $this->reports = $reports;
         $this->wxconfigs = $wxconfigs;
         $this->logs = $logs;
+//        $this->base_path = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR;
+        $this->base_path = '/home/reportfile/resources/uploads/reports'.DIRECTORY_SEPARATOR;
     }
 
 
@@ -187,7 +194,7 @@ class WeixinController extends BaseController
         //企业微信id BY HPQ 2020-03-03
         $this->setWeixin(intval($request->get('wxId')));
 
-        $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'excel'.DIRECTORY_SEPARATOR . $request->get('fileName');
+        $filePath = $this->base_path.'excel'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->uploadFile($filePath);
     }
 
@@ -196,7 +203,7 @@ class WeixinController extends BaseController
         //企业微信id BY HPQ 2020-03-03
         $this->setWeixin(intval($request->get('wxId')));
 
-        $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'image'.DIRECTORY_SEPARATOR . $request->get('fileName');
+        $filePath = $this->base_path.'image'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->uploadImage($filePath);
     }
 
@@ -205,7 +212,7 @@ class WeixinController extends BaseController
         //企业微信id BY HPQ 2020-03-03
         $this->setWeixin(intval($request->get('wxId')));
 
-        $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'image'.DIRECTORY_SEPARATOR . $request->get('fileName');
+        $filePath = $this->base_path.'image'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->uploadNewsImg($filePath);
     }
 
@@ -214,7 +221,7 @@ class WeixinController extends BaseController
         //企业微信id BY HPQ 2020-03-03
         $this->setWeixin(intval($request->get('wxId')));
 
-        $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'excel'.DIRECTORY_SEPARATOR . $request->get('fileName');
+        $filePath = $this->base_path.'excel'.DIRECTORY_SEPARATOR . $request->get('fileName');
         return app('weixin')->uploadForeverMedia($filePath);
     }
 
@@ -223,7 +230,7 @@ class WeixinController extends BaseController
         //企业微信id BY HPQ 2020-03-03
         $this->setWeixin(intval($request->get('wxId')));
 
-        $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'image'.DIRECTORY_SEPARATOR . $request->get('fileName');
+        $filePath = $this->base_path.'image'.DIRECTORY_SEPARATOR . $request->get('fileName');
         $picUrl = app('weixin')->uploadNewsImg($filePath);
         $users = $request->get('users');
         $newsItem = new NewsItem();
@@ -241,7 +248,7 @@ class WeixinController extends BaseController
 
         $redirect_url = $request->get('url');
         $users = $request->get('users');
-        $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'image'.DIRECTORY_SEPARATOR . $request->get('fileName');
+        $filePath = $this->base_path.'image'.DIRECTORY_SEPARATOR . $request->get('fileName');
         $media_id = app('weixin')->uploadImage($filePath);
         $newsItem = new MpNewsItem();
         $newsItem->title = $request->get('title');
