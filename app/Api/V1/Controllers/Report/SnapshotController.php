@@ -83,24 +83,24 @@ class SnapshotController extends BaseController
 
         switch ($clientType) {
             case 'application/vnd.ms-excel':
-                $filePath = $this.$this->base_path.'excel';
+                $filePath = $this->base_path.'excel';
                 $fileType = self::TYPE_EXCEL;
                 break;
             case 'text/html':
-                $filePath = $this.$this->base_path.'html';
+                $filePath = $this->base_path.'html';
                 $fileType = self::TYPE_HTML;
                 break;
             case 'text/csv':
-                $filePath = $this.$this->base_path.'csv';
+                $filePath = $this->base_path.'csv';
                 $fileType = self::TYPE_CSV;
                 break;
             case 'image/jpeg':
-                $filePath = $this.$this->base_path.'img';
+                $filePath = $this->base_path.'img';
                 $fileType = self::TYPE_JPEG;
                 break;
             case 'image/gif':
             case 'image/png':
-                $filePath = $this.$this->base_path.'image';
+                $filePath = $this->base_path.'image';
                 $fileType = self::TYPE_IMAGE;
                 break;
             default:
