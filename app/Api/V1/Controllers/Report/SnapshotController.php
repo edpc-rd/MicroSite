@@ -40,6 +40,11 @@ class SnapshotController extends BaseController
     protected $reports;
 
     /**
+     * 基础地址
+     */
+    protected $base_path;
+
+    /**
      * @param UserContract $users
      * @param ReportSnapshotRepositoryContract $snapshots
      * @param ReportRepositoryContract $reports
@@ -53,6 +58,7 @@ class SnapshotController extends BaseController
         $this->users = $users;
         $this->snapshots = $snapshots;
         $this->reports = $reports;
+        $this->base_path = '/home/reportfile/resources/uploads/reports'.DIRECTORY_SEPARATOR;
     }
 
     public function uploadFile(Request $request)
@@ -77,24 +83,24 @@ class SnapshotController extends BaseController
 
         switch ($clientType) {
             case 'application/vnd.ms-excel':
-                $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'excel';
+                $filePath = $this.$this->base_path.'excel';
                 $fileType = self::TYPE_EXCEL;
                 break;
             case 'text/html':
-                $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'html';
+                $filePath = $this.$this->base_path.'html';
                 $fileType = self::TYPE_HTML;
                 break;
             case 'text/csv':
-                $filePath = public_path() . DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'csv';
+                $filePath = $this.$this->base_path.'csv';
                 $fileType = self::TYPE_CSV;
                 break;
             case 'image/jpeg':
-                $filePath = public_path() . DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'img';
+                $filePath = $this.$this->base_path.'img';
                 $fileType = self::TYPE_JPEG;
                 break;
             case 'image/gif':
             case 'image/png':
-                $filePath = base_path() . DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'reports'.DIRECTORY_SEPARATOR.'image';
+                $filePath = $this.$this->base_path.'image';
                 $fileType = self::TYPE_IMAGE;
                 break;
             default:
