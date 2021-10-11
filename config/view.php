@@ -16,6 +16,7 @@ return [
     'paths' => [
         realpath(base_path('resources/views')),
         realpath(base_path('resources/uploads/reports/html')),
+        '/home/reportfile/resources/uploads/reports/html',   //add by Hpq 2021-08-17 新的html文件地址
     ],
 
     /*

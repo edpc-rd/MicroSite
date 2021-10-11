@@ -15,6 +15,7 @@ use App\Repositories\Backend\Report\ReportRepositoryContract;
 use App\Repositories\Backend\Report\Snapshot\ReportSnapshotRepositoryContract;
 use App\Repositories\Backend\User\UserContract;
 use App\Repositories\Backend\Wxconfig\WxconfigRepositoryContract;
+use Stoneworld\Wechat\Exception;
 use View;
 
 /**
@@ -177,6 +178,9 @@ class ReportController extends Controller
     //add by 2020-03-11 Hpq 發送文件消息
     public  function viewExcelReport($fileName,SendExcelRequest $request)
     {
+        set_time_limit(180);
+        ini_set("max_input_time", 180);
+
         $member = app('weixin')->getMemberInfo();
         try{
             $wxconfig = $this->wxconfigs->findOrThrowException(intval($request->get('id')));
@@ -194,9 +198,19 @@ class ReportController extends Controller
         }catch(\Exception $e){
             throw new Exception('發送報表失敗，獲取報表快照錯誤',30007);
         }
-        $excelPath = $xlsSnapshot->file_path . DIRECTORY_SEPARATOR . $xlsSnapshot->file_name;
-        $media_id = app('weixin')->uploadFile($excelPath);
-        app('weixin')->sendFileToUser($media_id, array($member['UserId']));
+
+        try{
+            $excelPath = $xlsSnapshot->file_path . DIRECTORY_SEPARATOR . $xlsSnapshot->file_name;
+            file_put_contents('/web/website/laravel/MicroSite/serve987.txt',$excelPath."\n",FILE_APPEND);
+            $media_id = app('weixin')->uploadFile($excelPath);
+        }catch(\Exception $e){
+            throw new Exception('上傳報表失敗！',30007);
+        }
+        try{
+            app('weixin')->sendFileToUser($media_id, array($member['UserId']));
+        }catch(\Exception $e){
+            throw new Exception('報表发送失敗！',30007);
+        }
         echo "<h1>已向您發送Excel格式的報表！</h1>";
     }
 }

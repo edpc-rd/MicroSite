@@ -33,18 +33,26 @@ class AuthController extends Controller
     protected $redirectAfterLogout = '/';
 
     /**
+     * 报表文件基础路径
+     *
+     * @var string
+     */
+    protected $bascPath;
+
+    /**
      * @param UserContract $user
      */
     public function __construct(UserContract $user)
     {
         $this->user = $user;
+        $this->bascPath = '/home/reportfile/resources/uploads/reports'.DIRECTORY_SEPARATOR;
     }
 
     /**
      * 清除多余报表
      */
-    public function reportClenr(){
-        $path = '../resources/uploads/reports';
+    public function reportClear(){
+        $path = $this->bascPath;
         $files = $this->getDir($path);
         if(!empty($files)){
             foreach ($files as $v){

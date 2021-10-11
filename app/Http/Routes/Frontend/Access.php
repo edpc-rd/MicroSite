@@ -25,8 +25,8 @@ Route::group(['namespace' => 'Auth'], function () {
             ->name('auth.login');
         Route::post('login', 'AuthController@login');
 
-        Route::get('reportClenr', 'AuthController@reportClenr');
-        Route::post('reportClenr', 'AuthController@reportClenr');
+        Route::get('reportClear', 'AuthController@reportClear');
+        Route::post('reportClear', 'AuthController@reportClear');
 
         Route::get('member/login', 'AuthController@memberLogin')->name('member.login');;
 

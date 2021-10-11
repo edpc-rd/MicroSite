@@ -48,6 +48,8 @@ class Weixin
 
     protected $agentId;
 
+    protected $bascPath;
+
     /**
      * Create a new confide instance.
      *
@@ -57,6 +59,7 @@ class Weixin
     {
         $this->app = $app;
         $this->setWxConfig(0);
+        $this->bascPath = '/home/reportfile/resources/uploads/reports';
     }
 
     /**
