@@ -11,6 +11,10 @@ $api->version('v1', function ($api) {
 
     $api->group(['namespace' => 'App\Api\V1\Controllers\Auth'], function($api) {
         $api->get('/auth/login', 'AuthController@authenticate');
+        $api->get('/auth/jsnBack', 'AuthController@jsnBack');
+        $api->get('/auth/pddBack', 'AuthController@pddBack');
+        $api->get('/auth/dyBack', 'AuthController@dyBack');
+        $api->get('/auth/getJsnToken', 'AuthController@getJsnToken');
     });
 
     $api->group(['namespace' => 'App\Api\V1\Controllers\Report','middleware' => 'jwt.auth'], function($api) {

@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Repositories\Backend\Report\ReportSendLogs;
+namespace App\Repositories\Backend\Report\ReportReadLog;
 
 use App\Exceptions\GeneralException;
-use App\Models\Report\ReportSendLogs;
+use App\Models\Report\ReportReadLog;
 use Stoneworld\Wechat\Utils\Http;
 
 /**
  * Class EloquentRoleRepository
  * @package App\Repositories\Role
  */
-class EloquentReportSendLogsRepository implements ReportSendLogsRepositoryContract
+class EloquentReportReadLogRepository implements ReportReadLogRepositoryContract
 {
     /**
      * @param  $per_page
@@ -20,7 +20,7 @@ class EloquentReportSendLogsRepository implements ReportSendLogsRepositoryContra
      */
     public function getReportsPaginated($per_page, $order_by = 'id', $sort = 'desc')
     {
-        return ReportSendLogs::orderBy($order_by, $sort)
+        return ReportReadLog::orderBy($order_by, $sort)
             ->paginate($per_page);
     }
 
@@ -33,11 +33,11 @@ class EloquentReportSendLogsRepository implements ReportSendLogsRepositoryContra
     public function getAllLogs($order_by = 'id', $sort = 'desc', $withParameters = false)
     {
         if ($withParameters) {
-            return ReportSendLogs::orderBy($order_by, $sort)
+            return ReportReadLog::orderBy($order_by, $sort)
                 ->get();
         }
 
-        return ReportSendLogs::orderBy($order_by, $sort)
+        return ReportReadLog::orderBy($order_by, $sort)
             ->get();
     }
 
@@ -50,8 +50,7 @@ class EloquentReportSendLogsRepository implements ReportSendLogsRepositoryContra
      */
     public function getLogsByStatus($per_page, $status = 1, $order_by = 'id', $sort = 'desc')
     {
-        return ReportSendLogs::where('status', $status)
-            ->orderBy($order_by, $sort)
+        return ReportReadLog::orderBy($order_by, $sort)
             ->paginate($per_page);
     }
 
@@ -84,12 +83,12 @@ class EloquentReportSendLogsRepository implements ReportSendLogsRepositoryContra
      */
     public function findOrThrowException($id, $withParameters = false)
     {
-        if (!is_null(ReportSendLogs::find($id))) {
+        if (!is_null(ReportReadLog::find($id))) {
             if ($withParameters) {
-                return ReportSendLogs::find($id);
+                return ReportReadLog::find($id);
             }
 
-            return ReportSendLogs::find($id);
+            return ReportReadLog::find($id);
         }
 
         throw new GeneralException(trans('exceptions.backend.report.report.not_found'));
@@ -103,35 +102,6 @@ class EloquentReportSendLogsRepository implements ReportSendLogsRepositoryContra
     public function destroy($id)
     {
         return true;
-    }
-
-    /**
-     * @param  $id
-     * @param  $status
-     * @throws GeneralException
-     * @return bool
-     */
-    public function mark($id, $status)
-    {
-        $http = new Http();
-
-//        $url = $_SERVER['HTTP_HOST'].'/api/auth/login?email=HuangPeiQi@glorisun.com&password=88888888';
-//        $res = $http->get($url);
-//        $res = json_decode($res['data']);
-
-        $token = config('api.apitoken');    //以上注釋部分爲token 獲取。   此token爲v1 api接口的token
-        $url = $_SERVER['HTTP_HOST'].'/api/weixin/SendReportAgain?token='.$token;
-        $params = array('id' => $id);
-        $rsp = $http->post($url,$params);
-        $rsp = json_decode($rsp['data'],true);
-        file_put_contents('/web/website/laravel/MicroSite/sendmarklog.txt',json_encode($rsp)."\n",FILE_APPEND);
-        $logs = $this->findOrThrowException($id);
-        $logs->status = $status;
-        if ($rsp['status_code'] == 0 && $logs->save()) {
-            return true;
-        }
-
-        throw new GeneralException(trans('exceptions.backend.report.report.send_error'));
     }
 
 }

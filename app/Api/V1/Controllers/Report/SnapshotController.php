@@ -77,12 +77,13 @@ class SnapshotController extends BaseController
         $expiration_at = strtotime($request->get('expiration_at'));
         $fileSize = $file->getSize() / 1024;
 
-        if ($fileSize > 30720) {
-            throw new Exception('上傳報表文件失敗，文件不能大於30M', 30002);
+        if ($fileSize > 51840) {
+            throw new Exception('上傳報表文件失敗，文件不能大於50M', 30002);
         }
 
         switch ($clientType) {
             case 'application/vnd.ms-excel':
+            case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
                 $filePath = $this->base_path.'excel';
                 $fileType = self::TYPE_EXCEL;
                 break;

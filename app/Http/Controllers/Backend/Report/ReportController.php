@@ -163,15 +163,17 @@ class ReportController extends Controller
      * @param string $fileName
      * @return mixed
      */
-    public function viewHtmlReport($fileName)
+    public function viewHtmlReport($fileName,SendExcelRequest $request)
     {
         View::addExtension('html', 'php');
+        $this->reports->saveReportLog($request->get('reportId'),'read','');
         return view($fileName);
     }
 
-    public  function viewImageReport($fileName)
+    public  function viewImageReport($fileName,SendExcelRequest $request)
     {
         View::addExtension('jpeg','php');
+        $this->reports->saveReportLog($request->get('reportId'),'read','');
         return view($fileName);
     }
 
@@ -211,6 +213,7 @@ class ReportController extends Controller
         }catch(\Exception $e){
             throw new Exception('報表发送失敗！',30007);
         }
+        $this->reports->saveReportLog($report->report_id,'excel',$member['UserId']);
         echo "<h1>已向您發送Excel格式的報表！</h1>";
     }
 }

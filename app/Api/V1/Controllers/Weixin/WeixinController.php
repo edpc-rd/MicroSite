@@ -430,7 +430,7 @@ class WeixinController extends BaseController
                     }
 
                     $xlsName = basename($htmlSnapshot->file_name, "." . substr(strrchr($htmlSnapshot->file_name, '.'), 1));
-                    $redirect_url = 'http://' . $_SERVER['SERVER_NAME'] . '/third/report/html/' . $xlsName . '?thirdLogin=true&id=' . $wxconfig->id;
+                    $redirect_url = 'http://' . $_SERVER['SERVER_NAME'] . '/third/report/html/' . $xlsName . '?thirdLogin=true&id=' . $wxconfig->id . '&reportId=' . $report->report_id;
                     $download_url = 'http://' . $_SERVER['SERVER_NAME'] . '/third/report/excel/' . $xlsName . '?thirdLogin=true&id=' . $wxconfig->id . '&reportId=' . $report->report_id;
                     $imgPath = $imgSnapshot->file_path . DIRECTORY_SEPARATOR . $imgSnapshot->file_name;
                     $media_id = app('weixin')->uploadImage($imgPath);

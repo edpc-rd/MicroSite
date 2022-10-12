@@ -191,8 +191,8 @@ class EloquentWxconfigRepository implements WxconfigRepositoryContract
         $clientType = $file->getClientMimeType();
         $fileSize = $file->getSize() / 1024;
 
-        if ($fileSize > 20000) {
-            throw new GeneralException('上傳校驗文件失敗，文件不能大於20M', 30002);
+        if ($fileSize > 50000) {
+            throw new GeneralException('上傳校驗文件失敗，文件不能大於50M', 30002);
         }
 
         switch ($clientType) {
