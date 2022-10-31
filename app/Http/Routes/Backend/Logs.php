@@ -11,4 +11,6 @@ Route::group([
         Route::get('mark/{status}', 'ReportSendLogsController@mark')->name('admin.logs.logs.mark')->
         where(['status' => '[0,1]']);
     });
+
+    Route::resource('report-read-logs', 'ReportReadLogsController', ['except' => ['show']]);
 });
