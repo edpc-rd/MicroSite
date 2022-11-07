@@ -354,13 +354,15 @@ class WeixinController extends BaseController
             try {
                 //企业微信id  BY HPQ 2020-03-03
                 $wxconfig = $this->setWeixin($arr['send_wxid']);
-                $msg_data = $this->SendReport($arr,$report,$wxconfig);
+                $result_data = $msg_data = $this->SendReport($arr,$report,$wxconfig);
             }catch (\Exception $e){
                 $data['code'] = 30001;
                 $msg_data['code'] = $e->getCode() != 0?$e->getCode():500;
                 $msg_data['message'] = $e->getMessage();
                 $data['message'] = '错误码：'.$e->getCode(). '错误信息：'.$e->getMessage() . ",";
                 $msg_data['status_code'] = 500;
+            }finally {
+                file_put_contents('/web/website/laravel/MicroSite/retrunSend.txt','send_id:' .$data['send_id'].",data:".json_encode($result_data)."\n",FILE_APPEND);
             }
 
             if($msg_data['code'] != 0){
