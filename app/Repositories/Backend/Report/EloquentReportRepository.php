@@ -4,7 +4,7 @@ namespace App\Repositories\Backend\Report;
 
 use App\Exceptions\GeneralException;
 use App\Models\Report\Report;
-use App\Models\Report\ReportReadLog;
+use App\Models\Report\ReportReadLogs;
 
 /**
  * Class EloquentRoleRepository
@@ -186,19 +186,19 @@ class EloquentReportRepository implements ReportRepositoryContract
      * @param $action
      */
     public function saveReportLog($report_id,$action,$user_name = ''){
-        $reportReadLog = new ReportReadLog();
+        $reportReadLogs = new ReportReadLogs();
 
         if(empty($user_name)){
             $member = app('weixin')->getMemberInfo();
-            $reportReadLog->user_name = $member['UserId'];
+            $reportReadLogs->user_name = $member['UserId'];
         }else{
-            $reportReadLog->user_name = $user_name;
+            $reportReadLogs->user_name = $user_name;
         }
 
-        $reportReadLog->action = $action;
-        $reportReadLog->report_id = $report_id;
+        $reportReadLogs->action = $action;
+        $reportReadLogs->report_id = $report_id;
 
-        if ($reportReadLog->save()) {
+        if ($reportReadLogs->save()) {
             return true;
         }
 

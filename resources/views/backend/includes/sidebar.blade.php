@@ -68,6 +68,9 @@
                     <li class="{{ Active::pattern('admin/logs/report-send-logs') }}">
                         <a href="{!! url('admin/logs/report-send-logs') !!}">{{ trans('menus.backend.report.report-send-logs') }}</a>
                     </li>
+                    <li class="{{ Active::pattern('admin/logs/report-read-logs') }}">
+                        <a href="{!! url('admin/logs/report-read-logs') !!}">{{ trans('menus.backend.report.report-read-logs') }}</a>
+                    </li>
                 </ul>
             </li>
         </ul><!-- /.sidebar-menu -->

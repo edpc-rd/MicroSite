@@ -9,23 +9,12 @@ use App\Models\Wxconfig\Wxconfig;
  * Class PermissionAttribute
  * @package App\Models\Access\Permission\Traits\Attribute
  */
-trait ReportReadLogAttribute
+trait ReportReadLogsAttribute
 {
-    public function getWxNameAttribute(){
-        $wxinfo = Wxconfig::where('status',1)->first();
-        $wxconfig = Wxconfig::pluck('name','id');
-        return $wxconfig[$this->wxid==0?$wxinfo->id:$this->wxid];
-    }
-
-    public function getNameAttribute(){
-        $wxinfo = Wxconfig::where('status',1)->first();
-        $Report = Report::where('report_id',$this->report_id);
-        return $Report[$this->wxid==0?$wxinfo->id:$this->wxid];
-    }
-
-    public function getStatusCodeAttribute(){
-        return $this->status==0?'成功':'失敗';
-    }
+//    public function getNameAttribute(){
+//        $report = Report::where('report_id',$this->report_id);
+//        return $report->name;
+//    }
 
     /**
      * @return string

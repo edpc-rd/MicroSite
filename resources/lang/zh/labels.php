@@ -208,6 +208,7 @@ return [
 //                'create' => '新建角色',
 //                'edit' => '編輯角色',
                 'management' => '報表發送列表',
+                'reportread' => '報表查看列表',
 
                 'table' => [
                     'id' => 'ID',
@@ -220,6 +221,9 @@ return [
                     'created' => '新增時間',
                     'updated' => '更新時間',
                     'total' => '合計',
+                    'user_name' => '用戶名',
+                    'action' => '動作',
+                    'explode' => '导出',
                 ],
             ],
 

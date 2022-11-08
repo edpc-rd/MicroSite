@@ -85,6 +85,7 @@ return [
                 'main' => '用戶',
             ],
             'report-send-logs' => '發送日誌列表',
+            'report-read-logs' => '查看日誌列表',
         ],
 
         'log-viewer' => [

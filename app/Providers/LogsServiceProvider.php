@@ -46,6 +46,11 @@ class LogsServiceProvider extends ServiceProvider
             \App\Repositories\Backend\Report\ReportSendLogs\ReportSendLogsRepositoryContract::class,
             \App\Repositories\Backend\Report\ReportSendLogs\EloquentReportSendLogsRepository::class
         );
+
+        $this->app->bind(
+            \App\Repositories\Backend\Report\ReportReadLogs\ReportReadLogsRepositoryContract::class,
+            \App\Repositories\Backend\Report\ReportReadLogs\EloquentReportReadLogsRepository::class
+        );
     }
 
 }

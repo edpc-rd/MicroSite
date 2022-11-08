@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Repositories\Backend\Report\ReportReadLog;
+namespace App\Repositories\Backend\Report\ReportReadLogs;
 
 /**
  * Interface RoleRepositoryContract
  * @package App\Repositories\Role
  */
-interface ReportReadLogRepositoryContract
+interface ReportReadLogsRepositoryContract
 {
     /**
      * @param  $id
@@ -21,7 +21,7 @@ interface ReportReadLogRepositoryContract
      * @param  string $sort
      * @return mixed
      */
-    public function getReportsPaginated($per_page, $order_by = 'id', $sort = 'asc');
+    public function getReportsPaginated($per_page, $order_by = 'id', $sort = 'asc',$start = '',$end = '');
 
     /**
      * @param  $per_page

@@ -7,7 +7,7 @@ namespace App\Models\Report\Traits\Relationship;
  * @package App\Models\Access\Report\Traits\Relationship
  */
 
-trait ReportReadLogRelationship
+trait ReportReadLogsRelationship
 {
 
     /**

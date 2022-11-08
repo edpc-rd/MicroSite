@@ -1,13 +1,13 @@
 {
-    "name": "edpc-rd/MicroSite",
+    "name": "edpc-rd/microsite",
     "description": "The Laravel Framework Boilerplate Project.",
     "keywords": ["framework", "laravel", "microSite"],
     "license": "MIT",
     "type": "project",
     "require": {
         "php": ">=5.5.9",
-        "laravel/framework": "5.2.*",
-        "laravelcollective/html": "5.2.*",
+        "laravel/framework": "5.0.*",
+        "laravelcollective/html": "5.0.*",
         "laracasts/utilities": "~2.0",
         "laravel/socialite": "^2.0",
         "creativeorange/gravatar": "~1.0",
